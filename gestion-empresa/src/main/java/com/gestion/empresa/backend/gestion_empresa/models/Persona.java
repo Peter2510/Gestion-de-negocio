@@ -34,5 +34,13 @@ public class Persona implements Serializable {
     private  String direccion;
 
 
+    @Column(name = "telefono", nullable = false, length = 200)
+    private  int telefono;
+
+
+    // aca para la foranea del genero
+    @ManyToOne
+    @JoinColumn(name = "idGenero", nullable = false)
+    private Genero genero;
 
 }
