@@ -1,6 +1,7 @@
 package com.gestion.empresa.backend.gestion_empresa.seguridad;
 
 
+import com.gestion.empresa.backend.gestion_empresa.models.Usuarios;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -43,11 +44,11 @@ public class JwtServicio {
 
     //para generar
 
-    public String generarToken(UserDetails userDetails){
-    return  generarToken(new HashMap<>(), userDetails);
+    public String obtenerToken(UserDetails userDetails){
+    return  obtenerToken(new HashMap<>(), userDetails);
     }
 
-    public String generarToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+    public String obtenerToken(Map<String, Object> extraClaims, UserDetails userDetails) {
 
         return construirToken(extraClaims, userDetails, jwtExpiracion);
     }
@@ -101,6 +102,7 @@ public class JwtServicio {
                 .getBody();
     }
 
+    //decodifica y me lo da
     private Key getLlaveIngreso() {
         byte[] keyBytes = Decoders.BASE64.decode(llave);
         return Keys.hmacShaKeyFor(keyBytes);

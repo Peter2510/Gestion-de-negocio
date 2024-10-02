@@ -24,50 +24,42 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @RequiredArgsConstructor
 public class Seguridad {
 
-    private AuthenticationProvider authenticationProvider;
-    private JwtFiltroAutorizacion jwtFiltroAutorizacion;
-    public Seguridad(
-            AuthenticationProvider authenticationProvider,
-            JwtFiltroAutorizacion jwtFiltroAutorizacion
-    ) {
-        this.authenticationProvider = authenticationProvider;
-        this.jwtFiltroAutorizacion = jwtFiltroAutorizacion;
-    }
+
+    //PONER FINALLLL NO JALA SIN ESTO
+    private final AuthenticationProvider authenticationProvider;
+    private final JwtFiltroAutorizacion jwtFiltroAutorizacion;
 
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                // se desabilita esta proteccion de csrf
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(authorize ->
-                                authorize
-                                        .requestMatchers("/Auth/**").permitAll()
-                                        .anyRequest().authenticated()
-//                .requestMatchers("/usuarios").authenticated()
-//                        // aca ver bien las rutas que no jala
-//                        //.requestMatchers("/usuarios/login").permitAll()
-//                        .anyRequest().permitAll()
-                ).formLogin(withDefaults()).build();
-//                .sessionManagement(session -> session
-//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                )
-//                .authenticationProvider(authenticationProvider)
-//                .addFilterBefore(jwtFiltroAutorizacion, UsernamePasswordAuthenticationFilter.class);
+                .csrf(csrf ->
+                        csrf.disable())
+                .authorizeHttpRequests(authRequest ->
+                        authRequest
+                                .requestMatchers("/auth/**").permitAll()
+                                .anyRequest().permitAll()
+                )
+                .sessionManagement(sessionManager->
+                        sessionManager
+                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtFiltroAutorizacion, UsernamePasswordAuthenticationFilter.class)
+                .build();
 
 //        return http.build();
     }
 
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("https://app-backend.com", "http://localhost:8080"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(List.of("https://app-backend.com", "http://localhost:8080"));
+//        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+//        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
 }

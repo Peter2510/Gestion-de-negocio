@@ -1,6 +1,7 @@
 package com.gestion.empresa.backend.gestion_empresa.seguridad;
 
 import com.gestion.empresa.backend.gestion_empresa.repositorio.RepositorioUsuario;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,26 +13,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 @Configuration
+@RequiredArgsConstructor
 public class ConfiguracionSeguridad {
-
-    private RepositorioUsuario repoUsuario;
-
-
-
     // repositorio de usuarios
-    public ConfiguracionSeguridad(RepositorioUsuario repoUsuario) {
-        this.repoUsuario = repoUsuario;
-    }
+    public RepositorioUsuario repoUsuario;
 
     @Bean
-    UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService() {
         //me retorna el valor del usario como userdetails
         return username -> repoUsuario.findByNombreUsuario(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     @Bean
-    BCryptPasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -41,7 +36,7 @@ public class ConfiguracionSeguridad {
     }
 
     @Bean
-    AuthenticationProvider authenticationProvider() {
+    public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
         authProvider.setUserDetailsService(userDetailsService());
