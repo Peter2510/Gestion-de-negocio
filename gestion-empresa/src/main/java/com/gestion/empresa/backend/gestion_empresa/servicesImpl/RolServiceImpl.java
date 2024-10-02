@@ -15,7 +15,6 @@ public class RolServiceImpl implements RolService {
     @Autowired
     private RolRepository rolRepository;
 
-
     @Override
     public Rol buscarPorNombre(String nombre) {
         Optional<Rol> rolOptional = rolRepository.findByNombre(nombre);
@@ -31,4 +30,5 @@ public class RolServiceImpl implements RolService {
     public Rol crearRol(Rol rol) {
         return rolRepository.save(rol);
     }
+
 }

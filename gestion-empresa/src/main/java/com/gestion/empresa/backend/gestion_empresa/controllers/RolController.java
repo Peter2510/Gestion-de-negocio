@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +44,7 @@ public class RolController {
 
         if (nuevoRol != null) {
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body("El rol" + nuevoRol.getNombre() + "creado con éxito: ");
+                    .body("El rol " + nuevoRol.getNombre() + " creado con éxito");
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Error al crear el rol.");

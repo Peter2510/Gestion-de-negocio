@@ -12,5 +12,3 @@ public interface RolService {
     Rol crearRol(Rol rol);
     List<Rol> findAll();
 }
-
-
