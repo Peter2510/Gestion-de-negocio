@@ -1,4 +1,4 @@
-package com.gestion.empresa.backend.gestion_empresa.rest_controller;
+package com.gestion.empresa.backend.gestion_empresa.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
