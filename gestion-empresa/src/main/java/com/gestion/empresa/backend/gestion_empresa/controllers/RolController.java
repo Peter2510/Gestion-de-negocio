@@ -1,7 +1,7 @@
 package com.gestion.empresa.backend.gestion_empresa.controllers;
 
 
-import com.gestion.empresa.backend.gestion_empresa.entities.Rol;
+import com.gestion.empresa.backend.gestion_empresa.models.Rol;
 import com.gestion.empresa.backend.gestion_empresa.repositories.RolRepository;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.RolServiceImpl;
 import jakarta.validation.Valid;

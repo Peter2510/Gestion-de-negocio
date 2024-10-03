@@ -1,4 +1,4 @@
-package com.gestion.empresa.backend.gestion_empresa.entities;
+package com.gestion.empresa.backend.gestion_empresa.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -1,7 +1,8 @@
 package com.gestion.empresa.backend.gestion_empresa.services;
 
-import com.gestion.empresa.backend.gestion_empresa.entities.Rol;
 import org.springframework.stereotype.Service;
+
+import com.gestion.empresa.backend.gestion_empresa.models.Rol;
 
 import java.util.List;
 
