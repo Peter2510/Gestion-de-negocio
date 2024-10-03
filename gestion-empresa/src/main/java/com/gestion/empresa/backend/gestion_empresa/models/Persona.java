@@ -7,12 +7,11 @@ import lombok.AllArgsConstructor;
 
 import java.io.Serializable;
 
-
+@Data //con lombook se genera getters, setters, toString, equals, hashCode, etc
+@NoArgsConstructor //con esto se genera un constructor vacío ( quee es el que pide JPA y no tira clavo).
+@AllArgsConstructor //genera un constructor con todos los campos y ya lo utilizamos para algun caso
 @Entity
 @Table(name = "Persona")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Persona implements Serializable {
     
     @Id

@@ -1,8 +1,13 @@
 package com.gestion.empresa.backend.gestion_empresa.controllers;
 
+import com.gestion.empresa.backend.gestion_empresa.dto.AuthRespuesta;
 import com.gestion.empresa.backend.gestion_empresa.dto.Login;
+import com.gestion.empresa.backend.gestion_empresa.dto.RegistroUsuarios;
 import com.gestion.empresa.backend.gestion_empresa.models.Usuarios;
+import com.gestion.empresa.backend.gestion_empresa.servicesImpl.AutenticacionServiceImpl;
 import com.gestion.empresa.backend.gestion_empresa.validation.RespuestaLogin;
+
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,12 +17,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/Auth")
+@RequiredArgsConstructor
 public class AuthController {
 
+
+    private final AutenticacionServiceImpl servicio;
     @PostMapping(value = "/login")
-    public ResponseEntity<Object> authenticate(@RequestBody Login loginUserDto){
+    public ResponseEntity<AuthRespuesta> login(@RequestBody Login loginUserDto){
+        return ResponseEntity.ok(servicio.login(loginUserDto));
 
-
-        return ResponseEntity.ok("login");
     }
+
+
+    @PostMapping(value = "/registro")
+    public ResponseEntity<AuthRespuesta> registro(@RequestBody RegistroUsuarios registro){
+        return ResponseEntity.ok(servicio.registro(registro));
+    }
+
+
 }

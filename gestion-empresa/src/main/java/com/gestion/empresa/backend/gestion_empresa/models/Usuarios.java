@@ -1,10 +1,12 @@
 package com.gestion.empresa.backend.gestion_empresa.models;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
@@ -15,9 +17,10 @@ import java.util.List;
 //clase para los usuarios
 @Entity
 @Table(name = "usuarios")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Data //con lombook se genera getters, setters, toString, equals, hashCode, etc
+@NoArgsConstructor //con esto se genera un constructor vacío ( quee es el que pide JPA y no tira clavo).
+@AllArgsConstructor //genera un constructor con todos los campos y ya lo utilizamos para algun caso
+@Builder // para qye genere todo
 public class Usuarios implements Serializable, UserDetails {
    
     @Id
@@ -30,9 +33,8 @@ public class Usuarios implements Serializable, UserDetails {
     @Column(name = "password", nullable = false, length = 200)
     private String password;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "idRol", nullable = false)
-
     private Rol rol;
     @ManyToOne
     @JoinColumn(name = "idPersona", nullable = false)
@@ -44,10 +46,6 @@ public class Usuarios implements Serializable, UserDetails {
     @Column(name = "a2fActivo", nullable = false, length = 200)
     private boolean a2fActivo;
 
-    @Column(name = "verification_code")
-    private String verificationCode;
-    @Column(name = "verification_expiration")
-    private LocalDateTime verificationCodeExpiresAt;
 
     public Usuarios(String nombreUsuario, String encode, Rol rol, Persona persona, boolean b, boolean b1) {
     }
@@ -55,31 +53,46 @@ public class Usuarios implements Serializable, UserDetails {
     // para lo de userDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return List.of(new SimpleGrantedAuthority((rol.getNombre())));
     }
 
     @Override
     public String getUsername() {
-        return "";
+        return nombreUsuario;
     }
+
 
     @Override
     public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return true;
     }
+
+
+
+
+    public Persona obtenerPersona() {
+        return persona;
+    }
+    public Rol obtenerRol() {
+        return rol;
+    }
+    public Boolean obtenerActivo() {
+        return activo;
+    }
+
 }

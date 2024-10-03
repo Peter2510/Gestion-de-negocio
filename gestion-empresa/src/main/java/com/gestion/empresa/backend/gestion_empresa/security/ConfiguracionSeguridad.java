@@ -2,6 +2,7 @@ package com.gestion.empresa.backend.gestion_empresa.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -14,26 +15,20 @@ import com.gestion.empresa.backend.gestion_empresa.repositories.UsuarioRepositor
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 @Configuration
+@RequiredArgsConstructor
 public class ConfiguracionSeguridad {
-
-    private UsuarioRepository repoUsuario;
-
-
-
     // repositorio de usuarios
-    public ConfiguracionSeguridad(UsuarioRepository repoUsuario) {
-        this.repoUsuario = repoUsuario;
-    }
+    public UsuarioRepository repoUsuario;
 
     @Bean
-    UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService() {
         //me retorna el valor del usario como userdetails
-        return username -> repoUsuario.findByNombreUsuario(username)
+        return nombreUsuario -> repoUsuario.findBynombreUsuario(nombreUsuario)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     @Bean
-    BCryptPasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -43,7 +38,7 @@ public class ConfiguracionSeguridad {
     }
 
     @Bean
-    AuthenticationProvider authenticationProvider() {
+    public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
         authProvider.setUserDetailsService(userDetailsService());

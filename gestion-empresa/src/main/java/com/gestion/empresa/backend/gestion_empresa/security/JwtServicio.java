@@ -1,6 +1,7 @@
 package com.gestion.empresa.backend.gestion_empresa.security;
 
 
+import com.gestion.empresa.backend.gestion_empresa.models.Usuarios;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -43,24 +44,30 @@ public class JwtServicio {
 
     //para generar
 
-    public String generarToken(UserDetails userDetails){
-    return  generarToken(new HashMap<>(), userDetails);
+    public String obtenerToken(Usuarios userDetails){
+    return  obtenerToken(new HashMap<>(), userDetails);
     }
 
-    public String generarToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+    public String obtenerToken(Map<String, Object> extraClaims, Usuarios userDetails) {
 
         return construirToken(extraClaims, userDetails, jwtExpiracion);
     }
 
 
-    private String construirToken(Map<String, Object> extraClaims, UserDetails userDetails, Long tiempoExpiracion)
+    private String construirToken(Map<String, Object> extraClaims, Usuarios userDetails, Long tiempoExpiracion)
     {
+
+        System.out.println(userDetails);
+        Claims claims = Jwts.claims().setSubject(String.valueOf(userDetails.getId()));
+        claims.put("persona",userDetails.obtenerPersona());
+        claims.put("rol",userDetails.obtenerRol());
+        claims.put("nombreUsuario",userDetails.getNombreUsuario());
+
     return Jwts.builder()
-            .setClaims(extraClaims)
-            .setSubject(userDetails.getUsername())
+            .setClaims(claims)
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis()+tiempoExpiracion))
-            .signWith(getLlaveIngreso(), SignatureAlgorithm.ES256)
+            .signWith(getLlaveIngreso(), SignatureAlgorithm.HS256)
             .compact();
     }
 
@@ -101,6 +108,7 @@ public class JwtServicio {
                 .getBody();
     }
 
+    //decodifica y me lo da
     private Key getLlaveIngreso() {
         byte[] keyBytes = Decoders.BASE64.decode(llave);
         return Keys.hmacShaKeyFor(keyBytes);
