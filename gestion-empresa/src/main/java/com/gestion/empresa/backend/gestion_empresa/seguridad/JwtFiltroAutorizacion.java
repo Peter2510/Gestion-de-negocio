@@ -57,31 +57,27 @@ public class JwtFiltroAutorizacion extends OncePerRequestFilter {
             return;
         }
 
-//        try {
-//            final String jwt = authHeader.substring(7);
-//            //extae en base al substring del header
-//            final String correo = jwtServicio.extarerNombreUsuario(jwt);
 //
-//            //elemento de autenticacion
+//        username=jwtServicio.getUsernameFromToken(token);
 //
-//            Authentication autenticacion = SecurityContextHolder.getContext().getAuthentication();
-//            System.out.println(authHeader+ " *-*-*-*-*-*-*-*-*-*-*-* "+ correo+"   +------------   "+autenticacion);
+//        if (username!=null && SecurityContextHolder.getContext().getAuthentication()==null)
+//        {
+//            UserDetails userDetails=userDetailsService.loadUserByUsername(username);
 //
+//            if (jwtService.isTokenValid(token, userDetails))
+//            {
+//                UsernamePasswordAuthenticationToken authToken= new UsernamePasswordAuthenticationToken(
+//                        userDetails,
+//                        null,
+//                        userDetails.getAuthorities());
 //
-//            // compropbacion
-//            if (correo != null && autenticacion != null) {
-//                UserDetails detalles = this.userDetailsService.loadUserByUsername(correo);
+//                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 //
-//                if (jwtServicio.esValido(jwt, detalles )){
-//                    UsernamePasswordAuthenticationToken tokenAutorizado = new UsernamePasswordAuthenticationToken(detalles, null, detalles.getAuthorities());
-//
-//                    tokenAutorizado.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-//                    SecurityContextHolder.getContext().setAuthentication(tokenAutorizado);
-//                }
-//
+//                SecurityContextHolder.getContext().setAuthentication(authToken);
 //            }
 //
-//
+//        }
+////
             filterChain.doFilter(request, response);
 //
 //        } catch (Exception exception){
@@ -93,6 +89,8 @@ public class JwtFiltroAutorizacion extends OncePerRequestFilter {
     public String getTokenRequest(HttpServletRequest valor){
         final String authHeader=valor.getHeader(HttpHeaders.AUTHORIZATION);
     if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")){
+        System.out.println(authHeader.substring(7)+"--------------");
+
         return authHeader.substring(7);
 
     }

@@ -44,24 +44,30 @@ public class JwtServicio {
 
     //para generar
 
-    public String obtenerToken(UserDetails userDetails){
+    public String obtenerToken(Usuarios userDetails){
     return  obtenerToken(new HashMap<>(), userDetails);
     }
 
-    public String obtenerToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+    public String obtenerToken(Map<String, Object> extraClaims, Usuarios userDetails) {
 
         return construirToken(extraClaims, userDetails, jwtExpiracion);
     }
 
 
-    private String construirToken(Map<String, Object> extraClaims, UserDetails userDetails, Long tiempoExpiracion)
+    private String construirToken(Map<String, Object> extraClaims, Usuarios userDetails, Long tiempoExpiracion)
     {
+
+        System.out.println(userDetails);
+        Claims claims = Jwts.claims().setSubject(String.valueOf(userDetails.getId()));
+        claims.put("persona",userDetails.obtenerPersona());
+        claims.put("rol",userDetails.obtenerRol());
+        claims.put("nombreUsuario",userDetails.getNombreUsuario());
+
     return Jwts.builder()
-            .setClaims(extraClaims)
-            .setSubject(userDetails.getUsername())
+            .setClaims(claims)
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis()+tiempoExpiracion))
-            .signWith(getLlaveIngreso(), SignatureAlgorithm.ES256)
+            .signWith(getLlaveIngreso(), SignatureAlgorithm.HS256)
             .compact();
     }
 

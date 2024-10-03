@@ -21,7 +21,7 @@ public class ConfiguracionSeguridad {
     @Bean
     public UserDetailsService userDetailsService() {
         //me retorna el valor del usario como userdetails
-        return username -> repoUsuario.findByNombreUsuario(username)
+        return nombreUsuario -> repoUsuario.findBynombreUsuario(nombreUsuario)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 

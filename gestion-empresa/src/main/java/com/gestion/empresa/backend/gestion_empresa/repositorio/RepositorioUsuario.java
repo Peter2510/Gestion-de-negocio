@@ -12,7 +12,7 @@ public interface RepositorioUsuario extends JpaRepository<Usuarios, Long> {
     Optional<Usuarios> findById(Long aLong);
 
     //para encontrar por correo
-    Optional<Usuarios> findByNombreUsuario(String nombreUsuario);
+    Optional<Usuarios> findBynombreUsuario(String nombreUsuario);
 
 
 }

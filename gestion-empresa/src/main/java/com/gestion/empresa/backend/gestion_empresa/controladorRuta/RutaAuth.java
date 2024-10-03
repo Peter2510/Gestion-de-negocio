@@ -21,6 +21,7 @@ public class RutaAuth {
     @PostMapping(value = "/login")
     public ResponseEntity<AuthRespuesta> login(@RequestBody Login loginUserDto){
         return ResponseEntity.ok(servicio.login(loginUserDto));
+
     }
 
 

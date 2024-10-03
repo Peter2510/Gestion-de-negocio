@@ -58,7 +58,7 @@ public class Usuarios implements Serializable, UserDetails {
 
     @Override
     public String getUsername() {
-        return "";
+        return nombreUsuario;
     }
 
 
@@ -81,4 +81,18 @@ public class Usuarios implements Serializable, UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
+
+
+    public Persona obtenerPersona() {
+        return persona;
+    }
+    public Rol obtenerRol() {
+        return rol;
+    }
+    public Boolean obtenerActivo() {
+        return activo;
+    }
+
 }
