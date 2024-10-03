@@ -1,6 +1,6 @@
 package com.gestion.empresa.backend.gestion_empresa.servicesImpl;
 
-import com.gestion.empresa.backend.gestion_empresa.entities.Rol;
+import com.gestion.empresa.backend.gestion_empresa.models.Rol;
 import com.gestion.empresa.backend.gestion_empresa.repositories.RolRepository;
 import com.gestion.empresa.backend.gestion_empresa.services.RolService;
 import org.springframework.beans.factory.annotation.Autowired;
