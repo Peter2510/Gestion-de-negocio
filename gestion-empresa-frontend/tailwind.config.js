@@ -3,11 +3,12 @@ module.exports = {
   content: ["./src/**/*.{html,ts}",],
   theme: {
     extend: {},
-      daisyui: {
+
+  },
+        daisyui: {
     themes: [
       "garden"
     ],
-  },
   },
   plugins: [require('flowbite/plugin'), require('daisyui')],
 }
