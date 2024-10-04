@@ -40,7 +40,9 @@ public class AutenticacionServiceImpl {
 
         // Comparar la contraseña ingresada con la contraseña encriptada en la base de datos
         if (!passwordEncoder.matches(valor.getPassword(), user.getPassword())) {
-            throw new BadCredentialsException("Contraseña incorrecta para el usuario: " + valor.getNombreUsuario());
+            String respuesta = "Contraseña incorrecta para el usuario: " + valor.getNombreUsuario();
+
+            return AuthRespuesta.builder().token(respuesta).build();
         }
 
         // Si la autenticación es correcta, generar el token JWT
