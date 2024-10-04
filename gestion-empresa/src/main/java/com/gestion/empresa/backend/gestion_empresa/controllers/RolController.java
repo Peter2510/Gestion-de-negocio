@@ -24,31 +24,28 @@ public class RolController {
     @Autowired
     private RolRepository rolRepository;
 
-    @GetMapping
+    @GetMapping("/obtenerRoles")
     public ResponseEntity<List<Rol>> obtenerRolesRegistrados() {
         List<Rol> roles = rolService.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(roles);
+        return ResponseEntity.ok(roles);  // Simplificado utilizando ResponseEntity.ok() que ya devuelve 200 OK.
     }
+
+//    @GetMapping("/{id}")
+//    public void obtenerRolPorId(@PathVariable("id") String id, @RequestBody Long idRol) {
+//
+//    }
 
     @PostMapping("/crearRol")
     public ResponseEntity<String> crearRol(@Valid @RequestBody Rol rol) {
-
-        Optional<Rol> rolExistente = rolRepository.findByNombre(rol.getNombre());
-
-        if (rolExistente.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("El rol con nombre " + rol.getNombre() + " ya existe");
-        }
-
-        Rol nuevoRol = rolService.crearRol(rol);
-
-        if (nuevoRol != null) {
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body("El rol " + nuevoRol.getNombre() + " creado con éxito");
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Error al crear el rol.");
-        }
+        return rolRepository.findByNombre(rol.getNombre())
+                .map(existingRole -> ResponseEntity.badRequest()
+                        .body("El rol con nombre " + rol.getNombre() + " ya existe"))
+                .orElseGet(() -> {
+                    Rol nuevoRol = rolService.crearRol(rol);
+                    return nuevoRol != null
+                            ? ResponseEntity.status(HttpStatus.CREATED)
+                            .body("El rol " + nuevoRol.getNombre() + " creado con éxito")
+                            : ResponseEntity.badRequest().body("Error al crear el rol.");
+                });
     }
-
 }
