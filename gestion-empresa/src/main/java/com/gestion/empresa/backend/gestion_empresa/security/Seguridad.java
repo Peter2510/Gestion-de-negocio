@@ -37,8 +37,8 @@ public class Seguridad {
                         csrf.disable())
                 .authorizeHttpRequests(authRequest ->
                         authRequest
-                                .requestMatchers("/**").permitAll()
-                                .anyRequest().permitAll()
+                                .requestMatchers("/Auth/**").permitAll()
+                                .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManager->
                         sessionManager
