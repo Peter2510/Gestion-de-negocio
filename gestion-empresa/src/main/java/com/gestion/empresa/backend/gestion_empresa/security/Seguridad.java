@@ -37,7 +37,7 @@ public class Seguridad {
                         csrf.disable())
                 .authorizeHttpRequests(authRequest ->
                         authRequest
-                                .requestMatchers("/Auth/**").permitAll()
+                                .requestMatchers("/health/**", "/Auth/**").permitAll() 
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManager->
