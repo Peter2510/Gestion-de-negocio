@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -25,9 +26,9 @@ public class RolController {
     private RolRepository rolRepository;
 
     @GetMapping("/obtenerRoles")
-    public ResponseEntity<List<Rol>> obtenerRolesRegistrados() {
-        List<Rol> roles = rolService.findAll();
-        return ResponseEntity.ok(roles);  // Simplificado utilizando ResponseEntity.ok() que ya devuelve 200 OK.
+    public ResponseEntity<Map<String, Object>> obtenerRolesRegistrados() {
+        List<Rol> roles = rolService.obtenerRolesRegistrados();
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "roles", roles));
     }
 
 //    @GetMapping("/{id}")
@@ -36,16 +37,20 @@ public class RolController {
 //    }
 
     @PostMapping("/crearRol")
-    public ResponseEntity<String> crearRol(@Valid @RequestBody Rol rol) {
-        return rolRepository.findByNombre(rol.getNombre())
-                .map(existingRole -> ResponseEntity.badRequest()
-                        .body("El rol con nombre " + rol.getNombre() + " ya existe"))
-                .orElseGet(() -> {
-                    Rol nuevoRol = rolService.crearRol(rol);
-                    return nuevoRol != null
-                            ? ResponseEntity.status(HttpStatus.CREATED)
-                            .body("El rol " + nuevoRol.getNombre() + " creado con éxito")
-                            : ResponseEntity.badRequest().body("Error al crear el rol.");
-                });
+    public ResponseEntity<Map<String, Object>> crearRol(@Valid @RequestBody Rol rol) {
+        //verificar si el rol ya existe
+        if (rolService.buscarPorNombre(rol.getNombre()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("ok", false, "mensaje", "El rol " + rol.getNombre() + " ya existe"));
+        }
+
+        //si no existe se crea el rol
+        Rol rolCreado = rolService.crearRol(rol);
+
+        //verificar si el rol fue creado
+        if (rolCreado == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("ok", false, "mensaje", "No se pudo crear el rol"));
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("ok", true, "mensaje", "Rol creado exitosamente"));
     }
 }

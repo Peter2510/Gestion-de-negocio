@@ -16,13 +16,11 @@ public class RolServiceImpl implements RolService {
     private RolRepository rolRepository;
 
     @Override
-    public Rol buscarPorNombre(String nombre) {
-        Optional<Rol> rolOptional = rolRepository.findByNombre(nombre);
-
-        return rolOptional.orElse(null);
+    public Optional<Rol> buscarPorNombre(String nombre) {
+        return rolRepository.findByNombre(nombre);
     }
 
-    public List<Rol> findAll(){
+    public List<Rol> obtenerRolesRegistrados(){
         return rolRepository.findAll();
     }
 
