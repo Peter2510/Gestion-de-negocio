@@ -33,7 +33,7 @@ public class JwtServicio {
 // extare el nombre de usuario 7
 
     public String extarerNombreUsuario (String token){
-            return  extraerElementos(token, Claims::getSubject);
+            return  extraerElementos(token, claims -> claims.get("nombreUsuario", String.class));
     }
 
     public <T> T extraerElementos(String token, Function<Claims, T> resolucionClaims){
@@ -66,7 +66,7 @@ public class JwtServicio {
     return Jwts.builder()
             .setClaims(claims)
             .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis()+tiempoExpiracion))
+            .setExpiration(new Date(System.currentTimeMillis()+tiempoExpiracion*10))
             .signWith(getLlaveIngreso(), SignatureAlgorithm.HS256)
             .compact();
     }
@@ -83,22 +83,21 @@ public class JwtServicio {
 
     public boolean esValido(String token, UserDetails userDetails){
         final String cadena =extarerNombreUsuario(token);
-        return (cadena.equals(userDetails.getUsername()) && !TokenExpirado(token));
+        return (cadena.equals(userDetails.getUsername()) && !isTokenExpired(token));
 
     }
 
 
-    public boolean TokenExpirado(String token){
-        return ObtenerExpiracion(token).before(new Date());
+
+    private Date getExpiration(String token)
+    {
+        return extraerElementos(token, Claims::getExpiration);
     }
 
-
-    public Date ObtenerExpiracion(String token) {
-    return extraerElementos(token, Claims::getExpiration);
+    private boolean isTokenExpired(String token)
+    {
+        return getExpiration(token).before(new Date());
     }
-
-
-
     private Claims extraerTodasLasClaims(String token) {
         return Jwts
                 .parserBuilder()
