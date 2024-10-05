@@ -37,8 +37,17 @@ export class ServicioAuthService {
   }
 
   // para registrar nuevos usuarios
-  registro(persona: Persona, usuario: Usuario) {
-    return this.http.post(`${this.url}/auth/crearCliente`, usuario);
+  registro(
+    persona: Persona,
+    usuario: Usuario,
+    password: string,
+    nombreUsuario: string,
+    a2fActivo: boolean
+  ) {
+    const body = { persona, usuario, password, nombreUsuario, a2fActivo };
+    return this.http.post(`${this.url}/Auth/registro`, body, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${this.token}`),
+    });
   }
 
   // para Obtener generos

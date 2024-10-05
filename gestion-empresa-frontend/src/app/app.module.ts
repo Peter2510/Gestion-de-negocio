@@ -14,18 +14,16 @@ import { VistaGeneralComponent } from './usuarios/vista-general/vista-general.co
 import { ModuloUsuariosModule } from './usuarios/modulo-usuarios/modulo-usuarios.module';
 import { PanelAdministradorComponent } from './admin/panel-administrador/panel-administrador.component';
 import { ModuloAdministradorModule } from './admin/modulo-administrador/modulo-administrador.module';
+import { HeaderUsuarioComponent } from './Utils/header-usuario/header-usuario.component';
+import { HeaderAdminComponent } from './Utils/header-admin/header-admin.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    VistaGeneralComponent,
-    PanelAdministradorComponent,
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ModuloAuthModule,
-    ModuloAdministradorModule,
+    ModuloUsuariosModule,
     HttpClientModule,
     CommonModule,
     FormsModule,

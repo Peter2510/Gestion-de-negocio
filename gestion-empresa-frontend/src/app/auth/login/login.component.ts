@@ -45,9 +45,9 @@ export class LoginComponent {
       const id = idTipoUsuario;
 
       if (id === 2) {
-        this.router.navigate(['/administrador']);
-      } else if (id === 5) {
         this.router.navigate(['/usuarios']);
+      } else if (id === 5) {
+        this.router.navigate(['/administrador']);
       }
     }
   }
