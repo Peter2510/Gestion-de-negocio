@@ -22,9 +22,6 @@ public class RolController {
     @Autowired
     private RolServiceImpl rolService;
 
-    @Autowired
-    private RolRepository rolRepository;
-
     @GetMapping("/obtenerRoles")
     public ResponseEntity<Map<String, Object>> obtenerRolesRegistrados() {
         List<Rol> roles = rolService.obtenerRolesRegistrados();

@@ -31,7 +31,7 @@ class RolServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        // Crear un objeto de Rol para los tests
+        //crear un objeto de Rol para los tests
         rol = new Rol();
         rol.setId(1L);
         rol.setNombre("Contabilidad");
@@ -40,13 +40,13 @@ class RolServiceImplTest {
 
     @Test
     void buscarPorNombre_RolExistente() {
-        //Simulando que existe un rol con ese nombre
+        //simulando que existe un rol con ese nombre
         when(rolRepository.findByNombre("Contabilidad")).thenReturn(Optional.of(rol));
 
         //llamar al metodo
         Optional<Rol> resultado = rolService.buscarPorNombre("Contabilidad");
 
-        // Verificar resultado
+        //verificar resultado
         assertNotNull(resultado);
         assertEquals("Contabilidad", resultado.isPresent() ? resultado.get().getNombre() : "");
         //se define un número de invocaciones y se busca al rol Contabilidad
@@ -67,8 +67,8 @@ class RolServiceImplTest {
     }
 
     @Test
-    void findAll_ExistenRoles() {
-        // Simular que hay roles disponibles
+        void findAll_ExistenRoles() {
+        //simular que hay roles disponibles
         List<Rol> roles = new ArrayList<>();
         roles.add(rol);
         when(rolRepository.findAll()).thenReturn(roles);
@@ -76,7 +76,7 @@ class RolServiceImplTest {
         //llamar al metodo
         List<Rol> resultado = rolService.obtenerRolesRegistrados();
 
-        // Verificar resultado
+        //verificar resultado
         assertNotNull(resultado);
         assertEquals(1, resultado.size());
         assertEquals("Contabilidad", resultado.get(0).getNombre());
