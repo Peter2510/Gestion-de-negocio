@@ -22,6 +22,16 @@ export class LoginComponent {
       .subscribe((response: any) => {
         if (response.token == undefined) {
           return;
+        } else if (
+          response.token ===
+          'Contraseña incorrecta para el usuario: ' + this.nombreUsuario
+        ) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al iniciar sesión',
+            text: 'Ha ocurrido un error inesperado 2.',
+          });
+          return;
         }
         this.inicioSesion(response.token);
       });
