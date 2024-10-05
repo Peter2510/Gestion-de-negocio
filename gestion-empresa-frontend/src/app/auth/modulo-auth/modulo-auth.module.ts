@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { LoginComponent } from '../login/login.component';
 import { RecuperacionContraseniaComponent } from '../recuperacion-contrasenia/recuperacion-contrasenia.component';
 import { RegistroComponent } from '../registro/registro.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -11,6 +12,6 @@ import { RegistroComponent } from '../registro/registro.component';
     RegistroComponent,
     RecuperacionContraseniaComponent,
   ],
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FormsModule],
 })
 export class ModuloAuthModule {}

@@ -9,6 +9,8 @@ import { RecuperacionContraseniaComponent } from './auth/recuperacion-contraseni
 import { ModuloAuthModule } from './auth/modulo-auth/modulo-auth.module';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -17,6 +19,7 @@ import { HttpClientModule } from '@angular/common/http';
     ModuloAuthModule,
     HttpClientModule,
     CommonModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

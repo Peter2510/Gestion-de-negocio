@@ -6,42 +6,44 @@
     <div class="relative px-4 py-10 bg-white shadow-lg sm:rounded-lg sm:p-20">
       <div class="max-w-md mx-auto">
         <h1 class="text-2xl font-semibold">Ingresa Sesion</h1>
-        <form action="/login" method="POST" class="space-y-4">
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Correo Electronico</span>
-            </label>
-            <input
-              type="text"
-              placeholder="Ingrese su correo electronico"
-              class="input input-bordered w-full"
-              required
-            />
-          </div>
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Credenciales</span>
-            </label>
-            <input
-              type="password"
-              placeholder="Ingrese sus credenciales"
-              class="input input-bordered w-full"
-              required
-            />
-          </div>
-          <div class="form-control">
-            <label class="label">
-              <a
-                href="auth/recuperarCredencial"
-                class="label-text-alt link link-hover"
-                >Olvido su contrasenia?</a
-              >
-            </label>
-          </div>
-          <div class="form-control mt-6">
-            <button type="submit" class="btn btn-primary w-full">Login</button>
-          </div>
-        </form>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Nombre de usuario</span>
+          </label>
+          <input
+            type="text"
+            placeholder="Ingrese su correo electronico"
+            class="input input-bordered w-full"
+            required
+            [(ngModel)]="this.nombreUsuario"
+          />
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Credenciales</span>
+          </label>
+          <input
+            type="password"
+            placeholder="Ingrese sus credenciales"
+            class="input input-bordered w-full"
+            required
+            [(ngModel)]="this.password"
+          />
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <a
+              href="auth/recuperarCredencial"
+              class="label-text-alt link link-hover"
+              >Olvido su contrasenia?</a
+            >
+          </label>
+        </div>
+        <div class="form-control mt-6">
+          <button (click)="this.login()" class="btn btn-primary w-full">
+            Login
+          </button>
+        </div>
         <p class="mt-4 text-sm text-center">
           Aun no tiene una cuenta?
           <a href="auth/registro" class="text-blue-600 hover:underline"

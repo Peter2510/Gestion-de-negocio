@@ -13,5 +13,5 @@ export interface Persona {
 
 export interface Genero {
   id: number;
-  nombre: string;
+  genero: string;
 }

@@ -27,6 +27,18 @@
             class="input input-bordered"
           />
         </div>
+        <!-- Generos -->
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Seleccione un genero</span>
+          </label>
+          <select class="select select-bordered">
+            <option disabled selected>Seleccione un género</option>
+            <ng-container *ngFor="let genero of servicioAuth.generos()">
+              <option>{{ genero.genero }}</option>
+            </ng-container>
+          </select>
+        </div>
 
         <!-- Password -->
         <div class="form-control">
