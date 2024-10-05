@@ -84,18 +84,18 @@ export class ServicioAuthService {
 
   getIdUsuario(): number | null {
     const decodedToken = this.decodeToken();
-    if (decodedToken && decodedToken.idUsuario) {
-      return decodedToken.idUsuario;
+    if (decodedToken && decodedToken.sub) {
+      return decodedToken.sub;
     }
     return null;
   }
 
   public getIdTipoUsuario(): number | null {
     const decodedToken = this.decodeToken();
-    if (decodedToken && decodedToken.idTipoUsuario) {
-      console.log(decodedToken.idTipoUsuario, '---------');
+    if (decodedToken && decodedToken.rol.id) {
+      console.log(decodedToken.rol.id, '---------');
 
-      return decodedToken.idTipoUsuario;
+      return decodedToken.rol.id;
     }
     return null;
   }
@@ -134,8 +134,10 @@ export class ServicioAuthService {
 
   getNombre(): boolean | null {
     const decodedToken = this.decodeToken();
-    if (decodedToken && decodedToken.nombre) {
-      return decodedToken.nombre;
+    console.log(decodedToken);
+
+    if (decodedToken && decodedToken.nombreUsuario) {
+      return decodedToken.nombreUsuario;
     }
     return null;
   }

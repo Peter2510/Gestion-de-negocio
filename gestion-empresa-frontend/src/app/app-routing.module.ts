@@ -9,6 +9,20 @@ const routes: Routes = [
       import('./auth/auth-routing.module').then((m) => m.AuthRoutingModule),
   },
   {
+    path: 'usuarios',
+    loadChildren: () =>
+      import('./usuarios/usuarios-routing/usuarios-routing.module').then(
+        (m) => m.UsuariosRoutingModule
+      ),
+  },
+  {
+    path: 'administrador',
+    loadChildren: () =>
+      import('./admin/administrador-routing/administrador-routing.module').then(
+        (m) => m.AdministradorRoutingModule
+      ),
+  },
+  {
     path: '**',
     redirectTo: '/auth/login',
     pathMatch: 'full',

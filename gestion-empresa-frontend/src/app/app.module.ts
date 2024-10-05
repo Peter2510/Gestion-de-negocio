@@ -10,13 +10,22 @@ import { ModuloAuthModule } from './auth/modulo-auth/modulo-auth.module';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { VistaGeneralComponent } from './usuarios/vista-general/vista-general.component';
+import { ModuloUsuariosModule } from './usuarios/modulo-usuarios/modulo-usuarios.module';
+import { PanelAdministradorComponent } from './admin/panel-administrador/panel-administrador.component';
+import { ModuloAdministradorModule } from './admin/modulo-administrador/modulo-administrador.module';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+    VistaGeneralComponent,
+    PanelAdministradorComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ModuloAuthModule,
+    ModuloAdministradorModule,
     HttpClientModule,
     CommonModule,
     FormsModule,
