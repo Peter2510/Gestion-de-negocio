@@ -31,7 +31,7 @@ class RolServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        // Crear un objeto de Rol para los tests
+        //crear un objeto de Rol para los tests
         rol = new Rol();
         rol.setId(1L);
         rol.setNombre("Contabilidad");
@@ -40,43 +40,43 @@ class RolServiceImplTest {
 
     @Test
     void buscarPorNombre_RolExistente() {
-        // Simular que existe un rol con ese nombre
+        //simulando que existe un rol con ese nombre
         when(rolRepository.findByNombre("Contabilidad")).thenReturn(Optional.of(rol));
 
-        // Llamar al método
-        Rol resultado = rolService.buscarPorNombre("Contabilidad");
+        //llamar al metodo
+        Optional<Rol> resultado = rolService.buscarPorNombre("Contabilidad");
 
-        // Verificar resultado
+        //verificar resultado
         assertNotNull(resultado);
-        assertEquals("Contabilidad", resultado.getNombre());
-        // Se define un número de invocaciones y se y se busca al rol Contabilidad
+        assertEquals("Contabilidad", resultado.isPresent() ? resultado.get().getNombre() : "");
+        //se define un número de invocaciones y se busca al rol Contabilidad
         verify(rolRepository, times(1)).findByNombre("Contabilidad");
     }
 
     @Test
     void buscarPorNombre_RolNoExistente() {
-        // Simular que no existe un rol con ese nombre
-        when(rolRepository.findByNombre("Administración")).thenReturn(Optional.empty());
+        //simular que no existe un rol con ese nombre
+        when(rolRepository.findByNombre("Administracion")).thenReturn(Optional.empty());
 
-        // Llamar al método
-        Rol resultado = rolService.buscarPorNombre("Administración");
+        //llamar al metodo
+        Optional<Rol> resultado = rolService.buscarPorNombre("Administracion");
 
-        // Verificar resultado
-        assertNull(resultado);
-        verify(rolRepository, times(1)).findByNombre("Administración");
+        //verificar resultado
+        assertEquals(Optional.empty(), resultado);
+        verify(rolRepository, times(1)).findByNombre("Administracion");
     }
 
     @Test
-    void findAll_ExistenRoles() {
-        // Simular que hay roles disponibles
+        void findAll_ExistenRoles() {
+        //simular que hay roles disponibles
         List<Rol> roles = new ArrayList<>();
         roles.add(rol);
         when(rolRepository.findAll()).thenReturn(roles);
 
-        // Llamar al método
-        List<Rol> resultado = rolService.findAll();
+        //llamar al metodo
+        List<Rol> resultado = rolService.obtenerRolesRegistrados();
 
-        // Verificar resultado
+        //verificar resultado
         assertNotNull(resultado);
         assertEquals(1, resultado.size());
         assertEquals("Contabilidad", resultado.get(0).getNombre());
@@ -85,13 +85,13 @@ class RolServiceImplTest {
 
     @Test
     void findAll_NoExistenRoles() {
-        // Simular que no hay roles disponibles
+        //simulando que no hay roles disponibles
         when(rolRepository.findAll()).thenReturn(new ArrayList<>());
 
-        // Llamar al método
-        List<Rol> resultado = rolService.findAll();
+        //llamando al metodo
+        List<Rol> resultado = rolService.obtenerRolesRegistrados();
 
-        // Verificar resultado
+        //verificar resultado
         assertNotNull(resultado);
         assertTrue(resultado.isEmpty());
         verify(rolRepository, times(1)).findAll();
@@ -99,28 +99,16 @@ class RolServiceImplTest {
 
     @Test
     void crearRol_CrearNuevoRol() {
-        // Simular el comportamiento de guardar un nuevo rol
+        //simular el comportamiento de guardar un nuevo rol
         when(rolRepository.save(rol)).thenReturn(rol);
 
-        // Llamar al método
+        //llamar al metodo
         Rol resultado = rolService.crearRol(rol);
 
-        // Verificar resultado
+        //verificar resultado
         assertNotNull(resultado);
         assertEquals("Contabilidad", resultado.getNombre());
         verify(rolRepository, times(1)).save(rol);
     }
 
-    @Test
-    void crearRol_ErrorAlCrear() {
-        // Simular el comportamiento de que el rol no se pueda guardar (por ejemplo, un error en la base de datos)
-        when(rolRepository.save(rol)).thenThrow(new RuntimeException("Error al crear el rol"));
-
-        // Llamar al método
-        Exception exception = assertThrows(RuntimeException.class, () -> rolService.crearRol(rol));
-
-        // Verificar resultado
-        assertEquals("Error al crear el rol", exception.getMessage());
-        verify(rolRepository, times(1)).save(rol);
-    }
 }

@@ -11,10 +11,10 @@ import java.io.Serializable;
 
 
 @Data
-@NoArgsConstructor 
+@NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class PermisoRol implements Serializable {
+public class Permiso implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -23,12 +23,6 @@ public class PermisoRol implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "idRol", nullable = false)
-    private Rol rol;
-   
-    @ManyToOne
-    @JoinColumn(name = "idPermiso", nullable = false)
-    private Permiso permiso;
-
+    @Column(name = "nombre", nullable = false, length = 200, unique = true)
+    private String nombre;
 }
