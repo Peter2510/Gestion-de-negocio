@@ -35,9 +35,10 @@ public class Seguridad {
         return http
                 .csrf(csrf ->
                         csrf.disable())
+                .cors(withDefaults())
                 .authorizeHttpRequests(authRequest ->
                         authRequest
-                                .requestMatchers("/health/**", "/Auth/**").permitAll()
+                                .requestMatchers("/health/**", "/Auth/**", "/Genero/**").permitAll()
                                 .anyRequest().permitAll()
                                 //.anyRequest().authenticated()
                 )
@@ -55,9 +56,10 @@ public class Seguridad {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("https://app-backend.com", "http://localhost:8080"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedOrigins(List.of("http://localhost:4200")); // Update to the correct front-end origin
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        configuration.setAllowCredentials(true); // Allow credentials if necessary
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
