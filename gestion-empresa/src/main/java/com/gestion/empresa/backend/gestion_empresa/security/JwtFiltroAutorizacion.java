@@ -50,51 +50,55 @@ public class JwtFiltroAutorizacion extends OncePerRequestFilter {
     // metodo general
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        //se obtiene la ruta de la solicitud
+        String path = request.getRequestURI();
+
+        //verifica si la ruta es permitida y no necesita validaciones de jwt (no requiere autenticación)
+        //aca agregamos las que vamos generando y no necesiten de validaciones
+        if (path.startsWith("/Genero") || path.startsWith("/Auth") || path.startsWith("/health")) {
+            //si es una ruta permitida, no se el filtro JWT
+            filterChain.doFilter(request, response);
+            // se retorna
+            return;
+        }
+
         // token
         final String token = getTokenRequest(request);
         final String nombreUsuario;
 
-        if (token == null ) {
+        //si no hay token, continúa con la cadena de filtros sin hacer nada
+        if (token == null) {
             filterChain.doFilter(request, response);
             return;
         }
 
+        //si hay un token, obtiene el nombre de usuario desde el JWT
+        nombreUsuario = jwtServicio.extarerNombreUsuario(token);
 
-        //aca obtiene al usuario
-        nombreUsuario=jwtServicio.extarerNombreUsuario(token);
+        //si hay un nombre de usuario y no hay autenticación previa en el contexto de seguridad
+        if (nombreUsuario != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            //busca el usuario en la base de datos
+            UserDetails userDetails = userDetailsService.loadUserByUsername(nombreUsuario);
 
-
-        // si todo esta bien y esta acutenticado lo jala
-        if (nombreUsuario!=null && SecurityContextHolder.getContext().getAuthentication()==null)
-        {
-            // buscar en base de datos
-            UserDetails userDetails=userDetailsService.loadUserByUsername(nombreUsuario);
-
-            // si es valido se genera el token
-            if (jwtServicio.esValido(token, userDetails))
-            {
-                UsernamePasswordAuthenticationToken authToken= new UsernamePasswordAuthenticationToken(
+            //si el token es válido, crea la autenticación
+            if (jwtServicio.esValido(token, userDetails)) {
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
                         userDetails.getAuthorities());
 
-                // hace el token de detalles
+                //añade los detalles de la solicitud al token de autenticación
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-
-                // ingresa en seguridad
+                //establece la autenticación en el contexto de seguridad
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
-
         }
-//
-            filterChain.doFilter(request, response);
-//
-//        } catch (Exception exception){
-//            handlerExceptionResolver.resolveException(request, response, null, exception);
-//
-//        }
+
+        //continúa con el siguiente filtro en la cadena
+        filterChain.doFilter(request, response);
     }
+
 
     public String getTokenRequest(HttpServletRequest valor){
         final String authHeader=valor.getHeader(HttpHeaders.AUTHORIZATION);

@@ -24,34 +24,24 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @RequiredArgsConstructor
 public class Seguridad {
 
-
-    //PONER FINALLLL NO JALA SIN ESTO
     private final AuthenticationProvider authenticationProvider;
     private final JwtFiltroAutorizacion jwtFiltroAutorizacion;
-
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf ->
-                        csrf.disable())
+                .csrf(csrf -> csrf.disable())
                 .cors(withDefaults())
-                .authorizeHttpRequests(authRequest ->
-                        authRequest
-                                .requestMatchers("/health/**", "/Auth/**", "/Genero/**").permitAll()
-                                .anyRequest().permitAll()
-                                //.anyRequest().authenticated()
+                .authorizeHttpRequests(authRequest -> authRequest
+                        .requestMatchers("/health/**", "/Auth/**", "/Genero/**").permitAll()
+                        .anyRequest().authenticated()
                 )
-                .sessionManagement(sessionManager->
-                        sessionManager
-                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(sessionManager -> sessionManager
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFiltroAutorizacion, UsernamePasswordAuthenticationFilter.class)
                 .build();
-
-//        return http.build();
     }
-
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -65,4 +55,7 @@ public class Seguridad {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
+
+
 }
