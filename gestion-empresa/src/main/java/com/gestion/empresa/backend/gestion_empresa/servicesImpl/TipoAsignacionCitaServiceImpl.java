@@ -34,4 +34,10 @@ public class TipoAsignacionCitaServiceImpl implements TipoAsignacionCitaService 
     public List<TipoAsignacionCita> obtenerTipoAsignacionCitaRegistrados() {
         return tipoAsignacionCitaRepository.findAll();
     }
+
+    @Override
+    public Optional<TipoAsignacionCita> buscarPorId(Long id) {
+        return tipoAsignacionCitaRepository.findById(id);
+    }
+
 }

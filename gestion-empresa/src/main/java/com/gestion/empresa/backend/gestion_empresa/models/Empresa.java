@@ -49,21 +49,20 @@ public class Empresa implements Serializable {
     @Column(name="descripcion", nullable = false, length = 250)
     private String descripcion;
 
-    @Min(value = 1, message = "La cantidad de servicios debe ser al menos 1")
     @Column(name="cantidadServicios", nullable = false)
     private int cantidadServicios;
 
-    @Min(value = 1, message = "La cantidad de empleados debe ser al menos 1")
     @Column(name="cantidadEmpleados", nullable = false)
     private int cantidadEmpleados;
 
     @NotNull(message = "El tipo de servicio es obligatorio")
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "idTipoServicio", nullable = false)
     private TipoServicio tipoServicio;
 
     @NotNull(message = "El tipo de asignación de citas es obligatorio")
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "idTipoAsignacionCita", nullable = false)
     private TipoAsignacionCita tipoAsignacionCita;
+
 }

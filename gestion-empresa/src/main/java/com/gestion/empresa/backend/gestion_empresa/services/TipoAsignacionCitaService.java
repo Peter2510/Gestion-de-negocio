@@ -18,5 +18,6 @@ public interface TipoAsignacionCitaService {
     Optional<TipoAsignacionCita> buscarPorNombre(String tipo);
     TipoAsignacionCita crearTipoAsignacionCita(TipoAsignacionCita tipoAsignacionCita);
     List<TipoAsignacionCita> obtenerTipoAsignacionCitaRegistrados();
+    Optional<TipoAsignacionCita> buscarPorId(Long id);
 
 }

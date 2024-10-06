@@ -13,5 +13,5 @@ public interface TipoServicioService {
     Optional<TipoServicio> buscarPorNombre(String nombre);
     TipoServicio crearTipoServicio(TipoServicio tipoServicio);
     List<TipoServicio> obtenerTipoServiciosRegistrados();
-
+    Optional<TipoServicio> buscarPorId(Long id);
 }

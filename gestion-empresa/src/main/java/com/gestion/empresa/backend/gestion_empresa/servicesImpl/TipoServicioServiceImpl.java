@@ -35,4 +35,10 @@ public class TipoServicioServiceImpl implements TipoServicioService {
     public List<TipoServicio> obtenerTipoServiciosRegistrados() {
         return tipoServicioRepository.findAll();
     }
+
+    @Override
+    public Optional<TipoServicio> buscarPorId(Long id) {
+        return tipoServicioRepository.findById(id);
+    }
+
 }
