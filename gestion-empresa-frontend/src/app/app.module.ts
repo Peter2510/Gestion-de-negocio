@@ -21,8 +21,9 @@ import { InformacionEmpresaComponent } from './admin/informacion-empresa/informa
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
+import { NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FlatpickrModule } from 'angularx-flatpickr';
+import { VistaPerfilUsuarioComponent } from './usuarios/vista-perfil-usuario/vista-perfil-usuario.component';
 
 @NgModule({
   declarations: [AppComponent],
@@ -32,12 +33,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ModuloAuthModule,
     ModuloUsuariosModule,
     HttpClientModule,
+    NgbModalModule,
     CommonModule,
     FormsModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory,
     }),
+    FlatpickrModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent],
