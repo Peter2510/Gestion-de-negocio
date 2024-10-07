@@ -1,1 +1,31 @@
-<app-header-usuario></app-header-usuario>
+<div class="calendar-container">
+  <div class="row text-center">
+    <div class="col">
+      <button (click)="setView(CalendarView.Month)">Mes</button>
+      <button (click)="setView(CalendarView.Week)">Semana</button>
+      <button (click)="setView(CalendarView.Day)">Día</button>
+    </div>
+  </div>
+  <div class="calendar-body">
+    <mwl-calendar-month-view
+      *ngIf="view === CalendarView.Month"
+      [viewDate]="viewDate"
+      [events]="events"
+    >
+    </mwl-calendar-month-view>
+
+    <mwl-calendar-week-view
+      *ngIf="view === CalendarView.Week"
+      [viewDate]="viewDate"
+      [events]="events"
+    >
+    </mwl-calendar-week-view>
+
+    <mwl-calendar-day-view
+      *ngIf="view === CalendarView.Day"
+      [viewDate]="viewDate"
+      [events]="events"
+    >
+    </mwl-calendar-day-view>
+  </div>
+</div>

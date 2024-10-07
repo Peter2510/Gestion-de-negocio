@@ -16,6 +16,8 @@ import { PanelAdministradorComponent } from './admin/panel-administrador/panel-a
 import { ModuloAdministradorModule } from './admin/modulo-administrador/modulo-administrador.module';
 import { HeaderUsuarioComponent } from './Utils/header-usuario/header-usuario.component';
 import { HeaderAdminComponent } from './Utils/header-admin/header-admin.component';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 @NgModule({
   declarations: [AppComponent],
@@ -27,6 +29,10 @@ import { HeaderAdminComponent } from './Utils/header-admin/header-admin.componen
     HttpClientModule,
     CommonModule,
     FormsModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory,
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent],
