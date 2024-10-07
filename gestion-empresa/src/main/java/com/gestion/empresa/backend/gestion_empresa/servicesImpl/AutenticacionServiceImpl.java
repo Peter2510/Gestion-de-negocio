@@ -14,6 +14,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -43,9 +44,9 @@ public class AutenticacionServiceImpl {
 
         // Comparar la contraseña ingresada con la contraseña encriptada en la base de datos
         if (!passwordEncoder.matches(valor.getPassword(), user.getPassword())) {
-            String respuesta = "Contraseña incorrecta para el usuario: " + valor.getNombreUsuario();
+            System.out.println("mal");
+            throw new BadCredentialsException("Credenciales incorrectas");
 
-            return AuthRespuesta.builder().token(respuesta).build();
         }
 
         // Si la autenticación es correcta, generar el token JWT

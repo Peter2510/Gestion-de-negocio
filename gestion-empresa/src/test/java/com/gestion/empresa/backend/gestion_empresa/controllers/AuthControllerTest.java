@@ -4,12 +4,15 @@ import com.gestion.empresa.backend.gestion_empresa.dto.Login;
 import com.gestion.empresa.backend.gestion_empresa.dto.RegistroUsuarios;
 import com.gestion.empresa.backend.gestion_empresa.models.Persona;
 import com.gestion.empresa.backend.gestion_empresa.models.Rol;
+import com.gestion.empresa.backend.gestion_empresa.models.Usuarios;
 import com.gestion.empresa.backend.gestion_empresa.repositories.PersonaRepository;
 import com.gestion.empresa.backend.gestion_empresa.repositories.RolRepository;
 import com.gestion.empresa.backend.gestion_empresa.repositories.UsuarioRepository;
 import com.gestion.empresa.backend.gestion_empresa.security.JwtServicio;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.AutenticacionServiceImpl;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.RolServiceImpl;
+import org.apache.http.auth.AuthenticationException;
+import org.apache.http.auth.InvalidCredentialsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -24,7 +28,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Author: alexxus
@@ -77,6 +81,33 @@ public class AuthControllerTest {
         });
 
         assertEquals("Usuario no encontrado: testUser", exception.getMessage());
+    }
+
+
+    @Test
+    public void testLoginUsuarioCredencialesIncorrectas() {
+        String username = "MartinNnNnN";
+        String password = "simon1234";
+        Login nuevosDatos = new Login(username, password);
+
+        // Usuario simulado con contraseña encriptada
+        Usuarios mockUser = new Usuarios();
+        mockUser.setNombreUsuario(username);
+        mockUser.setPassword("holaaaaaa");  // Simular una contraseña encriptada con bcrypt
+
+        when(usuarioRepository.findByNombreUsuario(username)).thenReturn(Optional.of(mockUser));
+
+        Exception exception = assertThrows(BadCredentialsException.class, () -> {
+            autenticacionService.login(nuevosDatos);
+        });
+
+        System.out.println("Mensaje capturado de la excepción: " + exception.getMessage());
+
+        // Verificamos que el mensaje de la excepción es el correcto
+        assertEquals("Credenciales incorrectas", exception.getMessage());
+
+        // Verificamos que el repositorio fue llamado una vez con el nombre de usuario incorrecto
+        verify(usuarioRepository, times(1)).findByNombreUsuario(username);
     }
 
 //
