@@ -30,4 +30,10 @@ public class EmpresaServiceImpl implements EmpresaService {
         return empresaRepository.save(empresa);
     }
 
+    @Override
+    public Empresa actualizarEmpresa(Empresa empresa) {
+        return empresaRepository.updateEmpresaById(empresa.getId(),empresa);
+    }
+
+
 }

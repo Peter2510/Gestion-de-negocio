@@ -14,4 +14,5 @@ import java.util.Optional;
 public interface EmpresaService {
     Optional<Empresa> findById(Long id);
     Empresa crearEmpresa(Empresa empresa);
+    Empresa actualizarEmpresa(Empresa empresa);
 }
