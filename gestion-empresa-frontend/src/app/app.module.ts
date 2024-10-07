@@ -18,6 +18,11 @@ import { HeaderUsuarioComponent } from './Utils/header-usuario/header-usuario.co
 import { HeaderAdminComponent } from './Utils/header-admin/header-admin.component';
 import { InformacionEmpresaComponent } from './admin/informacion-empresa/informacion-empresa.component';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 
 @NgModule({
   declarations: [AppComponent],
