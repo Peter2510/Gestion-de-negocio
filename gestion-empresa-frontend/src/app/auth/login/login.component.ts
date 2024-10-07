@@ -42,11 +42,11 @@ export class LoginComponent {
 
     const message = `Bienvenido, ${this.servicioAuth.getNombre()}!`;
 
-    Swal.fire({
-      icon: 'success',
-      title: 'Inicio de sesión exitoso ',
-      text: message,
-    });
+    // Swal.fire({
+    //   icon: 'success',
+    //   title: 'Inicio de sesión exitoso ',
+    //   text: message,
+    // });
 
     const idTipoUsuario = this.servicioAuth.getIdTipoUsuario();
     console.log(idTipoUsuario);
@@ -56,7 +56,7 @@ export class LoginComponent {
 
       if (id === 2) {
         this.router.navigate(['/usuarios']);
-      } else if (id === 5) {
+      } else if (id === 1) {
         this.router.navigate(['/administrador']);
       }
     }

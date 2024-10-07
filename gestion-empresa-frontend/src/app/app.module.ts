@@ -16,6 +16,8 @@ import { PanelAdministradorComponent } from './admin/panel-administrador/panel-a
 import { ModuloAdministradorModule } from './admin/modulo-administrador/modulo-administrador.module';
 import { HeaderUsuarioComponent } from './Utils/header-usuario/header-usuario.component';
 import { HeaderAdminComponent } from './Utils/header-admin/header-admin.component';
+import { InformacionEmpresaComponent } from './admin/informacion-empresa/informacion-empresa.component';
+
 
 @NgModule({
   declarations: [AppComponent],
