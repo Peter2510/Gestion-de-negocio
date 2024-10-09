@@ -1,1 +1,107 @@
-<p>informacion-empresa works!</p>
+<app-header-admin *ngIf="!loading"></app-header-admin>
+<div class="flex justify-center items-center bg-base-200">
+    <form *ngIf="!loading" class="p-6 bg-base-100 shadow-lg rounded-lg w-full max-w-md space-y-4 mt-10"
+        (ngSubmit)="actualizarEmpresa()">
+
+        <h2 class="text-xl font-bold text-center">{{ empresa.nombre }}</h2>
+
+        <label class="block">
+            <span class="label-text">Nombre de la empresa</span>
+            <input type="text" placeholder="Ingresa el nombre de la empresa" [(ngModel)]="empresa.nombre" name="nombre"
+                class="input input-bordered input-secondary w-full" required />
+        </label>
+
+        <label class="block">
+            <span class="label-text">Descripción de la empresa</span>
+            <textarea placeholder="Ingresa la descripción de la empresa" [(ngModel)]="empresa.descripcion"
+                name="descripcion" class="textarea textarea-bordered textarea-secondary w-full"
+                rows="2">{{ empresa.descripcion }}</textarea>
+        </label>
+
+        <label class="block">
+            <span class="label-text">Dirección de la empresa</span>
+            <textarea placeholder="Ingresa la dirección de la empresa" [(ngModel)]="empresa.direccion" name="direccion"
+                class="textarea textarea-bordered textarea-secondary w-full" rows="2">{{ empresa.direccion }}</textarea>
+        </label>
+
+        <label class="block">
+            <span class="label-text">Teléfono</span>
+            <input type="number" placeholder="Ingresa el número de teléfono" max="99999999" min="10000000"
+                [(ngModel)]="empresa.telefono" name="telefono" pattern="[0-9]*"
+                class="input input-bordered input-secondary w-full" />
+        </label>
+
+        <label class="block">
+            <span class="label-text">Correo electrónico</span>
+            <input type="email" placeholder="Ingresa el correo electrónico de la empresa" [(ngModel)]="empresa.email"
+                name="email" class="input input-bordered input-secondary w-full" required />
+        </label>
+
+        <label class="block" *ngIf="empresa?.tipoServicio">
+            <span class="label-text">Tipo de Empresa</span>
+            <select name="tipoEmpresa" class="select select-bordered select-secondary w-full" [(ngModel)]="empresa.tipoServicio.id">
+                <option *ngFor="let tipoServicio of tiposServicios" [value]="tipoServicio.id">{{tipoServicio.nombre}}</option>
+            </select>
+        </label>
+
+        <label class="block" *ngIf="empresa?.tipoAsignacionCita">
+            <span class="label-text">Forma de asignación de las citas</span>
+            <select name="formaAsignacion" class="select select-bordered select-secondary w-full" [(ngModel)]="empresa.tipoAsignacionCita.id">
+                <option *ngFor="let tipoAsignacion of tipoAsignacionCitas" [value]="tipoAsignacion.id">{{tipoAsignacion.tipo}}</option>
+            </select>
+        </label>
+
+        <div>
+            <span class="label-text">Cantidad de Empleados:</span>
+            <input type="number" [value]="empresa.cantidadEmpleados" class="input input-bordered input-secondary w-full"
+                readonly />
+        </div>
+        <div>
+            <span class="label-text">Cantidad de Servicios:</span>
+            <input type="number" [value]="empresa.cantidadServicios" class="input input-bordered input-secondary w-full"
+                readonly />
+        </div>
+
+        <label class="block">
+            <span class="label-text">Ingresa nuevo logo de la empresa</span>
+            <input type="file" 
+                   accept="image/*" 
+                   class="file-input file-input-bordered file-input-secondary w-full" 
+                   (change)="onFileSelected($event)" />
+          </label>
+
+          <div class="flex justify-center items-center">
+            <label for="image-modal" class="flex justify-center">
+              <img *ngIf="empresa.logo" 
+                   [src]="empresa.logo" 
+                   alt="Current Image" 
+                   class="w-24 h-24 rounded-full mx-auto cursor-pointer" />
+            </label>
+          </div>
+
+        <div class="flex justify-center">
+            <button type="submit" class="btn btn-accent text-white w-full">Actualizar</button>
+        </div>
+
+
+
+    </form>
+
+</div>
+
+<div class="loading-overlay" *ngIf="loading">
+    <span class="loading loading-dots loading-lg"></span>
+</div>
+
+<input type="checkbox" id="image-modal" class="modal-toggle" />
+<div class="modal">
+    <div class="modal-box">
+        <h2 class="text-lg font-bold">Logo de la Empresa</h2>
+        <div class="flex justify-center mt-4">
+            <img src="{{empresa.logo}}" alt="Imagen Completa" class="max-w-full h-auto" />
+        </div>
+        <div class="modal-action">
+            <label for="image-modal" class="btn">Cerrar</label>
+        </div>
+    </div>
+</div>

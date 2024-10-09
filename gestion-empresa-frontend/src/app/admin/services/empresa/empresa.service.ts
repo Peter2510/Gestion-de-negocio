@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
-import { Empresa } from '../../models/Empresa';
+import { Empresa } from '../../../models/Empresa';
 import { ServicioAuthService } from 'src/app/auth/services/servicio-auth.service';
 
 @Injectable({
@@ -11,14 +11,53 @@ import { ServicioAuthService } from 'src/app/auth/services/servicio-auth.service
 export class EmpresaService {
 
   private baseURL = environment.URL;
-  
-  constructor(private http: HttpClient, private authService:ServicioAuthService ) { }
+  private empresa = "empresa"
+  private tipoServicio = "tipoServicio"
+  private tipoAsignacionCita = "tipoAsignacionCita"
+
+  constructor(private http: HttpClient, private authService: ServicioAuthService) { }
 
   public obtenerInfoEmpresa(): Observable<any> {
-    return this.http.get<any>(`${this.baseURL}/empresa/obtenerEmpresa/1`,
-      {
-        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
-      }
+    return this.http.get<any>(`${this.baseURL}/${this.empresa}/obtenerEmpresa/1`,
+      // {
+      //   headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      // }
+    );
+  }
+
+  public obtenerTipoServicios(): Observable<any> {
+    return this.http.get<any>(`${this.baseURL}/${this.tipoServicio}/obtenerTiposServicio`,
+      // {
+      //   headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      // }
+    );
+  }
+
+  public obtenerTipoAsignacionCita(): Observable<any> {
+    return this.http.get<any>(`${this.baseURL}/${this.tipoAsignacionCita}/obtenerTiposAsignacionCita`,
+      // {
+      //   headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      // }
+    );
+  }
+
+  public actualizarEmpresa(empresa: any, logo: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('nombre', empresa.nombre);
+    formData.append('descripcion', empresa.descripcion);
+    formData.append('direccion', empresa.direccion);
+    formData.append('telefono', empresa.telefono);
+    formData.append('email', empresa.email);
+    formData.append('idTipoServicio', empresa.tipoServicio.id);
+    formData.append('idTipoAsignacionCita', empresa.tipoAsignacionCita.id);
+    if (logo) {
+      formData.append('logoFile', logo);
+    }
+
+    return this.http.post<any>(`${this.baseURL}/${this.empresa}/actualizarEmpresa/1`, formData,
+      // {
+      //   headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      // }
     );
   }
 

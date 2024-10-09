@@ -1,23 +1,81 @@
 <div class="navbar bg-base-100" *ngIf="!loading">
-  <div class="flex-1">
+  <div class="flex-1 flex items-center">
     <img class="w-20 h-10 rounded md:w-40 md:h-20" src="{{ empresa?.logo }}">
-    <a class="btn btn-ghost text-xl">{{ empresa?.nombre }}</a>
+    <a href="/administrador/panel-administrador" class="text-xl text-gray-800 ml-2">{{ empresa?.nombre }}</a>
   </div>
-  <div class="flex-none gap-2">
+
+  <div class="flex-none gap-2 items-center">
+    <!-- Pantallas pequeñas -->
+    <div class="md:hidden">
+      <div class="dropdown dropdown-end">
+        <label tabindex="0" class="btn btn-ghost">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+          </svg>
+        </label>
+        <ul tabindex="0" class="menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
+          <li>
+            <select class="select w-full" (change)="onSelectChange($event)">
+              <option disabled selected>Gestión de empresa</option>
+              <option value="/administrador/informacion-empresa">Editar información</option>
+            </select>
+          </li>
+          <li>
+            <select class="select w-full" (change)="onSelectChange($event)">
+              <option disabled selected>Gestión de servicios</option>
+              <option>Ver servicios</option>
+              <option>Crear nuevo servicio</option>
+              <option>Editar servicio</option>
+            </select>
+          </li>
+          <li>
+            <select class="select w-full" (change)="onSelectChange($event)">
+              <option disabled selected>Gestión de roles</option>
+              <option value="/administrador/roles-registrados">Ver roles</option>
+              <option>Crear Rol</option>
+              <option>Editar Rol</option>
+            </select>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Pantallas más grandes -->
+    <ul class="menu menu-horizontal p-0 hidden md:flex space-x-4">
+               <li>
+            <select class="select w-full" (change)="onSelectChange($event)">
+              <option disabled selected>Gestión de empresa</option>
+              <option value="/administrador/informacion-empresa">Editar información</option>
+            </select>
+          </li>
+          <li>
+            <select class="select w-full" (change)="onSelectChange($event)">
+              <option disabled selected>Gestión de servicios</option>
+              <option>Ver servicios</option>
+              <option>Crear nuevo servicio</option>
+              <option>Editar servicio</option>
+            </select>
+          </li>
+          <li>
+            <select class="select w-full" (change)="onSelectChange($event)">
+              <option disabled selected>Gestión de roles</option>
+              <option value="/administrador/roles-registrados">Ver roles</option>
+              <option>Crear Rol</option>
+              <option>Editar Rol</option>
+            </select>
+          </li>
+    </ul>
+
+    <!-- avatar con Dropdown -->
     <div class="dropdown dropdown-end">
       <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
         <div class="w-10 rounded-full">
-          <img
-            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+          <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
         </div>
       </div>
-      <ul
-        tabindex="0"
-        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+      <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
         <li>
-          <a class="justify-between">
-            Mi perfil
-          </a>
+          <a class="justify-between">Mi perfil</a>
         </li>
         <li><a>Cerrar sesión</a></li>
       </ul>
