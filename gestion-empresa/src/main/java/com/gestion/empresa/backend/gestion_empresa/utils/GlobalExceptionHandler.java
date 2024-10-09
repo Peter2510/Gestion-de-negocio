@@ -1,13 +1,18 @@
 package com.gestion.empresa.backend.gestion_empresa.utils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,6 +22,28 @@ import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        BindingResult bindingResult = ex.getBindingResult();
+
+        // Recolecta los errores en una lista
+        List<Map<String, String>> errores = new ArrayList<>();
+        bindingResult.getFieldErrors().forEach(error -> {
+            Map<String, String> errorDetalle = new HashMap<>();
+            errorDetalle.put("campo", error.getField());
+            errorDetalle.put("mensaje", error.getDefaultMessage());
+            errores.add(errorDetalle);
+        });
+
+        // Devuelve el error como un array de errores
+        Map<String, Object> response = new HashMap<>();
+        response.put("ok", false);
+        response.put("errores", errores);
+
+        return ResponseEntity.badRequest().body(response);
+    }
 
     // Manejo de MissingServletRequestParameterException
     @ExceptionHandler(MissingServletRequestParameterException.class)
@@ -31,4 +58,9 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
+
+    /*@ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleGlobalException(Exception ex, WebRequest request) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("ok", false, "mensaje", ex.getMessage()));
+    }*/
 }

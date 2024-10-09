@@ -33,8 +33,7 @@ public class Seguridad {
                 .csrf(csrf -> csrf.disable())
                 .cors(withDefaults())
                 .authorizeHttpRequests(authRequest -> authRequest
-                        .requestMatchers("/health/**", "/Auth/**", "/Genero/**").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .sessionManagement(sessionManager -> sessionManager
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

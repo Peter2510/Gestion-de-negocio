@@ -7,7 +7,6 @@ import com.gestion.empresa.backend.gestion_empresa.services.EmpresaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -31,9 +30,19 @@ public class EmpresaServiceImpl implements EmpresaService {
     }
 
     @Override
-    public Empresa actualizarEmpresa(Empresa empresa) {
-        return empresaRepository.updateEmpresaById(empresa.getId(),empresa);
-    }
+    public void actualizarEmpresa(Empresa empresa) {
+        empresaRepository.findById(empresa.getId()).map(empresaActual -> {
+            empresaActual.setNombre(empresa.getNombre());
+            empresaActual.setDescripcion(empresa.getDescripcion());
+            empresaActual.setEmail(empresa.getEmail());
+            empresaActual.setTelefono(empresa.getTelefono());
+            empresaActual.setDireccion(empresa.getDireccion());
+            empresaActual.setLogo(empresa.getLogo());
+            empresaActual.setTipoAsignacionCita(empresa.getTipoAsignacionCita());
+            empresaActual.setTipoServicio(empresa.getTipoServicio());
 
+            return empresaRepository.save(empresaActual);
+        });
+    }
 
 }

@@ -13,6 +13,4 @@ import java.util.Optional;
 
 public interface EmpresaRepository extends JpaRepository<Empresa, Long> {
 
-    Empresa updateEmpresaById(Long id, Empresa empresa);
-
 }

@@ -23,7 +23,7 @@ import java.util.Map;
  */
 
 @RestController
-@RequestMapping("/tiposervicio")
+@RequestMapping("/tipoServicio")
 @Validated
 public class TipoServicioController {
 
