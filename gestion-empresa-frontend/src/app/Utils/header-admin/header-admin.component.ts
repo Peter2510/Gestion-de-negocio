@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Empresa } from 'src/app/admin/models/Empresa';
+import { Router } from '@angular/router';
+
 import { EmpresaService } from 'src/app/admin/services/empresa/empresa.service';
+import { Empresa } from 'src/app/models/Empresa';
 
 @Component({
   selector: 'app-header-admin',
@@ -12,7 +14,7 @@ export class HeaderAdminComponent implements OnInit {
   empresa: Empresa | null = null; //inicializar como null para manejar el estado de datos no cargados
   loading: boolean = true; //bandera para controlar si los datos están cargando
 
-  constructor(private empresaService: EmpresaService) { }
+  constructor(private empresaService: EmpresaService, private router: Router) { }
 
   ngOnInit(): void {
     this.empresaService.obtenerInfoEmpresa().subscribe({
@@ -26,4 +28,14 @@ export class HeaderAdminComponent implements OnInit {
       }
     });
   }
+
+  onSelectChange(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    const selectedValue = target.value;
+  
+    if (selectedValue) {
+      this.router.navigate([selectedValue]);
+    }
+  }
+
 }

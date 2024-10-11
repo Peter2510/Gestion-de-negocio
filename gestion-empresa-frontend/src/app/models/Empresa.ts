@@ -1,14 +1,15 @@
 export class Empresa {
     id: number;
     nombre: string;
+    descripcion: string;
     direccion: string;
     telefono: string;
     email: string;
     logo: string;
     cantidadEmpleados: number;
     cantidadServicios: number;
-    TipoServicio: TipoServicio;
-    TipoAsignacionCita: tipoAsignacionCita;
+    tipoServicio: TipoServicio;
+    tipoAsignacionCita: TipoAsignacionCita;
 }
 
 export class TipoServicio {
@@ -16,8 +17,8 @@ export class TipoServicio {
     nombre: string;
 }
 
-export class tipoAsignacionCita {
+export class TipoAsignacionCita {
     id: number;
-    nombre: string;
+    tipo: string;
     activo: boolean;
 }

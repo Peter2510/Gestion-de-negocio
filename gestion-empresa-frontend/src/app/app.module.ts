@@ -25,6 +25,10 @@ import { NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { VistaPerfilUsuarioComponent } from './usuarios/vista-perfil-usuario/vista-perfil-usuario.component';
 
+
+
+
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
