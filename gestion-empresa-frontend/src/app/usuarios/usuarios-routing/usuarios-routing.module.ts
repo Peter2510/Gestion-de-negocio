@@ -6,12 +6,13 @@ import { VistaPerfilUsuarioComponent } from '../vista-perfil-usuario/vista-perfi
 import { EdicionPerfilComponent } from '../edicion-perfil/edicion-perfil.component';
 
 const routes: Routes = [
-  { path: 'vistaGeneral', component: VistaGeneralComponent },
-  { path: 'PerfilUsuario', component: VistaPerfilUsuarioComponent },
-  { path: 'Edicion', component: EdicionPerfilComponent },
+  
+  { path: 'perfil-usuario', component: VistaPerfilUsuarioComponent },
+  { path: 'edicion', component: EdicionPerfilComponent },
+  { path: 'vista-general', component: VistaGeneralComponent },
   {
     path: '**',
-    redirectTo: 'vistaGeneral',
+    redirectTo: 'vista-general',
     pathMatch: 'full',
   },
 ];
