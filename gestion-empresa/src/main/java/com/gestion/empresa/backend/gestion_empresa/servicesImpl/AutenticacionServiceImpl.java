@@ -9,7 +9,11 @@ import com.gestion.empresa.backend.gestion_empresa.models.Usuarios;
 import com.gestion.empresa.backend.gestion_empresa.repositories.PersonaRepository;
 import com.gestion.empresa.backend.gestion_empresa.repositories.UsuarioRepository;
 import com.gestion.empresa.backend.gestion_empresa.security.JwtServicio;
+import com.gestion.empresa.backend.gestion_empresa.services.AutenticacionServicie;
+import com.gestion.empresa.backend.gestion_empresa.services.UsuarioServicio;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Optionals;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +24,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Random;
 @Service
 @RequiredArgsConstructor
-public class AutenticacionServiceImpl {
+public class AutenticacionServiceImpl implements AutenticacionServicie {
     private final UsuarioRepository userRepository;
     private final PersonaRepository personaRepository;
     private  final AuthenticationManager authenticationManager;
@@ -31,30 +36,32 @@ public class AutenticacionServiceImpl {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
 
-
-
-    public AuthRespuesta login(Login valor) {
-        System.out.println(valor.getNombreUsuario() + "------------" + valor.getPassword());
+    public Optional<AuthRespuesta> login(Login valor) {
+        System.out.println(valor);
 
         // Buscar al usuario en la base de datos
-        Usuarios user = userRepository.findByNombreUsuario(valor.getNombreUsuario())
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + valor.getNombreUsuario()));
-
-        // Comparar la contraseña ingresada con la contraseña encriptada en la base de datos
-        if (!passwordEncoder.matches(valor.getPassword(), user.getPassword())) {
-            System.out.println("mal");
-            throw new BadCredentialsException("Credenciales incorrectas");
+        Optional<Usuarios> user = userRepository.findByNombreUsuario(valor.getNombreUsuario());
+        if (user.isEmpty()) {
+            System.out.println("vacio");
+            return Optional.empty();
 
         }
-
+        // Comparar la contraseña ingresada con la contraseña encriptada en la base de datos
+        if (!passwordEncoder.matches(valor.getPassword(), user.get().getPassword())) {
+            return Optional.ofNullable(AuthRespuesta.builder()
+                    .token("no coincide")
+                    .build());
+        }
         // Si la autenticación es correcta, generar el token JWT
-        String token = jwtServicio.obtenerToken(user);
+        String token = jwtServicio.obtenerToken(user.get());
 
-        return AuthRespuesta.builder()
+        return Optional.ofNullable(AuthRespuesta.builder()
                 .token(token)
-                .build();
+                .build());
     }
 
 
@@ -98,4 +105,30 @@ public class AutenticacionServiceImpl {
         return AuthRespuesta.builder().token(jwtServicio.obtenerToken(nuevoUsuario)).build();
     }
 
+    @Override
+    public Optional<Usuarios> buscarNombre(String nombreUsuario) {        // Buscar al usuario en la base de datos
+        return userRepository.findByNombreUsuario(nombreUsuario);
+
+    }
+
+
+
+    public Optional<AuthRespuesta> validarCredenciales(String password, Optional<Usuarios> usuarios) {
+        if ((password== usuarios.get().getPassword())) {
+            // lógica para cuando las credenciales coinciden
+            return (generacionToken(usuarios));
+        } else {
+            return Optional.empty(); // o la lógica que necesites en caso de falla
+        }
+    }
+
+
+    @Override
+    public Optional<AuthRespuesta> generacionToken(Optional<Usuarios> usuarios) {
+        String token = jwtServicio.obtenerToken(usuarios.get());
+
+        return Optional.ofNullable(AuthRespuesta.builder()
+                .token(token)
+                .build());
+    }
 }

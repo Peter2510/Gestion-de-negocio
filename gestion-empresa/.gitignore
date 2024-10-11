@@ -34,3 +34,8 @@ build/
 
 .idea/
 .vscode/
+
+
+##segun para el env
+.src/main/java/com/gestion/empresa/backend/gestion_empresa/.env
+.env
