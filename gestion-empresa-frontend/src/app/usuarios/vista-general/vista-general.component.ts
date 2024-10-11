@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  OnInit,
   TemplateRef,
   ViewChild,
 } from '@angular/core';
@@ -148,7 +149,6 @@ export class VistaGeneralComponent {
 
   handleEvent(action: string, event: CalendarEvent): void {
     this.modalData = { event, action };
-    this.modal.open(this.modalContent, { size: 'lg' });
   }
 
   isModalOpen = false;
@@ -161,6 +161,7 @@ export class VistaGeneralComponent {
 
   closeModal() {
     this.isModalOpen = false;
+    this.modal.dismissAll();
   }
 
   saveEvent(): void {

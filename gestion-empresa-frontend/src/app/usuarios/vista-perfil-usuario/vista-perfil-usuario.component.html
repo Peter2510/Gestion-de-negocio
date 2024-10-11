@@ -1,22 +1,57 @@
+<app-header-usuario />
 <div class="max-w-4xl mx-auto p-4">
   <h1 class="text-2xl font-bold mb-4">Bienvenido, {{ user.name }}</h1>
 
-  <div class="card bg-base-100 shadow-md">
+  <div class="card bg-base-100 shadow-xl w-full md:w-2/3 mx-auto">
     <div class="card-body">
-      <h2 class="card-title">Información del Usuario</h2>
-      <p><strong>Email:</strong> {{ user.email }}</p>
-      <p><strong>Rol:</strong> {{ user.role }}</p>
-      <p><strong>Fecha de Registro:</strong> {{ user.joined }}</p>
-    </div>
-  </div>
+      <h2 class="card-title text-lg font-bold">Información del Usuario</h2>
 
-  <div class="mt-6">
-    <h2 class="text-xl font-bold">Tus Eventos</h2>
-    <ul class="menu bg-base-100 rounded-box">
-      <li><a href="#">Evento 1</a></li>
-      <li><a href="#">Evento 2</a></li>
-      <li><a href="#">Evento 3</a></li>
-      <li><a href="#">Evento 4</a></li>
-    </ul>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <p><strong>Nombre de Usuario:</strong> d</p>
+          <p><strong>Email Personal:</strong> sfs</p>
+          <p><strong>Teléfono:</strong> e</p>
+          <p><strong>Dirección:</strong> sd</p>
+        </div>
+
+        <div>
+          <p><strong>Rol:</strong> sf</p>
+          <p><strong>Género:</strong> sd</p>
+          <p><strong>Número:</strong> fg</p>
+          <p><strong>NIT:</strong> gh</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 mt-4">
+        <div>
+          <p><strong>Email de Usuario:</strong>fg</p>
+          <p>
+            <strong>Fecha de Registro:</strong>
+            {{ user.joined | date : "shortDate" }}
+          </p>
+        </div>
+
+        <div>
+          <p>
+            <strong>Estado Activo:</strong>
+            <span [class]="true ? 'text-green-500' : 'text-red-500'">
+              {{ true ? "Activo" : "Inactivo" }}
+            </span>
+          </p>
+          <p>
+            <strong>Autenticación 2 Factores:</strong>
+            <span [class]="false ? 'text-green-500' : 'text-red-500'">
+              {{ false ? "Activado" : "Desactivado" }}
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-actions justify-end p-4">
+      <button class="btn btn-primary" [routerLink]="'/usuarios/edicion'">
+        Editar Información
+      </button>
+    </div>
   </div>
 </div>

@@ -10,11 +10,14 @@ import { FlatpickrModule } from 'angularx-flatpickr';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { VistaPerfilUsuarioComponent } from '../vista-perfil-usuario/vista-perfil-usuario.component';
+import { RouterLink, RouterModule } from '@angular/router';
+import { EdicionPerfilComponent } from '../edicion-perfil/edicion-perfil.component';
 @NgModule({
   declarations: [
     VistaGeneralComponent,
     HeaderUsuarioComponent,
     VistaPerfilUsuarioComponent,
+    EdicionPerfilComponent,
   ],
   imports: [
     CommonModule,
@@ -26,6 +29,8 @@ import { VistaPerfilUsuarioComponent } from '../vista-perfil-usuario/vista-perfi
     FlatpickrModule.forRoot(),
     FormsModule,
     BrowserAnimationsModule,
+    RouterLink,
+    RouterModule,
   ],
 })
 export class ModuloUsuariosModule {}

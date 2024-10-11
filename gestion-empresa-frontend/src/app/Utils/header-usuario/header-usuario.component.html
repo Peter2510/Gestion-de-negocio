@@ -1,18 +1,41 @@
-<header class="bg-primary text-primary-content">
-  <div class="navbar px-4">
-    <!-- Logo -->
-    <div class="flex-1">
-      <a class="text-xl font-bold">Mi Sitio</a>
-    </div>
-
-    <!-- Navegación -->
-    <div class="flex-none">
-      <ul class="menu menu-horizontal p-0">
-        <li><a href="#">Inicio</a></li>
-        <li><a href="#">Servicios</a></li>
-        <li><a href="#">Contacto</a></li>
-        <li><a href="#">Sobre Nosotros</a></li>
+<div class="navbar bg-base-100" *ngIf="!loading">
+  <div class="flex-1">
+    <img
+      class="w-20 h-10 rounded md:w-40 md:h-20"
+      src="{{ this.empresa?.logo }}"
+      alt="imagen"
+      [routerLink]="'/usuarios/vistaGeneral'"
+    />
+    <a class="btn btn-ghost text-xl">{{ this.empresa?.nombre }}</a>
+    <div class="divider lg:divider-horizontal"></div>
+    <a class="btn btn-ghost text-xl">Historial de citas</a>
+    <a class="btn btn-ghost text-xl">Facturas y comprobantes</a>
+  </div>
+  <div class="flex-none gap-2">
+    <div class="dropdown dropdown-end">
+      <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+        <div class="w-10 rounded-full">
+          <img
+            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+          />
+        </div>
+      </div>
+      <ul
+        tabindex="0"
+        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+      >
+        <li>
+          <a class="justify-between" [routerLink]="'/usuarios/PerfilUsuario'">
+            Mi perfil
+          </a>
+        </li>
+        <li><a>Cerrar sesión</a></li>
       </ul>
     </div>
   </div>
-</header>
+</div>
+
+<!-- indicador de loading de pantalla completa -->
+<div class="loading-overlay" *ngIf="loading">
+  <span class="loading loading-dots loading-lg"></span>
+</div>
