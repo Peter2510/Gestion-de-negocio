@@ -1,6 +1,7 @@
 export interface Rol {
   id: number;
-  tipo: string;
+  nombre: string;
+  descripcion: string;
 }
 
 export interface Permisos {
