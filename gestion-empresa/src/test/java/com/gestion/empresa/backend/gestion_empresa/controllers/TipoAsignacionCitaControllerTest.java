@@ -16,9 +16,11 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.data.repository.util.ClassUtils.ifPresent;
 
 @ExtendWith(MockitoExtension.class)
 class TipoAsignacionCitaControllerTest {
@@ -53,6 +55,46 @@ class TipoAsignacionCitaControllerTest {
 
     }
 
+    @Test
+    void crearTipoAsignacionCitaYaRegistrado() {
+        when(tipoAsignacionCitaService.buscarPorNombre(tipoAsignacionCita.getTipo())).thenReturn(Optional.of(tipoAsignacionCita));
+
+        ResponseEntity<Map<String, Object>> response = tipoAsignacionCitaController.crearTipoAsignacionCita(tipoAsignacionCita);
+
+        assertNotNull(response.getBody(), "El cuerpo de la respuesta no debe ser null");
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        assertEquals(false, response.getBody().get("ok"));
+        assertEquals("El tipo de asignacion de cita " + tipoAsignacionCita.getTipo() + " ya existe", response.getBody().get("mensaje"));
+        verify(tipoAsignacionCitaService, times(1)).buscarPorNombre(tipoAsignacionCita.getTipo());
+    }
+
+    @Test
+    void crearTipoAsignacionCitaNoRegistrado() {
+        when(tipoAsignacionCitaService.buscarPorNombre(tipoAsignacionCita.getTipo())).thenReturn(Optional.empty());
+        when(tipoAsignacionCitaService.crearTipoAsignacionCita(tipoAsignacionCita)).thenReturn(tipoAsignacionCita);
+
+        ResponseEntity<Map<String, Object>> response = tipoAsignacionCitaController.crearTipoAsignacionCita(tipoAsignacionCita);
+
+        assertNotNull(response.getBody(), "El cuerpo de la respuesta no debe ser null");
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(true, response.getBody().get("ok"));
+        assertEquals("Tipo de asignacion de cita creado exitosamente", response.getBody().get("mensaje"));
+        verify(tipoAsignacionCitaService, times(1)).buscarPorNombre(tipoAsignacionCita.getTipo());
+    }
+
+    @Test
+    void crearTipoAsignacionCitaError() {
+        when(tipoAsignacionCitaService.buscarPorNombre(tipoAsignacionCita.getTipo())).thenReturn(Optional.empty());
+        when(tipoAsignacionCitaService.crearTipoAsignacionCita(tipoAsignacionCita)).thenReturn(null);
+
+        ResponseEntity<Map<String, Object>> response = tipoAsignacionCitaController.crearTipoAsignacionCita(tipoAsignacionCita);
+
+        assertNotNull(response.getBody(), "El cuerpo de la respuesta no debe ser null");
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals(false, response.getBody().get("ok"));
+        assertEquals("No se pudo crear el tipo de asignacion de cita", response.getBody().get("mensaje"));
+        verify(tipoAsignacionCitaService, times(1)).buscarPorNombre(tipoAsignacionCita.getTipo());
+    }
 
 
 }

@@ -54,57 +54,58 @@ public class EmpresaController {
             @RequestParam("descripcion") String descripcion,
             @RequestParam("idTipoServicio") Long idTipoServicio,
             @RequestParam("idTipoAsignacionCita") Long idTipoAsignacionCita,
-            @RequestPart("logo") MultipartFile logoFile  // Usamos @RequestPart para el archivo
+            @RequestPart("logo") MultipartFile logoFile
     ) {
 
-        Empresa empresa = new Empresa();
+        try {
+            Empresa empresa = new Empresa();
 
-        empresa.setNombre(nombre);
-        empresa.setDireccion(direccion);
-        empresa.setTelefono(telefono);
-        empresa.setEmail(email);
-        empresa.setDescripcion(descripcion);
-        empresa.setCantidadServicios(0);
-        empresa.setCantidadEmpleados(0);
+            empresa.setNombre(nombre);
+            empresa.setDireccion(direccion);
+            empresa.setTelefono(telefono);
+            empresa.setEmail(email);
+            empresa.setDescripcion(descripcion);
+            empresa.setCantidadServicios(0);
+            empresa.setCantidadEmpleados(0);
 
-        Optional<TipoServicio> busquedaTipoServicio = obtenerTipoServicio(idTipoServicio);
+            Optional<TipoServicio> busquedaTipoServicio = obtenerTipoServicio(idTipoServicio);
 
-        if (busquedaTipoServicio.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("ok", false, "mensaje", "El tipo de servicio no esta registrado"));
+            if (busquedaTipoServicio.isEmpty())
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("ok", false, "mensaje", "El tipo de servicio no esta registrado"));
 
-        Optional<TipoAsignacionCita> busquedaTipoAsignacionServicio = obtenerTipoAsignacionCita(idTipoAsignacionCita);
+            Optional<TipoAsignacionCita> busquedaTipoAsignacionServicio = obtenerTipoAsignacionCita(idTipoAsignacionCita);
 
-        if (busquedaTipoAsignacionServicio.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("ok", false, "mensaje", "El tipo de asignacion de la cita  no esta registrado"));
+            if (busquedaTipoAsignacionServicio.isEmpty())
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("ok", false, "mensaje", "El tipo de asignacion de la cita  no esta registrado"));
 
-        empresa.setTipoServicio(busquedaTipoServicio.get());
-        empresa.setTipoAsignacionCita(busquedaTipoAsignacionServicio.get());
+            empresa.setTipoServicio(busquedaTipoServicio.get());
+            empresa.setTipoAsignacionCita(busquedaTipoAsignacionServicio.get());
 
 
-        if (!logoFile.isEmpty()) {
-            String nombreArchivo = generarNombreArchivo.generarNombreUnico(logoFile);
-            String respuesta = s3Service.uploadFile(logoFile, nombreArchivo);
-            if (respuesta == null) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(Map.of("ok", false, "mensaje", "Error al subir el logo"));
+            if (!logoFile.isEmpty()) {
+                String nombreArchivo = generarNombreArchivo.generarNombreUnico(logoFile);
+                String respuesta = s3Service.uploadFile(logoFile, nombreArchivo);
+                if (respuesta == null) {
+                    return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                            .body(Map.of("ok", false, "mensaje", "Error al subir el logo"));
+                }
+                empresa.setLogo(nombreArchivo);
+            } else {
+                empresa.setLogo("logo_defecto.png");
             }
-            empresa.setLogo(nombreArchivo);
-        } else {
-            empresa.setLogo("logo_defecto.png");
-        }
 
-        Empresa guardarEmpresa = empresaService.crearEmpresa(empresa);
-        System.out.println("logo " + s3Service.createPresignedGetUrl(empresa.getLogo()));
+            empresaService.crearEmpresa(empresa);
 
-        if (guardarEmpresa == null) {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(Map.of("ok", true, "mensaje", "Empresa creada correctamente"));
+
+        }catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("ok", false, "mensaje", "Error al guardar la empresa"));
+                    .body(Map.of("ok", false, "mensaje", "Error al guardar la empresa", "error", e.getMessage()));
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Map.of("ok", true, "mensaje", "Empresa creada correctamente"));
     }
 
     @GetMapping("/obtenerEmpresa/{id}")
