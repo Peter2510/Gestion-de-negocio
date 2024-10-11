@@ -24,13 +24,16 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { VistaPerfilUsuarioComponent } from './usuarios/vista-perfil-usuario/vista-perfil-usuario.component';
+import { Vista2faLoginComponent } from './auth/vista2fa-login/vista2fa-login.component';
+import { RouterLink, RouterModule } from '@angular/router';
+import { EdicionPerfilComponent } from './usuarios/edicion-perfil/edicion-perfil.component';
 
 
 
 
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, Vista2faLoginComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -45,6 +48,8 @@ import { VistaPerfilUsuarioComponent } from './usuarios/vista-perfil-usuario/vis
       useFactory: adapterFactory,
     }),
     FlatpickrModule.forRoot(),
+    RouterLink,
+    RouterModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

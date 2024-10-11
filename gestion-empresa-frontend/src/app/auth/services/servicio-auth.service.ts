@@ -31,9 +31,7 @@ export class ServicioAuthService {
   // para el ingreso de los usuarios
   login(nombreUsuario: string, password: string) {
     const body = { nombreUsuario, password };
-    return this.http.post(`${this.url}/Auth/login`, body, {
-      headers: new HttpHeaders().set('Authorization', `Bearer ${this.token}`),
-    });
+    return this.http.post(`${this.url}/Auth/login`, body);
   }
 
   // para registrar nuevos usuarios
@@ -45,17 +43,13 @@ export class ServicioAuthService {
     a2fActivo: boolean
   ) {
     const body = { persona, usuario, password, nombreUsuario, a2fActivo };
-    return this.http.post(`${this.url}/Auth/registro`, body, {
-      headers: new HttpHeaders().set('Authorization', `Bearer ${this.token}`),
-    });
+    return this.http.post(`${this.url}/Auth/registro`, body);
   }
 
   // para Obtener generos
   obtenerGeneros() {
     this.http
-      .get<Genero[]>(`${this.url}/Genero`, {
-        headers: new HttpHeaders().set('Authorization', `Bearer ${this.token}`),
-      })
+      .get<Genero[]>(`${this.url}/Genero`)
       .pipe(
         tap((elementos: Genero[]) => {
           console.log(elementos);

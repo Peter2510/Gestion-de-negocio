@@ -1,0 +1,99 @@
+<app-header-usuario />
+<div class="max-w-4xl mx-auto p-4">
+  <h1 class="text-2xl font-bold mb-4">Editar Usuario</h1>
+
+  <form class="space-y-4">
+    <!-- Usuario y Password -->
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label for="nombreUsuario" class="block">Nombre de Usuario:</label>
+        <input
+          type="text"
+          id="nombreUsuario"
+          class="input input-bordered w-full"
+        />
+      </div>
+      <div>
+        <label for="password" class="block">Contraseña:</label>
+        <input
+          type="password"
+          id="password"
+          class="input input-bordered w-full"
+        />
+      </div>
+    </div>
+
+    <!-- Información Personal -->
+    <h2 class="text-xl font-bold mt-4">Información Personal</h2>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label for="nombre" class="block">Nombre:</label>
+        <input type="text" id="nombre" class="input input-bordered w-full" />
+      </div>
+      <div>
+        <label for="nit" class="block">NIT:</label>
+        <input type="text" id="nit" class="input input-bordered w-full" />
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label for="numero" class="block">Número:</label>
+        <input type="number" id="numero" class="input input-bordered w-full" />
+      </div>
+      <div>
+        <label for="correoPersona" class="block">Correo Personal:</label>
+        <input
+          type="email"
+          id="correoPersona"
+          class="input input-bordered w-full"
+        />
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label for="direccion" class="block">Dirección:</label>
+        <input type="text" id="direccion" class="input input-bordered w-full" />
+      </div>
+      <div>
+        <label for="telefono" class="block">Teléfono:</label>
+        <input
+          type="number"
+          id="telefono"
+          class="input input-bordered w-full"
+        />
+      </div>
+    </div>
+
+    <!-- Género -->
+    <div>
+      <label for="genero" class="block">Género:</label>
+      <select id="genero" class="select select-bordered w-full">
+        <option [value]="1">Femenino</option>
+        <option [value]="2">Masculino</option>
+      </select>
+    </div>
+
+    <!-- Correo de Usuario -->
+    <div>
+      <label for="correo" class="block">Correo de Usuario:</label>
+      <input type="email" id="correo" class="input input-bordered w-full" />
+    </div>
+
+    <!-- Estado de la Cuenta -->
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="block">Autenticación de Dos Factores Activa:</label>
+        <input type="checkbox" class="toggle toggle-primary" />
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <button type="submit" class="btn btn-primary w-full">
+        Guardar Cambios
+      </button>
+    </div>
+  </form>
+</div>
