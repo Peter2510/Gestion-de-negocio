@@ -12,6 +12,6 @@ public class StatusServerController {
 
     @GetMapping("/health")
     public ResponseEntity<Map<String, Object>> statusServer() {
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "mensaje", "Server ok"));
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "mensaje", "Server running ok"));
     }
 }
