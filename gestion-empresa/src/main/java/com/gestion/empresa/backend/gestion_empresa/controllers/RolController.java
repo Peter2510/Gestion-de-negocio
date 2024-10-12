@@ -45,7 +45,7 @@ public class RolController {
 
         //verificar si el rol fue creado
         if (rolCreado == null) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("ok", false, "mensaje", "No se pudo crear el rol"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("ok", false, "mensaje", "Error al crear el rol"));
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("ok", true, "mensaje", "Rol creado exitosamente"));

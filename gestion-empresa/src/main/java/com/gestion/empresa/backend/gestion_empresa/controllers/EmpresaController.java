@@ -1,6 +1,7 @@
 package com.gestion.empresa.backend.gestion_empresa.controllers;
 
 
+import com.gestion.empresa.backend.gestion_empresa.dto.EmpresaDTO;
 import com.gestion.empresa.backend.gestion_empresa.models.Empresa;
 import com.gestion.empresa.backend.gestion_empresa.models.TipoAsignacionCita;
 import com.gestion.empresa.backend.gestion_empresa.models.TipoServicio;
@@ -9,9 +10,11 @@ import com.gestion.empresa.backend.gestion_empresa.servicesImpl.S3ServiceImpl;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.TipoAsignacionCitaServiceImpl;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.TipoServicioServiceImpl;
 import com.gestion.empresa.backend.gestion_empresa.utils.GenerarNombreArchivo;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,63 +54,64 @@ public class EmpresaController {
             @RequestParam("descripcion") String descripcion,
             @RequestParam("idTipoServicio") Long idTipoServicio,
             @RequestParam("idTipoAsignacionCita") Long idTipoAsignacionCita,
-            @RequestPart("logo") MultipartFile logoFile  // Usamos @RequestPart para el archivo
+            @RequestPart("logo") MultipartFile logoFile
     ) {
 
-        Empresa empresa = new Empresa();
+        try {
+            Empresa empresa = new Empresa();
 
-        if (!logoFile.isEmpty()) {
-            String nombreArchivo = generarNombreArchivo.generarNombreUnico(logoFile);
-            String respuesta = s3Service.uploadFile(logoFile,nombreArchivo);
-            if(respuesta == null){
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(Map.of("ok", false, "mensaje", "Error al subir el archivo"));
+            empresa.setNombre(nombre);
+            empresa.setDireccion(direccion);
+            empresa.setTelefono(telefono);
+            empresa.setEmail(email);
+            empresa.setDescripcion(descripcion);
+            empresa.setCantidadServicios(0);
+            empresa.setCantidadEmpleados(0);
+
+            Optional<TipoServicio> busquedaTipoServicio = obtenerTipoServicio(idTipoServicio);
+
+            if (busquedaTipoServicio.isEmpty())
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("ok", false, "mensaje", "El tipo de servicio no esta registrado"));
+
+            Optional<TipoAsignacionCita> busquedaTipoAsignacionServicio = obtenerTipoAsignacionCita(idTipoAsignacionCita);
+
+            if (busquedaTipoAsignacionServicio.isEmpty())
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("ok", false, "mensaje", "El tipo de asignacion de la cita  no esta registrado"));
+
+            empresa.setTipoServicio(busquedaTipoServicio.get());
+            empresa.setTipoAsignacionCita(busquedaTipoAsignacionServicio.get());
+
+
+            if (!logoFile.isEmpty()) {
+                String nombreArchivo = generarNombreArchivo.generarNombreUnico(logoFile);
+                String respuesta = s3Service.uploadFile(logoFile, nombreArchivo);
+                if (respuesta == null) {
+                    return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                            .body(Map.of("ok", false, "mensaje", "Error al subir el logo"));
+                }
+                empresa.setLogo(nombreArchivo);
+            } else {
+                empresa.setLogo("logo_defecto.png");
             }
-            empresa.setLogo(nombreArchivo);
-        }else{
-            empresa.setLogo("logo_defecto.png");
-        }
 
-        empresa.setNombre(nombre);
-        empresa.setDireccion(direccion);
-        empresa.setTelefono(telefono);
-        empresa.setEmail(email);
-        empresa.setDescripcion(descripcion);
-        empresa.setCantidadServicios(0);
-        empresa.setCantidadEmpleados(0);
+            empresaService.crearEmpresa(empresa);
 
-        Optional<TipoServicio> tipoServicio = tipoServicioService.buscarPorId(idTipoServicio);
-        if(tipoServicio.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("ok", false, "mensaje", "El tipo de de servicio no esta registrado"));
-        }
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(Map.of("ok", true, "mensaje", "Empresa creada correctamente"));
 
-        Optional<TipoAsignacionCita> tipoAsignacionCita = tipoAsignacionCitaService.buscarPorId(idTipoAsignacionCita);
-
-        if(tipoAsignacionCita.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("ok", false, "mensaje", "El tipo de asignacion de la cita  no esta registrado"));
-        }
-
-        empresa.setTipoServicio(tipoServicio.get());
-        empresa.setTipoAsignacionCita(tipoAsignacionCita.get());
-        Empresa guardarEmpresa = empresaService.crearEmpresa(empresa);
-
-        System.out.println("logo "+s3Service.createPresignedGetUrl(empresa.getLogo()));
-
-        if(guardarEmpresa == null){
+        }catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("ok", false, "mensaje", "Error al guardar la empresa"));
+                    .body(Map.of("ok", false, "mensaje", "Error al guardar la empresa", "error", e.getMessage()));
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Map.of("ok", true, "mensaje", "Empresa creada correctamente"));
     }
 
     @GetMapping("/obtenerEmpresa/{id}")
     public ResponseEntity<Map<String, Object>> obtenerEmpresa(@PathVariable Long id) {
         Optional<Empresa> empresa = empresaService.findById(id);
-        if(empresa.isEmpty()){
+        if (empresa.isEmpty()) {
 
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("ok", false, "mensaje", "La empresa no esta registrada"));
@@ -117,6 +121,66 @@ public class EmpresaController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(Map.of("ok", true, "empresa", empresa.get()));
+    }
+
+    @PostMapping("/actualizarEmpresa/{id}")
+    public ResponseEntity<Map<String, Object>> actualizarEmpresa(
+            @PathVariable Long id,
+            @Valid @ModelAttribute EmpresaDTO empresaDTO) {
+
+
+        try{
+            Optional<Empresa> empresaBusqueda = empresaService.findById(id);
+            if (empresaBusqueda.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("ok", false, "mensaje", "La empresa no está registrada."));
+            }
+
+            Optional<TipoServicio> busquedaTipoServicio = obtenerTipoServicio(empresaDTO.getIdTipoServicio());
+            if (busquedaTipoServicio.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("ok", false, "mensaje", "El tipo de servicio no está registrado."));
+            }
+
+            Optional<TipoAsignacionCita> busquedaTipoAsignacionServicio = obtenerTipoAsignacionCita(empresaDTO.getIdTipoAsignacionCita());
+            if (busquedaTipoAsignacionServicio.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("ok", false, "mensaje", "El tipo de asignación de la cita no está registrado."));
+            }
+
+            Empresa nuevosDatosEmpresa = empresaBusqueda.get();
+            nuevosDatosEmpresa.setNombre(empresaDTO.getNombre());
+            nuevosDatosEmpresa.setDireccion(empresaDTO.getDireccion());
+            nuevosDatosEmpresa.setTelefono(empresaDTO.getTelefono());
+            nuevosDatosEmpresa.setEmail(empresaDTO.getEmail());
+            nuevosDatosEmpresa.setDescripcion(empresaDTO.getDescripcion());
+
+            if (empresaDTO.getLogoFile() != null && !empresaDTO.getLogoFile().isEmpty()) {
+                String nombreArchivo = generarNombreArchivo.generarNombreUnico(empresaDTO.getLogoFile());
+                String respuesta = s3Service.uploadFile(empresaDTO.getLogoFile(), nombreArchivo);
+                if (respuesta == null) {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                            .body(Map.of("ok", false, "mensaje", "Error al subir el logo."));
+                }
+                nuevosDatosEmpresa.setLogo(nombreArchivo);
+            }
+
+            empresaService.actualizarEmpresa(nuevosDatosEmpresa);
+
+            return ResponseEntity.ok(Map.of("ok", true, "mensaje", "Datos actualizados correctamente."));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("ok", false, "mensaje", "Error al actualizar los datos.", "error", e.getMessage()));
+        }
+    }
+
+    private Optional<TipoServicio> obtenerTipoServicio(Long idTipoServicio) {
+        return tipoServicioService.buscarPorId(idTipoServicio);
+    }
+
+    private Optional<TipoAsignacionCita> obtenerTipoAsignacionCita(Long idTipoAsignacionCita) {
+        return tipoAsignacionCitaService.buscarPorId(idTipoAsignacionCita);
     }
 
 }

@@ -48,7 +48,7 @@ public class S3ServiceImpl implements S3Service {
 
             return "Archivo subido correctamente";
         } catch (Exception e) {
-            throw new RuntimeException(e);
+           return null;
         }
     }
 

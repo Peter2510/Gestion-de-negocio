@@ -68,5 +68,13 @@ class TipoServicioServiceImplTest {
         verify(tipoServicioRepository, times(1)).save(tipoServicio);
     }
 
+    @Test
+    void buscarTipoServicioPorId() {
+        when(tipoServicioRepository.findById(1L)).thenReturn(Optional.of(tipoServicio));
+        Optional<TipoServicio> buscar = tipoServicioService.buscarPorId(1L);
+        assertEquals(1L, buscar.get().getId());
+        verify(tipoServicioRepository, times(1)).findById(1L);
+    }
+
 
 }

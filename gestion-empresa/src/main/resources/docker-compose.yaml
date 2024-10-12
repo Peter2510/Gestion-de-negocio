@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  gestion-empresa:
+    image: gestion-empresa
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gestion-imagen
+    restart: always
+    ports:
+        - "8080:8080"
+    expose:
+        - 8080
