@@ -5,6 +5,7 @@ import com.gestion.empresa.backend.gestion_empresa.repositories.GeneroRepository
 import com.gestion.empresa.backend.gestion_empresa.repositories.UsuarioRepository;
 import com.gestion.empresa.backend.gestion_empresa.services.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -21,6 +22,9 @@ public class UsuarioServiceImpl implements UsuarioServicio {
     //injeccion
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
 
@@ -52,7 +56,7 @@ public class UsuarioServiceImpl implements UsuarioServicio {
     @Override
     public Optional<Usuarios> editarUsuario(Usuarios usuarios) {
         System.out.println("------"+ usuarios);
-
+        String passwordEncriptada = passwordEncoder.encode(usuarios.getPassword());
         // Busca
         Optional<Usuarios> usuarioExistente = usuarioRepository.findByNombreUsuario(usuarios.getNombreUsuario());
 
@@ -63,7 +67,7 @@ public class UsuarioServiceImpl implements UsuarioServicio {
             Usuarios usuarioActualizado = usuarioExistente.get();
 
             // Actualiza los campos que deben cambiar
-            usuarioActualizado.setPassword(usuarios.getPassword());
+            usuarioActualizado.setPassword(passwordEncriptada);
 
             // Actualiza los datos personales
             usuarioActualizado.getPersona().setNombre(usuarios.getPersona().getNombre());
