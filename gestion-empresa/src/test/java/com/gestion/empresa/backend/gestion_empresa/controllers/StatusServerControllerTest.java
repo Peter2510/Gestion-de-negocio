@@ -27,6 +27,6 @@ class StatusServerControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertTrue(response.getBody().containsKey("ok"));
         assertEquals(true,response.getBody().get("ok"));
-        assertEquals("Server ok",response.getBody().get("mensaje"));
+        assertEquals("Server running ok",response.getBody().get("mensaje"));
     }
 }
