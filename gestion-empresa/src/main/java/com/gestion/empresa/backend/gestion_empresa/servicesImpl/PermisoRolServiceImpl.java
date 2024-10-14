@@ -2,6 +2,7 @@ package com.gestion.empresa.backend.gestion_empresa.servicesImpl;
 
 
 import com.gestion.empresa.backend.gestion_empresa.models.PermisoRol;
+import com.gestion.empresa.backend.gestion_empresa.projections.PermisoRolProjection;
 import com.gestion.empresa.backend.gestion_empresa.repositories.PermisoRolRepository;
 import com.gestion.empresa.backend.gestion_empresa.services.PermisoRolService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +40,10 @@ public class PermisoRolServiceImpl implements PermisoRolService {
     @Override
     public PermisoRol actualizarPermisoRol(PermisoRol permisoRol) {
         return permisoRolRepository.save(permisoRol);
+    }
+
+    @Override
+    public List<PermisoRolProjection> obtenerPermisosPorRol(Long idRol) {
+        return permisoRolRepository.findByRolId(idRol);
     }
 }

@@ -5,6 +5,7 @@ import com.gestion.empresa.backend.gestion_empresa.dto.PermisoRolDTO;
 import com.gestion.empresa.backend.gestion_empresa.models.Permiso;
 import com.gestion.empresa.backend.gestion_empresa.models.PermisoRol;
 import com.gestion.empresa.backend.gestion_empresa.models.Rol;
+import com.gestion.empresa.backend.gestion_empresa.projections.PermisoRolProjection;
 import com.gestion.empresa.backend.gestion_empresa.services.PermisoRolService;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.PermisoServiceImpl;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.RolServiceImpl;
@@ -69,6 +70,20 @@ public class PermisoRolController {
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "mensaje", "Asignacion exitosa"));
 
     }
+
+    @GetMapping("obtener-permisos-roles")
+    public ResponseEntity<Map<String, Object>> obtenerPermisosRoles(){
+        List<PermisoRol> permisosRoles = permisoRolService.obtenerRegistros();
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", false, "permisosRoles", permisosRoles));
+
+    }
+
+    @GetMapping("obtener-permiso-rol/{id}")
+    public ResponseEntity<Map<String, Object>> obtenerPermisosRolesById(@PathVariable("id") Long id){
+        List<PermisoRolProjection> permisoRol = permisoRolService.obtenerPermisosPorRol(id);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "permisos", permisoRol));
+    }
+
 
 
 }

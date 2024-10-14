@@ -2,6 +2,7 @@ package com.gestion.empresa.backend.gestion_empresa.services;
 
 
 import com.gestion.empresa.backend.gestion_empresa.models.PermisoRol;
+import com.gestion.empresa.backend.gestion_empresa.projections.PermisoRolProjection;
 import com.gestion.empresa.backend.gestion_empresa.repositories.PermisoRolRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,4 +21,5 @@ public interface PermisoRolService {
     List<PermisoRol> obtenerRegistros();
     Optional<PermisoRol> buscarPorId(Long id);
     PermisoRol actualizarPermisoRol(PermisoRol permisoRol);
+    List<PermisoRolProjection> obtenerPermisosPorRol(Long idRol);
 }
