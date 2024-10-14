@@ -45,7 +45,7 @@ public class EmpresaController {
 
     private final GenerarNombreArchivo generarNombreArchivo = new GenerarNombreArchivo();
 
-    @PostMapping("/crearEmpresa")
+    @PostMapping("/crear-empresa")
     public ResponseEntity<Map<String, Object>> crearEmpresa(
             @RequestParam("nombre") String nombre,
             @RequestParam("direccion") String direccion,
@@ -108,7 +108,7 @@ public class EmpresaController {
 
     }
 
-    @GetMapping("/obtenerEmpresa/{id}")
+    @GetMapping("/obtener-empresa/{id}")
     public ResponseEntity<Map<String, Object>> obtenerEmpresa(@PathVariable Long id) {
         Optional<Empresa> empresa = empresaService.findById(id);
         if (empresa.isEmpty()) {
@@ -123,7 +123,7 @@ public class EmpresaController {
                 .body(Map.of("ok", true, "empresa", empresa.get()));
     }
 
-    @PostMapping("/actualizarEmpresa/{id}")
+    @PostMapping("/actualizar-empresa/{id}")
     public ResponseEntity<Map<String, Object>> actualizarEmpresa(
             @PathVariable Long id,
             @Valid @ModelAttribute EmpresaDTO empresaDTO) {
