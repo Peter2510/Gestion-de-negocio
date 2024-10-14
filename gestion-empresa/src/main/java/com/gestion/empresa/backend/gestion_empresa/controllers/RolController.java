@@ -22,18 +22,13 @@ public class RolController {
     @Autowired
     private RolServiceImpl rolService;
 
-    @GetMapping("/obtenerRoles")
+    @GetMapping("/obtener-roles")
     public ResponseEntity<Map<String, Object>> obtenerRolesRegistrados() {
         List<Rol> roles = rolService.obtenerRolesRegistrados();
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "roles", roles));
     }
 
-//    @GetMapping("/{id}")
-//    public void obtenerRolPorId(@PathVariable("id") String id, @RequestBody Long idRol) {
-//
-//    }
-
-    @PostMapping("/crearRol")
+    @PostMapping("/crear-rol")
     public ResponseEntity<Map<String, Object>> crearRol(@Valid @RequestBody Rol rol) {
         //verificar si el rol ya existe
         if (rolService.buscarPorNombre(rol.getNombre()).isPresent()) {

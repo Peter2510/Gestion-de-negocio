@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface RolService {
 
     Optional<Rol> buscarPorNombre(String nombre);
+    Optional<Rol> buscarPorId(Long id);
     Rol crearRol(Rol rol);
     List<Rol> obtenerRolesRegistrados();
 }
