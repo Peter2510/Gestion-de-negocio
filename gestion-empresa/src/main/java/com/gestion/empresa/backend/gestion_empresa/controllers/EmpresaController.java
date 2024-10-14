@@ -155,12 +155,12 @@ public class EmpresaController {
             nuevosDatosEmpresa.setEmail(empresaDTO.getEmail());
             nuevosDatosEmpresa.setDescripcion(empresaDTO.getDescripcion());
 
+            //subida del logo
             if (empresaDTO.getLogoFile() != null && !empresaDTO.getLogoFile().isEmpty()) {
                 String nombreArchivo = generarNombreArchivo.generarNombreUnico(empresaDTO.getLogoFile());
                 String respuesta = s3Service.uploadFile(empresaDTO.getLogoFile(), nombreArchivo);
                 if (respuesta == null) {
-                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                            .body(Map.of("ok", false, "mensaje", "Error al subir el logo."));
+                    throw new RuntimeException("Error al subir el logo");
                 }
                 nuevosDatosEmpresa.setLogo(nombreArchivo);
             }
@@ -169,6 +169,9 @@ public class EmpresaController {
 
             return ResponseEntity.ok(Map.of("ok", true, "mensaje", "Datos actualizados correctamente."));
 
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                    .body(Map.of("ok", false, "mensaje", e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("ok", false, "mensaje", "Error al actualizar los datos.", "error", e.getMessage()));
