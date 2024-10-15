@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { VistaGeneralComponent } from '../vista-general/vista-general.component';
 import { HeaderUsuarioComponent } from 'src/app/Utils/header-usuario/header-usuario.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
@@ -12,12 +11,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { VistaPerfilUsuarioComponent } from '../vista-perfil-usuario/vista-perfil-usuario.component';
 import { RouterLink, RouterModule } from '@angular/router';
 import { EdicionPerfilComponent } from '../edicion-perfil/edicion-perfil.component';
+import { VistaUsuarioComponent } from '../vista-usuario/vista-usuario.component';
 @NgModule({
   declarations: [
-    VistaGeneralComponent,
     HeaderUsuarioComponent,
     VistaPerfilUsuarioComponent,
     EdicionPerfilComponent,
+    VistaUsuarioComponent
   ],
   imports: [
     CommonModule,

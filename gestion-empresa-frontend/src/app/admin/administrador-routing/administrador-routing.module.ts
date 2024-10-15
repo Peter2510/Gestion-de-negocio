@@ -5,12 +5,14 @@ import { PanelAdministradorComponent } from '../panel-administrador/panel-admini
 import { InformacionEmpresaComponent } from '../informacion-empresa/informacion-empresa.component';
 import { VerRolesComponent } from '../modulo-roles/ver-roles/ver-roles.component';
 import { CrearRolComponent } from '../modulo-roles/crear-rol/crear-rol.component';
+import { RolEspecificoComponent } from '../modulo-roles/rol-especifico/rol-especifico.component';
 
 const routes: Routes = [
   { path: 'panel-administrador', component: PanelAdministradorComponent },
   { path: 'informacion-empresa', component: InformacionEmpresaComponent },
   { path: 'roles-registrados', component: VerRolesComponent },
   { path: 'crear-rol', component: CrearRolComponent },
+  { path: 'detalles-rol', component: RolEspecificoComponent },
   {
     path: '**',
     redirectTo: 'PanelAdministrador',

@@ -10,8 +10,7 @@ import { ModuloAuthModule } from './auth/modulo-auth/modulo-auth.module';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { VistaGeneralComponent } from './usuarios/vista-general/vista-general.component';
-import { ModuloUsuariosModule } from './usuarios/modulo-usuarios/modulo-usuarios.module';
+
 import { PanelAdministradorComponent } from './admin/panel-administrador/panel-administrador.component';
 import { ModuloAdministradorModule } from './admin/modulo-administrador/modulo-administrador.module';
 import { HeaderUsuarioComponent } from './Utils/header-usuario/header-usuario.component';
@@ -27,6 +26,8 @@ import { VistaPerfilUsuarioComponent } from './usuarios/vista-perfil-usuario/vis
 import { Vista2faLoginComponent } from './auth/vista2fa-login/vista2fa-login.component';
 import { RouterLink, RouterModule } from '@angular/router';
 import { EdicionPerfilComponent } from './usuarios/edicion-perfil/edicion-perfil.component';
+import { ModuloUsuariosModule } from './usuarios/modulo-usuarios/modulo-usuarios.module';
+
 
 
 

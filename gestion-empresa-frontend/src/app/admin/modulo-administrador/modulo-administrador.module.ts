@@ -13,6 +13,8 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { VerRolesComponent } from '../modulo-roles/ver-roles/ver-roles.component';
 import { CrearRolComponent } from '../modulo-roles/crear-rol/crear-rol.component';
 import { LoadingComponent } from '../loading/loading.component';
+import { RolEspecificoComponent } from '../modulo-roles/rol-especifico/rol-especifico.component';
+
 
 
 @NgModule({
@@ -22,7 +24,8 @@ import { LoadingComponent } from '../loading/loading.component';
      InformacionEmpresaComponent,
      VerRolesComponent,
      CrearRolComponent, 
-     LoadingComponent
+     LoadingComponent,
+     RolEspecificoComponent
   ],
   imports: [CommonModule, FormsModule,
     FullCalendarModule,

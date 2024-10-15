@@ -15,3 +15,9 @@ export interface PermisoRol {
   descripcion: string;
   permisos:Permiso[];
 }
+
+export interface InfoPermiso{
+  id:number;
+  permisoId: number;
+  permisoNombre:string;
+}

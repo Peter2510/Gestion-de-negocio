@@ -17,8 +17,10 @@ export class HeaderUsuarioComponent implements OnInit {
     this.empresaService.obtenerInfoEmpresa().subscribe({
       next: (data) => {
         this.empresa = data.empresa;
+        console.log(this.empresa)
+        console.log(this.loading)
         this.loading = false; //desactivar la bandera de carga cuando los datos estén listos
-        console.log(this.empresa, data.empresa, this.loading);
+        console.log(this.loading)
       },
       error: (error) => {
         console.log(error);

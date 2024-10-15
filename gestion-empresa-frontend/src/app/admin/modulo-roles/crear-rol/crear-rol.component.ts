@@ -28,12 +28,10 @@ export class CrearRolComponent implements OnInit {
     this.permisoService.obtenerPermisosRegistrados().subscribe({
       next: (data) => {
         this.loading = false;
-        console.log(data)
         this.permisos = data.permisos
 
       }, error: (error) => {
         this.loading = false;
-        console.log(error)
       }
     })
   }

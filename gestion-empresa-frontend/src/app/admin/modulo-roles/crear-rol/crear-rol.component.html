@@ -1,5 +1,7 @@
 <app-header-admin></app-header-admin>
 
+<app-loading *ngIf="loading" ></app-loading>
+
 <div class="container mx-auto p-6 bg-white rounded-lg shadow-md">
     <h2 class="text-2xl font-semibold mb-4 text-center text-gray-800">Creación de rol</h2>
 
@@ -46,5 +48,3 @@
         </div>
     </form>
 </div>
-
-<app-loading *ngIf="loading" ></app-loading>

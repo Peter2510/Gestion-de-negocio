@@ -1,26 +1,9 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  TemplateRef,
-  ViewChild,
-} from '@angular/core';
-import {
-  CalendarView,
-  CalendarEvent,
-  CalendarEventTimesChangedEvent,
-  CalendarEventAction,
-} from 'angular-calendar';
-import {
-  addDays,
-  endOfDay,
-  isSameDay,
-  isSameMonth,
-  startOfDay,
-} from 'date-fns';
-import { EventColor } from 'calendar-utils';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
+import { addDays, endOfDay, isSameDay, isSameMonth, startOfDay } from 'date-fns';
 import { Subject } from 'rxjs';
+import { EventColor } from 'calendar-utils';
 
 const colors: Record<string, EventColor> = {
   red: {
@@ -36,25 +19,14 @@ const colors: Record<string, EventColor> = {
     secondary: '#FDF1BA',
   },
 };
-@Component({
-  selector: 'app-vista-general',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  styles: [
-    `
-      h3 {
-        margin: 0 0 10px;
-      }
 
-      pre {
-        background-color: #f5f5f5;
-        padding: 15px;
-      }
-    `,
-  ],
-  templateUrl: './vista-general.component.html',
-  styleUrls: ['./vista-general.component.css'],
+@Component({
+  selector: 'app-vista-usuario',
+  templateUrl: './vista-usuario.component.html',
+  styleUrls: ['./vista-usuario.component.css']
 })
-export class VistaGeneralComponent {
+
+export class VistaUsuarioComponent {
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
   view: CalendarView = CalendarView.Month; // Cambia la vista: Month, Week o Day
   viewDate: Date = new Date(); // Fecha actual
