@@ -1,6 +1,7 @@
 package com.gestion.empresa.backend.gestion_empresa.controllers;
 
 
+import com.gestion.empresa.backend.gestion_empresa.dto.PermisoRolDTO;
 import com.gestion.empresa.backend.gestion_empresa.dto.RolPermisoDTO;
 import com.gestion.empresa.backend.gestion_empresa.models.Permiso;
 import com.gestion.empresa.backend.gestion_empresa.models.PermisoRol;
@@ -68,4 +69,22 @@ public class RolController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("ok", true, "mensaje", "Rol creado exitosamente"));
     }
+
+
+//    @PostMapping("actualizar-permiso-rol/{rolId}")
+//    public ResponseEntity<Map<String, Object>> actualizarPermisosRol(@PathVariable Long rolId, @RequestBody List<PermisoRolDTO> nuevosPermisos) {
+//
+//        //verificar existencia de rol
+//        Optional<Rol> existenciaRol = rolServiceImpl.buscarPorId(rolId);
+//
+//        if(existenciaRol.isEmpty()){
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("ok", false, "mensaje", "El rol no existe"));
+//        }
+//
+//        permisoRolService.actualizarPermisosRol(nuevosPermisos);
+//
+//        return null;
+//
+//    }
+
 }

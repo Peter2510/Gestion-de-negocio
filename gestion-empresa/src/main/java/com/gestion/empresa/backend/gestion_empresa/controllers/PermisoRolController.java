@@ -81,24 +81,32 @@ public class PermisoRolController {
 
     @GetMapping("obtener-permiso-rol/{id}")
     public ResponseEntity<Map<String, Object>> obtenerPermisosRolesById(@PathVariable("id") Long id){
-        List<PermisoRolProjection> permisoRol = permisoRolService.obtenerPermisosPorRol(id);
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "permisos", permisoRol));
-    }
-
-    @PostMapping("actualizar-permiso-rol/{rolId}")
-    public ResponseEntity<Map<String, Object>> actualizarPermisosRol(@PathVariable Long rolId, @RequestBody List<PermisoRolDTO> nuevosPermisos) {
 
         //verificar existencia de rol
-        Optional<Rol> existenciaRol = rolServiceImpl.buscarPorId(rolId);
+        Optional<Rol> existenciaRol = rolServiceImpl.buscarPorId(id);
 
         if(existenciaRol.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("ok", false, "mensaje", "El rol no existe"));
         }
 
-        permisoRolService.actualizarPermisosRol(nuevosPermisos);
-
-        return null;
-
+        List<PermisoRolProjection> permisoRol = permisoRolService.obtenerPermisosPorRol(id);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true,"rol", existenciaRol,  "permisos", permisoRol));
     }
+
+//    @PostMapping("actualizar-permiso-rol/{rolId}")
+//    public ResponseEntity<Map<String, Object>> actualizarPermisosRol(@PathVariable Long rolId, @RequestBody List<PermisoRolDTO> nuevosPermisos) {
+//
+//        //verificar existencia de rol
+//        Optional<Rol> existenciaRol = rolServiceImpl.buscarPorId(rolId);
+//
+//        if(existenciaRol.isEmpty()){
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("ok", false, "mensaje", "El rol no existe"));
+//        }
+//
+//        permisoRolService.actualizarPermisosRol(nuevosPermisos);
+//
+//        return null;
+//
+//    }
 
 }

@@ -78,10 +78,9 @@ public class PermisoRolServiceImpl implements PermisoRolService {
                 .map(PermisoRolDTO::getIdPermiso)
                 .collect(Collectors.toList());
 
-        // Eliminando permisos que ya no están en la lista nueva
+        // Eliminando permisos que ya no están en la lista nueva (no todos)
         for (Long idActual : idsActuales) {
             if (!idsNuevos.contains(idActual)) {
-                // Eliminar el PermisoRol correspondiente, no solo por ID de permiso
                 permisoRolRepository.deleteByRolIdAndPermisoId(idRol, idActual);
             }
         }
