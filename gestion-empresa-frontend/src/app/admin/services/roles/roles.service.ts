@@ -14,7 +14,7 @@ export class RolesService {
   constructor(private http:HttpClient) { }
 
   obtenerRolesRegistrados(): Observable<any>{
-    return this.http.get(`${this.baseUrl}/${this.roles}/obtenerRoles`,
+    return this.http.get(`${this.baseUrl}/${this.roles}/obtener-roles`,
       // {
       //   headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
       // }

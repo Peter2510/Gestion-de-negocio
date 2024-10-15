@@ -4,13 +4,14 @@ export interface Rol {
   descripcion: string;
 }
 
-export interface Permisos {
+export interface Permiso {
   id: number;
   nombre: string;
+  selected?: boolean; 
 }
 
-export interface PermisosRol {
-  id: number;
-  idRol: Rol;
-  idPermiso: Permisos;
+export interface PermisoRol {
+  nombre: string;
+  descripcion: string;
+  permisos:Permiso[];
 }

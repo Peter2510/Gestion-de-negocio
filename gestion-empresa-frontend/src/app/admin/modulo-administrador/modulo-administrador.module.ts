@@ -11,13 +11,18 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { VerRolesComponent } from '../modulo-roles/ver-roles/ver-roles.component';
+import { CrearRolComponent } from '../modulo-roles/crear-rol/crear-rol.component';
+import { LoadingComponent } from '../loading/loading.component';
 
 
 @NgModule({
-  declarations: [PanelAdministradorComponent,
+  declarations: [
+     PanelAdministradorComponent,
      HeaderAdminComponent,
      InformacionEmpresaComponent,
-     VerRolesComponent
+     VerRolesComponent,
+     CrearRolComponent, 
+     LoadingComponent
   ],
   imports: [CommonModule, FormsModule,
     FullCalendarModule,

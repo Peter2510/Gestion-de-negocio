@@ -31,7 +31,6 @@ import { EdicionPerfilComponent } from './usuarios/edicion-perfil/edicion-perfil
 
 
 
-
 @NgModule({
   declarations: [AppComponent, Vista2faLoginComponent],
   imports: [

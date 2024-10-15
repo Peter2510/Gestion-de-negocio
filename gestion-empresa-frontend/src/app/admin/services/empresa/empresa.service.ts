@@ -18,7 +18,7 @@ export class EmpresaService {
   constructor(private http: HttpClient, private authService: ServicioAuthService) { }
 
   public obtenerInfoEmpresa(): Observable<any> {
-    return this.http.get<any>(`${this.baseURL}/${this.empresa}/obtenerEmpresa/1`,
+    return this.http.get<any>(`${this.baseURL}/${this.empresa}/obtener-empresa/1`,
       // {
       //   headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
       // }
@@ -26,7 +26,7 @@ export class EmpresaService {
   }
 
   public obtenerTipoServicios(): Observable<any> {
-    return this.http.get<any>(`${this.baseURL}/${this.tipoServicio}/obtenerTiposServicio`,
+    return this.http.get<any>(`${this.baseURL}/${this.tipoServicio}/obtener-tipos-servicio`,
       // {
       //   headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
       // }
@@ -34,7 +34,7 @@ export class EmpresaService {
   }
 
   public obtenerTipoAsignacionCita(): Observable<any> {
-    return this.http.get<any>(`${this.baseURL}/${this.tipoAsignacionCita}/obtenerTiposAsignacionCita`,
+    return this.http.get<any>(`${this.baseURL}/${this.tipoAsignacionCita}/obtener-tipos-asignacion-cita`,
       // {
       //   headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
       // }
@@ -54,7 +54,7 @@ export class EmpresaService {
       formData.append('logoFile', logo);
     }
 
-    return this.http.post<any>(`${this.baseURL}/${this.empresa}/actualizarEmpresa/1`, formData,
+    return this.http.post<any>(`${this.baseURL}/${this.empresa}/actualizar-empresa/1`, formData,
       // {
       //   headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
       // }
