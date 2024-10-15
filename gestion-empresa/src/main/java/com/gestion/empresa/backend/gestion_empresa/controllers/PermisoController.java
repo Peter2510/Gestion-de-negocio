@@ -41,7 +41,7 @@ public class PermisoController {
             return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("ok", true, "mensaje", "Permiso creado exitosamente"));
     }
 
-    @GetMapping("obtener-permisos")
+    @GetMapping("obtener-permisos-registrados")
     public ResponseEntity<Map<String, Object>> obtenerPermisos() {
 
         List<Permiso> permisos = permisoService.obtenerPermisosRegistrados();

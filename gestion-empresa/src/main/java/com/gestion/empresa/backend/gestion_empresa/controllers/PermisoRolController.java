@@ -7,6 +7,7 @@ import com.gestion.empresa.backend.gestion_empresa.models.PermisoRol;
 import com.gestion.empresa.backend.gestion_empresa.models.Rol;
 import com.gestion.empresa.backend.gestion_empresa.projections.PermisoRolProjection;
 import com.gestion.empresa.backend.gestion_empresa.services.PermisoRolService;
+import com.gestion.empresa.backend.gestion_empresa.servicesImpl.PermisoRolServiceImpl;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.PermisoServiceImpl;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.RolServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ import java.util.Optional;
 public class PermisoRolController {
 
     @Autowired
-    private PermisoRolService permisoRolService;
+    private PermisoRolServiceImpl permisoRolService;
 
     @Autowired
     private PermisoServiceImpl permisoServiceImpl;
@@ -38,45 +39,45 @@ public class PermisoRolController {
     @Autowired
     private RolServiceImpl rolServiceImpl;
 
-    @PostMapping("crear-permiso-rol")
-    public ResponseEntity<Map<String, Object>> crearPermisoRol(@RequestBody List<PermisoRolDTO> permisoRol){
+//    @PostMapping("crear-permiso-rol")
+//    public ResponseEntity<Map<String, Object>> crearPermisoRol(@RequestBody List<PermisoRolDTO> permisoRol){
+//
+//        for(int i=0; i<permisoRol.size(); i++){
+//
+//            Optional<Permiso> permiso = permisoServiceImpl.buscarPorId(permisoRol.get(i).getIdPermiso());
+//
+//            if(permiso.isEmpty()){
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("ok", false, "mensaje", "No existe el permiso"));
+//            }
+//
+//            Optional<Rol> rol = rolServiceImpl.buscarPorId(permisoRol.get(i).getIdRol());
+//
+//            if(rol.isEmpty()){
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("ok", false, "mensaje", "No existe el rol"));
+//            }
+//
+//            PermisoRol nuevoPermisoRol = new PermisoRol();
+//            nuevoPermisoRol.setRol(rol.get());
+//            nuevoPermisoRol.setPermiso(permiso.get());
+//
+//            PermisoRol creado = permisoRolService.crearPermisoRol(nuevoPermisoRol);
+//
+//            if(creado == null){
+//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("ok", false, "mensaje", "Error al la asignacion"));
+//            }
+//
+//        }
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "mensaje", "Asignacion exitosa"));
+//
+//    }
 
-        for(int i=0; i<permisoRol.size(); i++){
-
-            Optional<Permiso> permiso = permisoServiceImpl.buscarPorId(permisoRol.get(i).getIdPermiso());
-
-            if(permiso.isEmpty()){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("ok", false, "mensaje", "No existe el permiso"));
-            }
-
-            Optional<Rol> rol = rolServiceImpl.buscarPorId(permisoRol.get(i).getIdRol());
-
-            if(rol.isEmpty()){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("ok", false, "mensaje", "No existe el rol"));
-            }
-
-            PermisoRol nuevoPermisoRol = new PermisoRol();
-            nuevoPermisoRol.setRol(rol.get());
-            nuevoPermisoRol.setPermiso(permiso.get());
-
-            PermisoRol creado = permisoRolService.crearPermisoRol(nuevoPermisoRol);
-
-            if(creado == null){
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("ok", false, "mensaje", "Error al la asignacion"));
-            }
-
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "mensaje", "Asignacion exitosa"));
-
-    }
-
-    @GetMapping("obtener-permisos-roles")
-    public ResponseEntity<Map<String, Object>> obtenerPermisosRoles(){
-        List<PermisoRol> permisosRoles = permisoRolService.obtenerRegistros();
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", false, "permisosRoles", permisosRoles));
-
-    }
+//    @GetMapping("obtener-permisos-roles")
+//    public ResponseEntity<Map<String, Object>> obtenerPermisosRoles(){
+//        List<PermisoRol> permisosRoles = permisoRolService.obtenerRegistros();
+//        return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", false, "permisosRoles", permisosRoles));
+//
+//    }
 
     @GetMapping("obtener-permiso-rol/{id}")
     public ResponseEntity<Map<String, Object>> obtenerPermisosRolesById(@PathVariable("id") Long id){
@@ -84,6 +85,20 @@ public class PermisoRolController {
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "permisos", permisoRol));
     }
 
+    @PostMapping("actualizar-permiso-rol/{rolId}")
+    public ResponseEntity<Map<String, Object>> actualizarPermisosRol(@PathVariable Long rolId, @RequestBody List<PermisoRolDTO> nuevosPermisos) {
 
+        //verificar existencia de rol
+        Optional<Rol> existenciaRol = rolServiceImpl.buscarPorId(rolId);
+
+        if(existenciaRol.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("ok", false, "mensaje", "El rol no existe"));
+        }
+
+        permisoRolService.actualizarPermisosRol(nuevosPermisos);
+
+        return null;
+
+    }
 
 }
