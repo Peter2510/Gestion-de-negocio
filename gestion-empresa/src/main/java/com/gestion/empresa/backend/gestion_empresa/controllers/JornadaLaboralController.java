@@ -34,6 +34,7 @@ public class JornadaLaboralController {
             @RequestBody JornadaLaboral jornadaLaboral
     ) {
         try {
+            System.out.println(jornadaLaboral);
             //crea la categoria
             JornadaLaboral nuevaJornada = new JornadaLaboral();
             nuevaJornada.setNombre(jornadaLaboral.getNombre());
