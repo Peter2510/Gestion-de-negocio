@@ -7,7 +7,7 @@ package com.gestion.empresa.backend.gestion_empresa.projections;
  */
 
 public interface PermisoRolProjection {
-    Long getRolId();
+    Long getId();
     Long getPermisoId();
     String getPermisoNombre();
 }

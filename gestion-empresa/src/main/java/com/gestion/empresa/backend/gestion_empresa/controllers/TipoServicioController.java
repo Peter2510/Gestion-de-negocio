@@ -30,13 +30,13 @@ public class TipoServicioController {
     @Autowired
     private TipoServicioServiceImpl tipoServicioService;
 
-    @GetMapping("/obtenerTiposServicio")
+    @GetMapping("/obtener-tipos-servicio")
     public ResponseEntity<Map<String, Object>> obtenerTiposServicioRegistrados() {
         List<TipoServicio> tiposServicio = tipoServicioService.obtenerTipoServiciosRegistrados();
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "tiposServicio", tiposServicio));
     }
 
-    @RequestMapping("/crearTipoServicio")
+    @RequestMapping("/crear-tipo-servicio")
     public ResponseEntity<Map<String, Object>> crearTipoServicio(@Valid @RequestBody TipoServicio tipoServicio) {
         //verificar si el tipo de servicio ya existe
         if (tipoServicioService.buscarPorNombre(tipoServicio.getNombre()).isPresent()) {

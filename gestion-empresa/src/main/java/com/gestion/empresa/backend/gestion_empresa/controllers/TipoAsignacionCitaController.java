@@ -26,13 +26,13 @@ public class TipoAsignacionCitaController {
     @Autowired
     private TipoAsignacionCitaServiceImpl tipoAsignacionCitaService;
 
-    @GetMapping("/obtenerTiposAsignacionCita")
+    @GetMapping("/obtener-tipos-asignacion-cita")
     public ResponseEntity<Map<String, Object>> obtenerTiposAsignacionCitaRegistrados() {
         List<TipoAsignacionCita> tiposAsignacionCita = tipoAsignacionCitaService.obtenerTipoAsignacionCitaRegistrados();
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "tiposAsignacionCita", tiposAsignacionCita));
     }
 
-    @PostMapping("/crearTipoAsignacionCita")
+    @PostMapping("/crear-tipo-asignacion-cita")
     public ResponseEntity<Map<String, Object>> crearTipoAsignacionCita(@Valid @RequestBody TipoAsignacionCita tipoAsignacionCita) {
         //verificar si el tipo de asignacion de cita ya existe
         if (tipoAsignacionCitaService.buscarPorNombre(tipoAsignacionCita.getTipo()).isPresent()) {
