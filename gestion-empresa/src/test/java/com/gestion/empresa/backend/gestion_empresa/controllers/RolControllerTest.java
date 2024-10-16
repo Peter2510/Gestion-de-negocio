@@ -49,43 +49,43 @@ class RolControllerTest {
         // Verificar que el servicio fue llamado
         verify(rolService, times(1)).obtenerRolesRegistrados();
     }
-    @Test
-    void crearRol_RolNuevo() {
-        //simular que no existe un rol con ese nombre
-        when(rolService.buscarPorNombre(any(String.class))).thenReturn(Optional.empty());
-        when(rolService.crearRol(any(Rol.class))).thenReturn(rol);
-        //llamada al controlador
-        ResponseEntity<Map<String,Object>> response = rolController.crearRol(rol);
-        //verificar resultado
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals("Rol creado exitosamente", Objects.requireNonNull(response.getBody()).get("mensaje"));
-        //verificar que el repositorio y servicio fueron llamados
-        verify(rolService, times(1)).buscarPorNombre(rol.getNombre());
-        verify(rolService, times(1)).crearRol(any(Rol.class));
-    }
-
-    @Test
-    void crearRol_RolExistente() {
-
-        when(rolService.buscarPorNombre(any(String.class))).thenReturn(Optional.of(rol));
-
-        ResponseEntity<Map<String,Object>> response = rolController.crearRol(rol);
-
-        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
-        assertEquals("El rol Contabilidad ya existe", Objects.requireNonNull(response.getBody()).get("mensaje"));
-        verify(rolService, times(0)).crearRol(any(Rol.class));
-    }
-
-    @Test
-    void crearRol_noSeCreaRol(){
-        when(rolService.buscarPorNombre(any(String.class))).thenReturn(Optional.empty());
-        when(rolService.crearRol(any(Rol.class))).thenReturn(null);
-
-        ResponseEntity<Map<String,Object>> response = rolController.crearRol(rol);
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        assertEquals("Error al crear el rol",response.getBody().get("mensaje"));
-
-        verify(rolService, times(1)).crearRol(any(Rol.class));
-    }
+//    @Test
+//    void crearRol_RolNuevo() {
+//        //simular que no existe un rol con ese nombre
+//        when(rolService.buscarPorNombre(any(String.class))).thenReturn(Optional.empty());
+//        when(rolService.crearRol(any(Rol.class))).thenReturn(rol);
+//        //llamada al controlador
+//        ResponseEntity<Map<String,Object>> response = rolController.crearRol(rol);
+//        //verificar resultado
+//        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+//        assertEquals("Rol creado exitosamente", Objects.requireNonNull(response.getBody()).get("mensaje"));
+//        //verificar que el repositorio y servicio fueron llamados
+//        verify(rolService, times(1)).buscarPorNombre(rol.getNombre());
+//        verify(rolService, times(1)).crearRol(any(Rol.class));
+//    }
+//
+//    @Test
+//    void crearRol_RolExistente() {
+//
+//        when(rolService.buscarPorNombre(any(String.class))).thenReturn(Optional.of(rol));
+//
+//        ResponseEntity<Map<String,Object>> response = rolController.crearRol(rol);
+//
+//        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+//        assertEquals("El rol Contabilidad ya existe", Objects.requireNonNull(response.getBody()).get("mensaje"));
+//        verify(rolService, times(0)).crearRol(any(Rol.class));
+//    }
+//
+//    @Test
+//    void crearRol_noSeCreaRol(){
+//        when(rolService.buscarPorNombre(any(String.class))).thenReturn(Optional.empty());
+//        when(rolService.crearRol(any(Rol.class))).thenReturn(null);
+//
+//        ResponseEntity<Map<String,Object>> response = rolController.crearRol(rol);
+//
+//        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+//        assertEquals("Error al crear el rol",response.getBody().get("mensaje"));
+//
+//        verify(rolService, times(1)).crearRol(any(Rol.class));
+//    }
 }

@@ -20,6 +20,11 @@ public class RolServiceImpl implements RolService {
         return rolRepository.findByNombre(nombre);
     }
 
+    @Override
+    public Optional<Rol> buscarPorId(Long id) {
+        return rolRepository.findById(id);
+    }
+
     public List<Rol> obtenerRolesRegistrados(){
         return rolRepository.findAll();
     }
