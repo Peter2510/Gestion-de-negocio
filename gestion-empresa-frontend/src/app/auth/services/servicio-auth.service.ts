@@ -52,7 +52,6 @@ export class ServicioAuthService {
       .get<Genero[]>(`${this.url}/Genero`)
       .pipe(
         tap((elementos: Genero[]) => {
-          console.log(elementos);
           this.generos.set(elementos);
         })
       )

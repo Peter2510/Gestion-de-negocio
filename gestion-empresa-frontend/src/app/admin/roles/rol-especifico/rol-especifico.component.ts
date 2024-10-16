@@ -3,13 +3,14 @@ import { RolesService } from '../../services/roles/roles.service';
 import { InfoPermiso, Permiso, Rol } from 'src/app/models/Roles';
 import { PermisosService } from '../../services/permisos/permisos.service';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-rol-especifico',
   templateUrl: './rol-especifico.component.html',
   styleUrls: ['./rol-especifico.component.css']
 })
-export class RolEspecificoComponent implements OnInit{
+export class RolEspecificoComponent implements OnInit {
 
   rolId: number | null = null;
   loading: boolean = true;
@@ -21,8 +22,8 @@ export class RolEspecificoComponent implements OnInit{
 
   permisosActuales: InfoPermiso[] = [];
   permisosRegistrados: Permiso[] = [];
-  
-  constructor(private rolService: RolesService, private permisoService: PermisosService, private router: Router) {}
+
+  constructor(private rolService: RolesService, private permisoService: PermisosService, private router: Router) { }
 
   ngOnInit() {
     this.rolId = this.rolService.getRolId();
@@ -36,10 +37,8 @@ export class RolEspecificoComponent implements OnInit{
   }
 
   mostrarInfoRol() {
-    console.log("entro el id----", this.rolId)
     this.rolService.obtenerRolYPermisoEspecifico(this.rolId).subscribe({
       next: (data) => {
-        console.log("entro el id", this.rolId)
         this.loading = false;
         this.rol = data.rol;
         this.permisosActuales = data.permisos;
@@ -76,4 +75,47 @@ export class RolEspecificoComponent implements OnInit{
       });
     }
   }
+
+
+
+  actualizarRol() {
+
+    if (this.rol.nombre.length <=0 || this.rol.descripcion.length <=0) {
+      Swal.fire({
+        title: "El nombre y descripción del rol son obligatorios",
+        icon: "warning"
+      });
+      return;
+    }
+
+    const permisosSeleccionados = this.permisosRegistrados.filter(permiso => permiso.selected);
+
+    if (permisosSeleccionados.length === 0) {
+      Swal.fire({
+        title: "Debes seleccionar al menos un permiso",
+        icon: "warning"
+      });
+      return;
+    }
+    this.loading = true;
+    this.rolService.actualizarPermisosEInfoRol(permisosSeleccionados,this.rol.id, this.rol.nombre, this.rol.descripcion).subscribe({
+      next: (data)=>{
+        this.loading = false;
+        Swal.fire({
+          title: data.mensaje,
+          icon: "success"
+        })
+      },
+      error: (error) =>{
+        this.loading = false;
+        Swal.fire({
+          title: error.error.mensaje,
+          icon: "error"
+        })
+      }
+    })
+
+  }
+
+
 }

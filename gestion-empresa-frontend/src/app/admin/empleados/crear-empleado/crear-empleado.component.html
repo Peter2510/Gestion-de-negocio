@@ -1,0 +1,175 @@
+<app-header-admin></app-header-admin>
+
+<div class="flex justify-center items-center min-h-screen bg-base-100 mt-24 pt-4">
+    <div class="card w-full max-w-lg bg-base-100 shadow-xl">
+        <div class="card-body ">
+            <h2 class="card-title text-center">Registro</h2>
+
+            <!-- Nombre de usuario -->
+            <div class="form-control mb-4">
+                <label class="label">
+                    <span class="label-text">Nombre de usuario</span>
+                </label>
+                <input
+                    type="text"
+                    placeholder="Nombre de usuario"
+                    class="input input-bordered"
+                    name="nombreUsuario"
+                />
+            </div>
+
+            <!-- Nombre de cui -->
+            <div class="form-control mb-4">
+                <label class="label">
+                    <span class="label-text">CUI de usuario</span>
+                </label>
+                <input
+                    type="number"
+                    placeholder="CUI de usuario"
+                    class="input input-bordered"
+                    name="cui"
+                />
+            </div>
+
+            <!-- Contraseña -->
+            <div class="form-control mb-4">
+                <label class="label">
+                    <span class="label-text">Contraseña</span>
+                </label>
+                <input
+                    type="password"
+                    placeholder="Contraseña"
+                    class="input input-bordered"
+                    name="password"
+                />
+            </div>
+
+            <!-- Confirmar Contraseña -->
+            <div class="form-control mb-4">
+                <label class="label">
+                    <span class="label-text">Confirmar contraseña</span>
+                </label>
+                <input
+                    type="password"
+                    placeholder="Confirmar contraseña"
+                    class="input input-bordered"
+                />
+            </div>
+
+            <!-- Correo -->
+            <div class="form-control mb-4">
+                <label class="label">
+                    <span class="label-text">Correo</span>
+                </label>
+                <input
+                    type="email"
+                    placeholder="Correo"
+                    class="input input-bordered"
+                    name="correo"
+                />
+            </div>
+
+            <!-- Persona - Nombre -->
+            <div class="form-control mb-4">
+                <label class="label">
+                    <span class="label-text">Nombre</span>
+                </label>
+                <input
+                    type="text"
+                    placeholder="Nombre"
+                    class="input input-bordered"
+                    name="persona.nombre"
+                />
+            </div>
+
+            <!-- Persona - NIT -->
+            <div class="form-control mb-4">
+                <label class="label">
+                    <span class="label-text">NIT</span>
+                </label>
+                <input
+                    type="text"
+                    placeholder="NIT"
+                    class="input input-bordered"
+                    name="persona.nit"
+                />
+            </div>
+
+            <!-- Persona - Número -->
+            <div class="form-control mb-4">
+                <label class="label">
+                    <span class="label-text">Número</span>
+                </label>
+                <input
+                    type="number"
+                    placeholder="Número"
+                    class="input input-bordered"
+                    name="persona.numero"
+                />
+            </div>
+
+            <!-- Persona - Dirección -->
+            <div class="form-control mb-4">
+                <label class="label">
+                    <span class="label-text">Dirección</span>
+                </label>
+                <input
+                    type="text"
+                    placeholder="Dirección"
+                    class="input input-bordered"
+                    name="persona.direccion"
+                />
+            </div>
+
+            <!-- Persona - Género -->
+            <div class="form-control mb-4">
+                <label class="label">
+                    <span class="label-text">Género</span>
+                </label>
+                <select
+                    class="select select-bordered"
+                    name="persona.genero.id"
+                >
+                    <option disabled selected>Seleccione un género</option>
+                    <ng-container *ngFor="let genero of servicioAuth.generos()">
+                        <option [ngValue]="genero">{{ genero.genero }}</option>
+                    </ng-container>
+                </select>
+            </div>
+
+            <div class="form-control mb-4">
+                <label class="label">
+                    <span class="label-text">Rol</span>
+                </label>
+                <select
+                    class="select select-bordered"
+                    name="persona.genero.id"
+                >
+                    <option disabled selected>Seleccione un rol</option>
+                    <ng-container *ngFor="let rol of roles">
+                        <option [ngValue]="rol">{{ rol.nombre }}</option>
+                    </ng-container>
+                </select>
+            </div>
+
+            <!-- A2F Activo -->
+            <div class="form-control mb-4">
+                <label class="label cursor-pointer">
+                    <span class="label-text">Autenticación de dos factores activa</span>
+                    <input
+                        type="checkbox"
+                        class="checkbox"
+                        name="a2fActivo"
+                    />
+                </label>
+            </div>
+
+            <!-- Botón para enviar -->
+            <div class="form-control mt-6">
+                <button class="btn btn-primary w-full">
+                    Registrar empleado
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

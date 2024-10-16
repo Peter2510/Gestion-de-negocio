@@ -30,8 +30,6 @@ import { ModuloUsuariosModule } from './usuarios/modulo-usuarios/modulo-usuarios
 
 
 
-
-
 @NgModule({
   declarations: [AppComponent, Vista2faLoginComponent],
   imports: [

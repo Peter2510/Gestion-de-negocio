@@ -10,10 +10,11 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FullCalendarModule } from '@fullcalendar/angular';
-import { VerRolesComponent } from '../modulo-roles/ver-roles/ver-roles.component';
-import { CrearRolComponent } from '../modulo-roles/crear-rol/crear-rol.component';
+import { VerRolesComponent } from '../roles/ver-roles/ver-roles.component';
+import { CrearRolComponent } from '../roles/crear-rol/crear-rol.component';
 import { LoadingComponent } from '../loading/loading.component';
-import { RolEspecificoComponent } from '../modulo-roles/rol-especifico/rol-especifico.component';
+import { RolEspecificoComponent } from '../roles/rol-especifico/rol-especifico.component';
+import { CrearEmpleadoComponent } from '../empleados/crear-empleado/crear-empleado.component';
 
 
 
@@ -25,7 +26,8 @@ import { RolEspecificoComponent } from '../modulo-roles/rol-especifico/rol-espec
      VerRolesComponent,
      CrearRolComponent, 
      LoadingComponent,
-     RolEspecificoComponent
+     RolEspecificoComponent,
+     CrearEmpleadoComponent
   ],
   imports: [CommonModule, FormsModule,
     FullCalendarModule,

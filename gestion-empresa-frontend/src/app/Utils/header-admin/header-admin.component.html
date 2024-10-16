@@ -1,6 +1,7 @@
-<div class="navbar bg-base-100" *ngIf="!loading">
+<!-- navbar.component.html -->
+<div class="navbar bg-base-100 z-10 fixed top-0 left-0 right-0" *ngIf="!loading">
   <div class="flex-1 flex items-center">
-    <img class="w-20 h-10 rounded md:w-40 md:h-20" src="{{ empresa?.logo }}">
+    <img class="w-20 h-10 rounded md:w-40 md:h-20" [src]="empresa?.logo">
     <a href="/administrador/panel-administrador" class="text-xl text-gray-800 ml-2">{{ empresa?.nombre }}</a>
   </div>
 
@@ -22,9 +23,15 @@
           </li>
           <li>
             <select class="select w-full" (change)="onSelectChange($event)">
+              <option disabled selected>Gestión de empleados</option>
+              <option value="/administrador/crear-empleado">Crear empleado</option>
+            </select>
+          </li>
+          <li>
+            <select class="select w-full" (change)="onSelectChange($event)">
               <option disabled selected>Gestión de servicios</option>
               <option>Ver servicios</option>
-              <option>Crear nuevo servicio</option>
+              <option>Crear servicio</option>
               <option>Editar servicio</option>
             </select>
           </li>
@@ -41,30 +48,36 @@
 
     <!-- Pantallas más grandes -->
     <ul class="menu menu-horizontal p-0 hidden md:flex space-x-4">
-               <li>
-            <select class="select w-full" (change)="onSelectChange($event)">
-              <option disabled selected>Gestión de empresa</option>
-              <option value="/administrador/informacion-empresa">Editar información</option>
-            </select>
-          </li>
-          <li>
-            <select class="select w-full" (change)="onSelectChange($event)">
-              <option disabled selected>Gestión de servicios</option>
-              <option>Ver servicios</option>
-              <option>Crear nuevo servicio</option>
-              <option>Editar servicio</option>
-            </select>
-          </li>
-          <li>
-            <select class="select w-full" (change)="onSelectChange($event)">
-              <option disabled selected>Gestión de roles</option>
-              <option value="/administrador/roles-registrados">Ver roles</option>
-              <option value="/administrador/crear-rol">Crear Rol</option>
-            </select>
-          </li>
+      <li>
+        <select class="select w-full" (change)="onSelectChange($event)">
+          <option disabled selected>Gestión de empresa</option>
+          <option value="/administrador/informacion-empresa">Editar información</option>
+        </select>
+      </li>
+      <li>
+        <select class="select w-full" (change)="onSelectChange($event)">
+          <option disabled selected>Gestión de empleados</option>
+          <option value="/administrador/crear-empleado">Crear empleado</option>
+        </select>
+      </li>
+      <li>
+        <select class="select w-full" (change)="onSelectChange($event)">
+          <option disabled selected>Gestión de servicios</option>
+          <option>Ver servicios</option>
+          <option>Crear servicio</option>
+          <option>Editar servicio</option>
+        </select>
+      </li>
+      <li>
+        <select class="select w-full" (change)="onSelectChange($event)">
+          <option disabled selected>Gestión de roles</option>
+          <option value="/administrador/roles-registrados">Ver roles</option>
+          <option value="/administrador/crear-rol">Crear Rol</option>
+        </select>
+      </li>
     </ul>
 
-    <!-- avatar con Dropdown -->
+    <!-- Avatar con Dropdown -->
     <div class="dropdown dropdown-end">
       <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
         <div class="w-10 rounded-full">
@@ -81,7 +94,7 @@
   </div>
 </div>
 
-<!-- indicador de loading de pantalla completa -->
-<div class="loading-overlay" *ngIf="loading">
+<!-- Indicador de loading de pantalla completa -->
+<div class="loading-overlay fixed inset-0 flex items-center justify-center z-20" *ngIf="loading">
   <span class="loading loading-dots loading-lg"></span>
 </div>
