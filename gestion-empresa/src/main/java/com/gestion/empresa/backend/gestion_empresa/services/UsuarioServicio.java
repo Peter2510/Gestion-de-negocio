@@ -9,10 +9,9 @@ import java.util.Optional;
 @Service
 public interface UsuarioServicio {
 
-    Optional<Usuarios> findByPersonaCui(Long cui);
-    Optional<Usuarios> findById(Long id);
-    Optional<Usuarios> buscarNombre(String nombreUsuario);
-
+    Optional<Usuarios> buscarPorCui(Long cui);
+    Optional<Usuarios> buscarPorId(Long id);
+    Optional<Usuarios> buscarNombreUsuario(String nombreUsuario);
     // para que pueda editar
     Optional<Usuarios> editarUsuario(Usuarios usuarios);
 }

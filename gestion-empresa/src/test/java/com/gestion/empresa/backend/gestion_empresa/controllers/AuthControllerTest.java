@@ -1,22 +1,13 @@
 package com.gestion.empresa.backend.gestion_empresa.controllers;
 
-import com.gestion.empresa.backend.gestion_empresa.dto.AuthRespuesta;
 import com.gestion.empresa.backend.gestion_empresa.dto.Login;
-import com.gestion.empresa.backend.gestion_empresa.dto.RegistroUsuarios;
-import com.gestion.empresa.backend.gestion_empresa.models.Persona;
 import com.gestion.empresa.backend.gestion_empresa.models.Rol;
-import com.gestion.empresa.backend.gestion_empresa.models.Usuarios;
 import com.gestion.empresa.backend.gestion_empresa.repositories.PersonaRepository;
-import com.gestion.empresa.backend.gestion_empresa.repositories.RolRepository;
 import com.gestion.empresa.backend.gestion_empresa.repositories.UsuarioRepository;
 import com.gestion.empresa.backend.gestion_empresa.security.JwtServicio;
 import com.gestion.empresa.backend.gestion_empresa.services.UsuarioServicio;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.AutenticacionServiceImpl;
-import com.gestion.empresa.backend.gestion_empresa.servicesImpl.RolServiceImpl;
-import org.apache.http.auth.AuthenticationException;
-import org.apache.http.auth.InvalidCredentialsException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -25,21 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import java.util.Map;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 /**
  * Author: alexxus

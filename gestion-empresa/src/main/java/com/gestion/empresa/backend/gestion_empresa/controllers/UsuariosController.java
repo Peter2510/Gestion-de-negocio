@@ -39,7 +39,7 @@ public class UsuariosController {
     public  ResponseEntity<Object> obtenerUsuario(@RequestParam long id){
 
 
-        Optional<Usuarios> usuarioIndividual = this.usuarioServiceImpl.findById(id);
+        Optional<Usuarios> usuarioIndividual = this.usuarioServiceImpl.buscarPorId(id);
 
         if (usuarioIndividual.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(usuarioIndividual);

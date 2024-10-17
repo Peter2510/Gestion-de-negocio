@@ -26,11 +26,8 @@ public class UsuarioServiceImpl implements UsuarioServicio {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
-
-
     @Override
-    public Optional<Usuarios> findByPersonaCui(Long cui) {
+    public Optional<Usuarios> buscarPorCui(Long cui) {
         Optional<Usuarios> usuarioObtenido = this.usuarioRepository.findByPersonaCui(cui);
         if (usuarioObtenido.isPresent()) {
             return usuarioObtenido;
@@ -39,7 +36,7 @@ public class UsuarioServiceImpl implements UsuarioServicio {
     }
 
     @Override
-    public Optional<Usuarios> findById(Long id) {
+    public Optional<Usuarios> buscarPorId(Long id) {
         Optional<Usuarios> usuarioObtenido = this.usuarioRepository.findById(id);
         if (usuarioObtenido.isPresent()) {
             return usuarioObtenido;
@@ -47,10 +44,9 @@ public class UsuarioServiceImpl implements UsuarioServicio {
         return Optional.empty();
     }
 
-    // metodos a implementar
     @Override
-    public Optional<Usuarios> buscarNombre(String nombreUsuario) {
-        return Optional.empty();
+    public Optional<Usuarios> buscarNombreUsuario(String nombreUsuario) {
+        return usuarioRepository.findByNombreUsuario(nombreUsuario);
     }
 
     @Override
@@ -58,7 +54,7 @@ public class UsuarioServiceImpl implements UsuarioServicio {
         System.out.println("------"+ usuarios);
         String passwordEncriptada = passwordEncoder.encode(usuarios.getPassword());
         // Busca
-        Optional<Usuarios> usuarioExistente = usuarioRepository.findByNombreUsuario(usuarios.getNombreUsuario());
+        Optional<Usuarios> usuarioExistente = usuarioRepository.findById(usuarios.getId());
 
 
         System.out.println(usuarioExistente+"------"+ usuarios);
@@ -72,7 +68,7 @@ public class UsuarioServiceImpl implements UsuarioServicio {
             // Actualiza los datos personales
             usuarioActualizado.getPersona().setNombre(usuarios.getPersona().getNombre());
             usuarioActualizado.getPersona().setNit(usuarios.getPersona().getNit());
-            usuarioActualizado.getPersona().setNumero(usuarios.getPersona().getNumero());
+            usuarioActualizado.getPersona().setTelefono(usuarios.getPersona().getTelefono());
             usuarioActualizado.getPersona().setCorreo(usuarios.getPersona().getCorreo());
             usuarioActualizado.getPersona().setDireccion(usuarios.getPersona().getDireccion());
             usuarioActualizado.getPersona().setTelefono(usuarios.getPersona().getTelefono());

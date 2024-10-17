@@ -30,12 +30,11 @@ public class PersonaController {
     }
 
 
-
-    // para crear nuevas personas
-
-    @PostMapping("/ingresarPersona")
-    public ResponseEntity<Persona> ingresarPersona(@RequestBody  Persona persona) {
-        Persona nuevaPersona = servicio.agregarPersonas(persona);
-        return  new ResponseEntity<>(nuevaPersona, HttpStatus.CREATED);
-    }
+//    // para crear nuevas personas
+//
+//    @PostMapping("/ingresarPersona")
+//    public ResponseEntity<Persona> ingresarPersona(@RequestBody  Persona persona) {
+//        Persona nuevaPersona = servicio.agregarPersonas(persona);
+//        return  new ResponseEntity<>(nuevaPersona, HttpStatus.CREATED);
+//    }
 }
