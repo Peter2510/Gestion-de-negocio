@@ -1,6 +1,7 @@
 package com.gestion.empresa.backend.gestion_empresa.controllers;
 
 
+import com.gestion.empresa.backend.gestion_empresa.dto.ActualizacionRolDTO;
 import com.gestion.empresa.backend.gestion_empresa.dto.PermisoRolDTO;
 import com.gestion.empresa.backend.gestion_empresa.models.Permiso;
 import com.gestion.empresa.backend.gestion_empresa.models.PermisoRol;
@@ -93,20 +94,33 @@ public class PermisoRolController {
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true,"rol", existenciaRol,  "permisos", permisoRol));
     }
 
-//    @PostMapping("actualizar-permiso-rol/{rolId}")
-//    public ResponseEntity<Map<String, Object>> actualizarPermisosRol(@PathVariable Long rolId, @RequestBody List<PermisoRolDTO> nuevosPermisos) {
-//
-//        //verificar existencia de rol
-//        Optional<Rol> existenciaRol = rolServiceImpl.buscarPorId(rolId);
-//
-//        if(existenciaRol.isEmpty()){
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("ok", false, "mensaje", "El rol no existe"));
-//        }
-//
-//        permisoRolService.actualizarPermisosRol(nuevosPermisos);
-//
-//        return null;
-//
-//    }
+    @PostMapping("actualizar-permiso-rol/{rolId}")
+    public ResponseEntity<Map<String, Object>> actualizarPermisosRol(@PathVariable Long rolId, @RequestBody ActualizacionRolDTO nuevosDatos) {
 
+        try{
+
+
+            //verificar existencia de rol
+            Optional<Rol> existenciaRol = rolServiceImpl.buscarPorId(rolId);
+
+
+            if(existenciaRol.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("ok", false, "mensaje", "El rol no existe"));
+            }
+
+            if(!(existenciaRol.get().getNombre().equals(nuevosDatos.getNombre())&&existenciaRol.get().getDescripcion().equals(nuevosDatos.getDescripcion()))){
+                existenciaRol.get().setNombre(nuevosDatos.getNombre());
+                existenciaRol.get().setDescripcion(nuevosDatos.getDescripcion());
+                existenciaRol.get().setId(rolId);
+                rolServiceImpl.crearRol(existenciaRol.get());
+            }
+
+            permisoRolService.actualizarPermisosRol(nuevosDatos.getPermisos(), rolId);
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "mensaje", "Rol actualizado correctamente"));
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("ok", false, "mensaje", "Error al actualizar el rol y sus permisos"));
+        }
+    }
 }

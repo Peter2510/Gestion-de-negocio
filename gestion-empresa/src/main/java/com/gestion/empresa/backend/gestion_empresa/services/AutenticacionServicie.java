@@ -11,7 +11,6 @@ import java.util.Optional;
 public interface AutenticacionServicie {
 
 
-    Optional<Usuarios> buscarNombre(String nombreUsuario);
     Optional<AuthRespuesta> validarCredenciales(String password, Optional<Usuarios> usuarios);
     Optional<AuthRespuesta> generacionToken(Optional<Usuarios> usuarios);
 

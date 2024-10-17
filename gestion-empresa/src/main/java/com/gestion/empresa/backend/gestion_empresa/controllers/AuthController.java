@@ -2,15 +2,19 @@ package com.gestion.empresa.backend.gestion_empresa.controllers;
 
 import com.gestion.empresa.backend.gestion_empresa.dto.AuthRespuesta;
 import com.gestion.empresa.backend.gestion_empresa.dto.Login;
-import com.gestion.empresa.backend.gestion_empresa.dto.RegistroUsuarios;
+import com.gestion.empresa.backend.gestion_empresa.dto.RegistroUsuariosDTO;
 import com.gestion.empresa.backend.gestion_empresa.models.Usuarios;
+import com.gestion.empresa.backend.gestion_empresa.services.PersonaService;
+import com.gestion.empresa.backend.gestion_empresa.services.UsuarioServicio;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.AutenticacionServiceImpl;
-import com.gestion.empresa.backend.gestion_empresa.validation.RespuestaLogin;
 
+import com.gestion.empresa.backend.gestion_empresa.servicesImpl.PersonaServicioImpl;
+import com.gestion.empresa.backend.gestion_empresa.servicesImpl.UsuarioServiceImpl;
+import com.gestion.empresa.backend.gestion_empresa.utils.ResponseBackend;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,10 +28,19 @@ import java.util.Optional;
 public class AuthController {
 
 
-    private final AutenticacionServiceImpl servicio;
+    @Autowired
+    private final AutenticacionServiceImpl autenticacionService;
+
+    @Autowired
+    private final PersonaServicioImpl personaServicio;
+
+    @Autowired
+    private final UsuarioServiceImpl usuarioService;
+
+
     @PostMapping(value = "/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody Login loginUserDto) {
-        Optional<AuthRespuesta> respuesta = servicio.login(loginUserDto);
+        Optional<AuthRespuesta> respuesta = autenticacionService.login(loginUserDto);
         System.out.println(respuesta);
         if (respuesta.isEmpty()) {
             System.out.println("no existe");
@@ -46,8 +59,9 @@ public class AuthController {
 
 
     @PostMapping(value = "/registro")
-    public ResponseEntity<AuthRespuesta> registro(@RequestBody RegistroUsuarios registro){
-        return ResponseEntity.ok(servicio.registro(registro));
+    public ResponseEntity<Map<String, Object>> registro(@RequestBody RegistroUsuariosDTO registro){
+        ResponseBackend respuesta = autenticacionService.registrarUsuario(registro);
+        return ResponseEntity.status(respuesta.getStatus()).body(Map.of("ok",respuesta.getOk(), "mensaje",respuesta.getMensaje()));
     }
 
 

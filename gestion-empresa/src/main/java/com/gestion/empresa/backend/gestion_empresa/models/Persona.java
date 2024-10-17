@@ -22,11 +22,8 @@ public class Persona implements Serializable {
     @Column(name = "nombre", nullable = false, length = 200)
     private String nombre;
 
-    @Column(name = "nit", nullable = false, length = 200, unique = true)
+    @Column(name = "nit", nullable = false, length = 10, unique = true)
     private String nit;
-
-    @Column(name = "numero", nullable = false, length = 200, unique = true)
-    private  long numero;
 
     @Column(name = "correo", nullable = false, length = 200, unique = true)
     private  String correo;
@@ -35,9 +32,8 @@ public class Persona implements Serializable {
     private  String direccion;
 
 
-    @Column(name = "telefono", nullable = false, length = 200)
-    private  int telefono;
-
+    @Column(name = "telefono", nullable = false, length = 10, unique = true)
+    private String telefono;
 
     // aca para la foranea del genero
     @ManyToOne

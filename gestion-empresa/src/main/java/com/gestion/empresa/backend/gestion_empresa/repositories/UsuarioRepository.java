@@ -8,12 +8,8 @@ import java.util.Optional;
 
 public interface UsuarioRepository extends JpaRepository<Usuarios, Long> {
 
-    //función para encontrar por id
     Optional<Usuarios> findById(Long aLong);
-    // para ver el cui
     Optional<Usuarios> findByPersonaCui(Long cui);
-    //para encontrar por correo
     Optional<Usuarios> findByNombreUsuario(String nombreUsuario);
-
 
 }

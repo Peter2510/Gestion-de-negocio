@@ -1,12 +1,9 @@
 package com.gestion.empresa.backend.gestion_empresa.services;
 
 
-import com.gestion.empresa.backend.gestion_empresa.dto.PermisoRolDTO;
-import com.gestion.empresa.backend.gestion_empresa.models.Permiso;
+import com.gestion.empresa.backend.gestion_empresa.dto.IdPermisoDTO;
 import com.gestion.empresa.backend.gestion_empresa.models.PermisoRol;
-import com.gestion.empresa.backend.gestion_empresa.models.Rol;
 import com.gestion.empresa.backend.gestion_empresa.projections.PermisoRolProjection;
-import com.gestion.empresa.backend.gestion_empresa.repositories.PermisoRolRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +22,6 @@ import java.util.Optional;
         Optional<PermisoRol> buscarPorId(Long id);
         PermisoRol actualizarPermisoRol(PermisoRol permisoRol);
         List<PermisoRolProjection> obtenerPermisosPorRol(Long idRol);
-        void actualizarPermisosRol(List<PermisoRolDTO> nuevosPermisos);
+        void actualizarPermisosRol(List<IdPermisoDTO> nuevosPermisos, Long idRol);
 
     }

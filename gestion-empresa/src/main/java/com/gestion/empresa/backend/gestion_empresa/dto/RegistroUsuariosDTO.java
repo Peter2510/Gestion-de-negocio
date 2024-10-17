@@ -8,16 +8,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RegistroUsuarios {
-    private long id;
+public class RegistroUsuariosDTO {
     private String nombreUsuario;
     private String password;
-    private Rol rol;
+    private Long idRol;
+    private Long idGenero;
     private Persona persona;
     private String correo;
     private boolean activo;
     private boolean a2fActivo;
-
-
 }
 

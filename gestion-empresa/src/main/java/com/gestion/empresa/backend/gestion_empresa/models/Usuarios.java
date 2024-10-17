@@ -27,15 +27,17 @@ public class Usuarios implements Serializable, UserDetails {
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     @Column(nullable = false, updatable = true)
     private long id;
-    @Column(name = "nombreUsuario", nullable = false, length = 200, unique = true)
 
+    @Column(name = "nombreUsuario", nullable = false, length = 200, unique = true)
     private String nombreUsuario;
+
     @Column(name = "password", nullable = false, length = 200)
     private String password;
 
     @ManyToOne
     @JoinColumn(name = "idRol", nullable = false)
     private Rol rol;
+
     @ManyToOne
     @JoinColumn(name = "idPersona", nullable = false)
     private Persona persona;
@@ -45,7 +47,6 @@ public class Usuarios implements Serializable, UserDetails {
 
     @Column(name = "a2fActivo", nullable = false, length = 200)
     private boolean a2fActivo;
-
 
     public Usuarios(String nombreUsuario, String encode, Rol rol, Persona persona, boolean b, boolean b1) {
     }

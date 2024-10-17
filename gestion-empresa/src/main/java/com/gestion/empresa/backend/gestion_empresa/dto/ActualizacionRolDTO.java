@@ -15,9 +15,10 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RolDTO {
+public class ActualizacionRolDTO {
     //DTO para la actualizacion de datos del rol
     private String nombre;
     private String descripcion;
-    private List<PermisoRolDTO> permisos;
+    private List<IdPermisoDTO> permisos;
 }
+
