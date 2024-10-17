@@ -27,6 +27,7 @@ import { Vista2faLoginComponent } from './auth/vista2fa-login/vista2fa-login.com
 import { RouterLink, RouterModule } from '@angular/router';
 import { EdicionPerfilComponent } from './usuarios/edicion-perfil/edicion-perfil.component';
 import { ModuloUsuariosModule } from './usuarios/modulo-usuarios/modulo-usuarios.module';
+import { LoadingComponent } from './admin/loading/loading.component';
 
 
 

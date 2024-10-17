@@ -1,8 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { ServicioAuthService } from '../services/servicio-auth.service';
 import { Router } from '@angular/router';
 import { Genero, Persona } from 'src/app/models/Persona';
 import { Usuario } from 'src/app/models/Usuario';
+import Swal from 'sweetalert2';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-registro',
@@ -10,22 +12,32 @@ import { Usuario } from 'src/app/models/Usuario';
   styleUrls: ['./registro.component.css'],
 })
 export class RegistroComponent {
-  //para las personas
-  nombre!: string;
-  cui!: number;
-  correo!: string;
-  direccion!: string;
-  nit!: string;
-  telefono!: number;
-  // ver que es
-  genero!: Genero;
+  
+  @ViewChild('registroForm') registroForm!: NgForm;
+  loading: boolean;
 
-  // para los usuarios
-  nombreUsuario!: string;
-  password!: string;
-  confirmacionPassword!: string;
-  activo!: boolean;
-  a2fActivo!: boolean;
+  nuevaPersona: Persona = {
+    id: 0,
+    cui: 0,
+    direccion: "",
+    nit: "",
+    nombre: "",
+    correo: "",
+    numero: 0,
+    telefono: 0,
+    genero : {
+      id: 0,
+      genero: ""
+    }
+  };
+
+  
+  id = 0;
+  nombre_usuario = "";
+  password = "";
+  a2f_activo = false;
+  activo = true;
+  confirmacionPassword = "";
 
   //servicios
   servicioAuth = inject(ServicioAuthService);
@@ -34,38 +46,35 @@ export class RegistroComponent {
   //funcion para registrar
 
   registrar() {
-    //generacion de elementos
-
-    let nuevaPersona: Persona = {
-      id: 0,
-      cui: this.cui,
-      direccion: this.direccion,
-      nit: this.nit,
-      nombre: this.nombre,
-      correo: this.correo,
-      numero: this.telefono,
-      telefono: this.telefono,
-      genero: this.genero,
-    };
-
-    let nuevoUsuario: Usuario = {
-      id: 0,
-      nombre_usuario: this.nombreUsuario,
-      password: this.password,
-      a2f_activo: this.a2fActivo === undefined ? false : true,
-      activo: this.activo === undefined ? false : true,
-    };
-
-    // aca enviamos el servicio
-    this.servicioAuth
-      .registro(
-        nuevaPersona,
-        nuevoUsuario,
-        this.password,
-        this.nombreUsuario,
-        this.a2fActivo
-      )
-      .subscribe();
-    console.log(nuevaPersona, nuevoUsuario, this.genero);
+    // Verificar si el formulario es válido
+    if (!this.registroForm.valid) {
+      Swal.fire({
+        title: "Campos incompletos",
+        text: "Por favor, complete todos los campos.",
+        icon: "error"
+      });
+      return;
+    }
+  
+    this.loading = true;
+  
+    this.servicioAuth.registro(this.nuevaPersona, this.nombre_usuario, this.password, 
+      this.nuevaPersona.genero.id, 2, this.a2f_activo, true, this.nuevaPersona.correo).subscribe({
+      next: (data) => {
+        this.loading = false;
+        Swal.fire({
+          title: "Registrado correctamente",
+          text: data.mensaje,
+          icon: "success"
+        });
+      },
+      error: (error) => {
+        this.loading = false;
+        Swal.fire({
+          title: error.error.mensaje,
+          icon: "info"
+        });
+      }
+    });
   }
 }

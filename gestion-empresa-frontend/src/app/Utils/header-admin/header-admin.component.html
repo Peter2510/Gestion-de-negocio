@@ -2,7 +2,7 @@
 <div class="navbar bg-base-100 z-10 fixed top-0 left-0 right-0" *ngIf="!loading">
   <div class="flex-1 flex items-center">
     <img class="w-20 h-10 rounded md:w-40 md:h-20" [src]="empresa?.logo">
-    <a href="/administrador/panel-administrador" class="text-xl text-gray-800 ml-2">{{ empresa?.nombre }}</a>
+    <a href="/administrador/panel-administrador" class="text-xl text-gray-100 ml-2">{{ empresa?.nombre }}</a>
   </div>
 
   <div class="flex-none gap-2 items-center">
@@ -95,6 +95,4 @@
 </div>
 
 <!-- Indicador de loading de pantalla completa -->
-<div class="loading-overlay fixed inset-0 flex items-center justify-center z-20" *ngIf="loading">
-  <span class="loading loading-dots loading-lg"></span>
-</div>
+<app-loading *ngIf="loading"></app-loading>
