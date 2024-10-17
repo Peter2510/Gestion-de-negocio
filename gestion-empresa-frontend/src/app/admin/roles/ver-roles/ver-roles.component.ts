@@ -26,7 +26,7 @@ export class VerRolesComponent implements OnInit{
       },error:(error)=>{
         console.log(error)
       }
-    })
+    });
   }
 
   detallesRol(id: number) {

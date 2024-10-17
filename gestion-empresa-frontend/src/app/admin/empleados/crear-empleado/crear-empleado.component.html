@@ -1,52 +1,52 @@
-<div class="absolute inset-0 bg-black bg-opacity-70 flex flex-col justify-center items-center z-50" *ngIf="loading">
-  <span class="loading loading-dots text-white text-4xl mb-2"></span>
-  <p class="text-white text-lg">Cargando</p>
-</div>
+<app-header-admin></app-header-admin>
+
+<app-loading *ngIf="loading"></app-loading>
 
 <form (ngSubmit)="registrar()" #registroForm="ngForm">
-  <div class="flex justify-center items-center min-h-screen bg-base-200 px-4">
+  <div class="flex justify-center items-center min-h-screen bg-base-200 px-4 mt-24">
     <div class="card w-full max-w-lg bg-base-100 shadow-xl border border-base-300 rounded-lg my-8">
       <div class="card-body p-6">
-        <h2 class="card-title text-center text-white text-2xl font-semibold">Registro</h2>
+        <h2 class="text-center text-white text-2xl font-semibold mb-6">Crear empleado</h2> <!-- Centrado aquí -->
 
         <!-- Nombre de usuario -->
-        <div class="form-control mb-4 bg-base-200 ">
+        <div class="form-control mb-4 bg-base-200">
           <label class="label">
             <span class="label-text">Nombre de usuario</span>
           </label>
-          <input
-            type="text"
-            placeholder="Nombre de usuario"
-            class="input input-bordered focus:bg-slate-950 text-white w-full"
-            name="nombreUsuario"
-            [(ngModel)]="nombre_usuario"
-            #nombreUsuario="ngModel"
-            required
-          />
+          <input type="text" placeholder="Nombre de usuario"
+            class="input input-bordered focus:bg-slate-950 text-white w-full" name="nombreUsuario"
+            [(ngModel)]="nombre_usuario" #nombreUsuario="ngModel" required />
           <div *ngIf="nombreUsuario.invalid && nombreUsuario.touched" class="text-red-500 text-xs">
             El nombre de usuario es requerido.
           </div>
         </div>
 
         <!-- CUI de usuario -->
-        <div class="form-control mb-4 bg-base-200 ">
+        <div class="form-control mb-4 bg-base-200">
           <label class="label">
             <span class="label-text">CUI de usuario</span>
           </label>
-          <input
-            type="text"
-            placeholder="CUI de usuario"
-            class="input input-bordered focus:bg-slate-950 text-white w-full"
-            name="cui"
-            [(ngModel)]="nuevaPersona.cui"
-            #cui="ngModel"
-            required
-            pattern="^\d{10}$"
-            minlength="10"
-            maxlength="10"
-          />
+          <input type="text" placeholder="CUI de usuario"
+            class="input input-bordered focus:bg-slate-950 text-white w-full" name="cui" [(ngModel)]="nuevaPersona.cui"
+            #cui="ngModel" required pattern="^\d{10}$" minlength="10" maxlength="10" />
           <div *ngIf="cui.invalid && cui.touched" class="text-red-500 text-xs">
             El CUI debe tener 10 dígitos numéricos.
+          </div>
+        </div>
+
+        <div class="form-control mb-4 bg-base-200">
+          <label class="label">
+            <span class="label-text">Rol</span>
+          </label>
+          <select class="select select-bordered w-full text-white" name="usuario.rol"
+            [(ngModel)]="idRol" #Rol="ngModel" required>
+            <option disabled selected class="text-white">Seleccione un rol</option>
+            <ng-container *ngFor="let rol of roles">
+              <option [ngValue]="rol.id" class="text-white">{{ rol.nombre }}</option>
+            </ng-container>
+          </select>
+          <div *ngIf="Rol.invalid && Rol.touched" class="text-red-500 text-xs">
+            El rol es requerido.
           </div>
         </div>
 
@@ -55,15 +55,9 @@
           <label class="label">
             <span class="label-text">Contraseña</span>
           </label>
-          <input
-            type="password"
-            placeholder="Contraseña"
-            class="input input-bordered focus:bg-slate-950 text-white w-full"
-            name="password"
-            [(ngModel)]="password"
-            #passwordField="ngModel"
-            required
-          />
+          <input type="password" placeholder="Contraseña"
+            class="input input-bordered focus:bg-slate-950 text-white w-full" name="password" [(ngModel)]="password"
+            #passwordField="ngModel" required />
           <div *ngIf="passwordField.invalid && passwordField.touched" class="text-red-500 text-xs">
             La contraseña es requerida.
           </div>
@@ -74,15 +68,9 @@
           <label class="label">
             <span class="label-text">Confirmar contraseña</span>
           </label>
-          <input
-            type="password"
-            placeholder="Confirmar contraseña"
-            class="input input-bordered focus:bg-slate-950 text-white w-full"
-            [(ngModel)]="confirmacionPassword"
-            name="confirmPassword"
-            #confirmPasswordField="ngModel"
-            required
-          />
+          <input type="password" placeholder="Confirmar contraseña"
+            class="input input-bordered focus:bg-slate-950 text-white w-full" [(ngModel)]="confirmacionPassword"
+            name="confirmPassword" #confirmPasswordField="ngModel" required />
           <div *ngIf="confirmPasswordField.invalid && confirmPasswordField.touched" class="text-red-500 text-xs">
             Confirmar contraseña es requerido.
           </div>
@@ -96,17 +84,12 @@
           <label class="label">
             <span class="label-text">Correo</span>
           </label>
-          <input
-            type="email"
-            placeholder="Correo"
-            class="input input-bordered focus:bg-slate-950 text-white w-full"
-            name="correo"
-            [(ngModel)]="nuevaPersona.correo"
-            #correo="ngModel"
-            required
-          />
+          <input type="email" placeholder="Correo" class="input input-bordered focus:bg-slate-950 text-white w-full"
+            name="correo" [(ngModel)]="nuevaPersona.correo" #correo="ngModel" required 
+            pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" />
           <div *ngIf="correo.invalid && correo.touched" class="text-red-500 text-xs">
-            El correo es requerido.
+            <div *ngIf="correo.errors?.['required']">El correo es requerido.</div>
+            <div *ngIf="correo.errors?.['pattern']">El correo debe ser válido.</div>
           </div>
         </div>
 
@@ -115,15 +98,8 @@
           <label class="label">
             <span class="label-text">Nombre</span>
           </label>
-          <input
-            type="text"
-            placeholder="Nombre"
-            class="input input-bordered focus:bg-slate-950 text-white w-full"
-            name="persona.nombre"
-            [(ngModel)]="nuevaPersona.nombre"
-            #nombrePersona="ngModel"
-            required
-          />
+          <input type="text" placeholder="Nombre" class="input input-bordered focus:bg-slate-950 text-white w-full"
+            name="persona.nombre" [(ngModel)]="nuevaPersona.nombre" #nombrePersona="ngModel" required />
           <div *ngIf="nombrePersona.invalid && nombrePersona.touched" class="text-red-500 text-xs">
             El nombre es requerido.
           </div>
@@ -134,18 +110,9 @@
           <label class="label">
             <span class="label-text">NIT</span>
           </label>
-          <input
-            type="text"
-            placeholder="NIT"
-            class="input input-bordered focus:bg-slate-950 text-white w-full"
-            name="persona.nit"
-            [(ngModel)]="nuevaPersona.nit"
-            #nitPersona="ngModel"
-            required
-            pattern="^\d{10}$"
-            minlength="10"
-            maxlength="10"
-          />
+          <input type="text" placeholder="NIT" class="input input-bordered focus:bg-slate-950 text-white w-full"
+            name="persona.nit" [(ngModel)]="nuevaPersona.nit" #nitPersona="ngModel" required pattern="^\d{10}$"
+            minlength="10" maxlength="10" />
           <div *ngIf="nitPersona.invalid && nitPersona.touched" class="text-red-500 text-xs">
             El NIT debe tener 10 dígitos numéricos.
           </div>
@@ -156,18 +123,9 @@
           <label class="label">
             <span class="label-text">Número de teléfono</span>
           </label>
-          <input
-            type="text"
-            placeholder="Número"
-            class="input input-bordered focus:bg-slate-950 text-white w-full"
-            name="persona.telefono"
-            [(ngModel)]="nuevaPersona.telefono"
-            #telefonoPersona="ngModel"
-            required
-            pattern="^\d{8}$"
-            minlength="8"
-            maxlength="8"
-          />
+          <input type="text" placeholder="Número" class="input input-bordered focus:bg-slate-950 text-white w-full"
+            name="persona.telefono" [(ngModel)]="nuevaPersona.telefono" #telefonoPersona="ngModel" required
+            pattern="^\d{8}$" minlength="8" maxlength="8" />
           <div *ngIf="telefonoPersona.invalid && telefonoPersona.touched" class="text-red-500 text-xs">
             El número de teléfono debe tener 8 dígitos numéricos.
           </div>
@@ -178,15 +136,8 @@
           <label class="label">
             <span class="label-text">Dirección</span>
           </label>
-          <input
-            type="text"
-            placeholder="Dirección"
-            class="input input-bordered focus:bg-slate-950 text-white w-full"
-            name="persona.direccion"
-            [(ngModel)]="nuevaPersona.direccion"
-            #direccionPersona="ngModel"
-            required
-          />
+          <input type="text" placeholder="Dirección" class="input input-bordered focus:bg-slate-950 text-white w-full"
+            name="persona.direccion" [(ngModel)]="nuevaPersona.direccion" #direccionPersona="ngModel" required />
           <div *ngIf="direccionPersona.invalid && direccionPersona.touched" class="text-red-500 text-xs">
             La dirección es requerida.
           </div>
@@ -197,13 +148,8 @@
           <label class="label">
             <span class="label-text">Género</span>
           </label>
-          <select
-            class="select select-bordered w-full text-white"
-            name="persona.genero.id"
-            [(ngModel)]="nuevaPersona.genero.id"
-            #generoPersona="ngModel"
-            required
-          >
+          <select class="select select-bordered w-full text-white" name="persona.genero.id"
+            [(ngModel)]="nuevaPersona.genero.id" #generoPersona="ngModel" required>
             <option disabled selected class="text-white">Seleccione un género</option>
             <ng-container *ngFor="let genero of servicioAuth.generos()">
               <option [ngValue]="genero.id" class="text-white">{{ genero.genero }}</option>
@@ -218,21 +164,13 @@
         <div class="form-control mb-4 bg-base-200">
           <label class="label cursor-pointer">
             <span class="label-text">Autenticación de dos factores activa</span>
-            <input
-              type="checkbox"
-              class="checkbox checkbox-primary"
-              name="a2fActivo"
-              [(ngModel)]="a2f_activo"
-            />
+            <input type="checkbox" class="checkbox checkbox-primary" name="a2fActivo" [(ngModel)]="a2f_activo" />
           </label>
         </div>
 
         <!-- Botón para enviar -->
         <div class="form-control mt-6 bg-base-100 border-none">
-          <button
-            [disabled]="registroForm.invalid"
-            class="btn btn-primary w-full"
-          >
+          <button [disabled]="registroForm.invalid" class="btn btn-primary w-full">
             Registrar
           </button>
         </div>

@@ -1,11 +1,8 @@
-<div class="navbar bg-base-100" *ngIf="!loading">
+<!-- navbar.component.html -->
+<div class="navbar bg-base-100 z-10 fixed top-0 left-0 right-0" *ngIf="!loading">
   <div class="flex-1 flex items-center">
-    <img class="w-20 h-10 rounded md:w-40 md:h-20" src="{{ empresa?.logo }}" />
-    <a
-      href="/administrador/panel-administrador"
-      class="text-xl text-gray-800 ml-2"
-      >{{ empresa?.nombre }}</a
-    >
+    <img class="w-20 h-10 rounded md:w-40 md:h-20" [src]="empresa?.logo">
+    <a href="/administrador/panel-administrador" class="text-xl text-gray-100 ml-2">{{ empresa?.nombre }}</a>
   </div>
 
   <div class="flex-none gap-2 items-center">
@@ -41,6 +38,12 @@
           </li>
           <li>
             <select class="select w-full" (change)="onSelectChange($event)">
+              <option disabled selected>Gestión de empleados</option>
+              <option value="/administrador/crear-empleado">Crear empleado</option>
+            </select>
+          </li>
+          <li>
+            <select class="select w-full" (change)="onSelectChange($event)">
               <option disabled selected>Gestión de servicios</option>
               <option value="/administrador/vista-servicio">
                 Ver servicios
@@ -69,9 +72,13 @@
       <li>
         <select class="select w-full" (change)="onSelectChange($event)">
           <option disabled selected>Gestión de empresa</option>
-          <option value="/administrador/informacion-empresa">
-            Editar información
-          </option>
+          <option value="/administrador/informacion-empresa">Editar información</option>
+        </select>
+      </li>
+      <li>
+        <select class="select w-full" (change)="onSelectChange($event)">
+          <option disabled selected>Gestión de empleados</option>
+          <option value="/administrador/crear-empleado">Crear empleado</option>
         </select>
       </li>
       <li>
@@ -93,7 +100,7 @@
       </li>
     </ul>
 
-    <!-- avatar con Dropdown -->
+    <!-- Avatar con Dropdown -->
     <div class="dropdown dropdown-end">
       <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
         <div class="w-10 rounded-full">
@@ -115,7 +122,5 @@
   </div>
 </div>
 
-<!-- indicador de loading de pantalla completa -->
-<div class="loading-overlay" *ngIf="loading">
-  <span class="loading loading-dots loading-lg"></span>
-</div>
+<!-- Indicador de loading de pantalla completa -->
+<app-loading *ngIf="loading"></app-loading>

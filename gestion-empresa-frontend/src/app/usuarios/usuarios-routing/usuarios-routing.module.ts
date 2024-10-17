@@ -12,7 +12,7 @@ const routes: Routes = [
 
   {
     path: '**',
-    redirectTo: 'vista-general',
+    redirectTo: 'vista-usuario',
     pathMatch: 'full',
   },
 ];

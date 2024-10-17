@@ -5,7 +5,6 @@ export interface Persona {
   nit: string;
   nombre: string;
   correo: string;
-  numero: number;
   telefono: number;
   genero: Genero;
 }

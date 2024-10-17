@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { Genero, Persona } from 'src/app/models/Persona';
 import { Usuario } from 'src/app/models/Usuario';
 import { environment } from 'src/environments/environment.development';
@@ -37,12 +37,15 @@ export class ServicioAuthService {
   // para registrar nuevos usuarios
   registro(
     persona: Persona,
-    usuario: Usuario,
-    password: string,
     nombreUsuario: string,
-    a2fActivo: boolean
-  ) {
-    const body = { persona, usuario, password, nombreUsuario, a2fActivo };
+    password: string,
+    idGenero: number,
+    idRol: number,
+    a2fActivo: boolean,
+    activo: boolean,
+    correo: string
+  ): Observable<any> {
+    const body = { persona, nombreUsuario, password, idGenero, idRol, a2fActivo, activo, correo};
     return this.http.post(`${this.url}/Auth/registro`, body);
   }
 
@@ -52,7 +55,6 @@ export class ServicioAuthService {
       .get<Genero[]>(`${this.url}/Genero`)
       .pipe(
         tap((elementos: Genero[]) => {
-          console.log(elementos);
           this.generos.set(elementos);
         })
       )

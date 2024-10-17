@@ -1,5 +1,5 @@
 <app-header-admin *ngIf="!loading"></app-header-admin>
-<div class="flex justify-center items-center bg-base-200">
+<div class="flex justify-center items-center bg-base-200 mt-24">
     <form *ngIf="!loading" class="p-6 bg-base-100 shadow-lg rounded-lg w-full max-w-md space-y-4 mt-10"
         (ngSubmit)="actualizarEmpresa()">
 
@@ -89,9 +89,7 @@
 
 </div>
 
-<div class="loading-overlay" *ngIf="loading">
-    <span class="loading loading-dots loading-lg"></span>
-</div>
+<app-loading *ngIf="loading"></app-loading>
 
 <input type="checkbox" id="image-modal" class="modal-toggle" />
 <div class="modal">

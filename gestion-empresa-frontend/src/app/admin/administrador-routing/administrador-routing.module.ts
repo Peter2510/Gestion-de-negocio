@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { PanelAdministradorComponent } from '../panel-administrador/panel-administrador.component';
 import { InformacionEmpresaComponent } from '../informacion-empresa/informacion-empresa.component';
-import { VerRolesComponent } from '../modulo-roles/ver-roles/ver-roles.component';
-import { CrearRolComponent } from '../modulo-roles/crear-rol/crear-rol.component';
-import { RolEspecificoComponent } from '../modulo-roles/rol-especifico/rol-especifico.component';
 import { CreacionServicioComponent } from '../modulo-servicios/creacion-servicio/creacion-servicio.component';
 import { VistaServiciosComponent } from '../modulo-servicios/vista-servicios/vista-servicios.component';
 import { VistaServicioEspecificoComponent } from '../modulo-servicios/vistaEspecifica/vista-servicio-especifico/vista-servicio-especifico.component';
+import { VerRolesComponent } from '../roles/ver-roles/ver-roles.component';
+import { CrearRolComponent } from '../roles/crear-rol/crear-rol.component';
+import { RolEspecificoComponent } from '../roles/rol-especifico/rol-especifico.component';
+import { CrearEmpleadoComponent } from '../empleados/crear-empleado/crear-empleado.component';
 
 const routes: Routes = [
   { path: 'panel-administrador', component: PanelAdministradorComponent },
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'crear-servicio', component: CreacionServicioComponent },
   { path: 'vista-servicio/:id', component: VistaServicioEspecificoComponent },
   { path: 'vista-servicio', component: VistaServiciosComponent },
+  { path: 'crear-empleado', component: CrearEmpleadoComponent },
   {
     path: '**',
     redirectTo: 'PanelAdministrador',
