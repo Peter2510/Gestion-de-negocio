@@ -1,5 +1,6 @@
 package com.gestion.empresa.backend.gestion_empresa.servicesImpl;
 
+import com.gestion.empresa.backend.gestion_empresa.models.JornadaPorDia;
 import com.gestion.empresa.backend.gestion_empresa.repositories.JornadaPorDiaRepository;
 import com.gestion.empresa.backend.gestion_empresa.repositories.PermisoRolRepository;
 import com.gestion.empresa.backend.gestion_empresa.services.JornadaPorDiaService;
@@ -17,4 +18,9 @@ import org.springframework.stereotype.Service;
 public class JornadaPorDiaServiceImpl implements JornadaPorDiaService {
     @Autowired
     private JornadaPorDiaRepository jornadaPorDiaRepository;
+
+    @Override
+    public JornadaPorDia ingresarJornadaDia(JornadaPorDia jornadaPorDia) {
+        return  this.jornadaPorDiaRepository.save(jornadaPorDia);
+    }
 }

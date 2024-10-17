@@ -36,6 +36,10 @@ public class Servicios  implements Serializable {
     //aca ver si es long
     private String descripcion;
 
+    @NotBlank(message = "La imagen es obligatoria")
+    @Column(name="imagen", nullable = false)
+    private String imagen;
+
     @ManyToOne
     @JoinColumn(name = "idEstadoServicio", nullable = false)
     private EstadoServicio idEstadoServicio;
