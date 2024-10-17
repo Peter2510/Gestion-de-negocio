@@ -23,7 +23,6 @@ export class RegistroComponent {
     nit: "",
     nombre: "",
     correo: "",
-    numero: 0,
     telefono: 0,
     genero : {
       id: 0,
