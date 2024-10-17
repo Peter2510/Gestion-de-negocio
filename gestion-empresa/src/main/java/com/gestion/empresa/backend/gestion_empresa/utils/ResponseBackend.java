@@ -12,12 +12,23 @@ import org.springframework.http.HttpStatus;
  */
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class ResponseBackend {
 
     private Boolean ok;
     private HttpStatus status;
     private String mensaje;
+    private Object data;
 
+    public ResponseBackend(Boolean ok, HttpStatus status, String mensaje) {
+        this.ok = ok;
+        this.status = status;
+        this.mensaje = mensaje;
+    }
+
+    public ResponseBackend(Boolean ok, HttpStatus status, Object data) {
+        this.ok = ok;
+        this.status = status;
+        this.data = data;
+    }
 }
