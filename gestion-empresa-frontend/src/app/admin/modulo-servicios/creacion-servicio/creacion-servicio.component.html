@@ -1,0 +1,310 @@
+<app-header-admin></app-header-admin>
+<div class="flex justify-center items-center min-h-screen mt-24">
+  <div class="card w-full max-w-lg bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h2 class="card-title text-center">Creación de Servicios</h2>
+
+      <!-- Stepper -->
+      <ul class="steps mb-8">
+        <li
+          class="step"
+          [class.step-primary]="currentStep >= 1"
+          [class.step-complete]="currentStep > 1"
+          data-content="1"
+        >
+          Información de Servicio
+        </li>
+        <li
+          class="step"
+          [class.step-primary]="currentStep >= 2"
+          [class.step-complete]="currentStep > 2"
+          data-content="2"
+        >
+          Generacion de horarios
+        </li>
+        <li
+          class="step"
+          [class.step-primary]="currentStep >= 3"
+          [class.step-complete]="currentStep > 3"
+          data-content="3"
+        >
+          Generacion de servicios especificos
+        </li>
+      </ul>
+
+      <!-- Step 1: Nombre del Servicio -->
+      <div *ngIf="currentStep === 1" class="form-control">
+        <label class="label">
+          <span class="label-text">Nombre del Servicio</span>
+        </label>
+        <input
+          type="text"
+          class="input input-bordered w-full"
+          placeholder="Ingrese el nombre del servicio"
+        />
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Descripción del Servicio</span>
+          </label>
+          <textarea
+            class="textarea textarea-bordered w-full"
+            placeholder="Ingrese la descripción del servicio"
+          ></textarea>
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Estado del Servicio</span>
+          </label>
+          <select class="select select-bordered w-full">
+            <option *ngFor="let estado of estados" [value]="estado.id">
+              {{ estado.nombre }}
+            </option>
+          </select>
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Categoría del Servicio</span>
+          </label>
+          <select class="select select-bordered w-full">
+            <option
+              *ngFor="let categoria of this.todasCategorias"
+              [value]="categoria.id"
+            >
+              {{ categoria.tipo }}
+            </option>
+          </select>
+        </div>
+        <div class="form-control mt-6">
+          <button class="btn btn-primary w-full" (click)="goToStep(2)">
+            Siguiente
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2: -->
+      <div *ngIf="currentStep === 2">
+        <button
+          class="btn btn-outline btn-primary flex items-center"
+          (click)="this.agregarHorario()"
+        >
+          <!-- SVG del ícono de agregar -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 mr-2"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
+          Agregar Horario
+        </button>
+        <div class="overflow-x-auto">
+          <h2 class="text-lg font-semibold mb-4">Vista de horario</h2>
+          <table class="table table-zebra w-full min-w-[768px]">
+            <!-- head -->
+            <thead>
+              <tr>
+                <th>#</th>
+                <td>Nombre</td>
+                <td>Hora inicio</td>
+                <td>Hora fin</td>
+                <td>Acciones</td>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- row 1 -->
+              <tr
+                *ngFor="
+                  let horarioNuevos of this.arregloHorarios;
+                  let indice = index
+                "
+              >
+                <th>{{ indice + 1 }}</th>
+                <td>
+                  <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    [(ngModel)]="horarioNuevos.nombre"
+                    class="input input-bordered w-full"
+                    placeholder="Nombre"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="time"
+                    id="horaInicio"
+                    name="horaInicio"
+                    [(ngModel)]="horarioNuevos.hora_inicio"
+                    class="input input-bordered w-full"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="time"
+                    id="horaFin"
+                    name="horaFin"
+                    [(ngModel)]="horarioNuevos.hora_fin"
+                    class="input input-bordered w-full"
+                  />
+                </td>
+                <td>
+                  <button
+                    class="btn btn-outline btn-primary flex items-center"
+                    (click)="
+                      eliminarHorario(horarioNuevos.id, horarioNuevos.nombre)
+                    "
+                  >
+                    <!-- SVG del ícono de eliminar -->
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-6 mr-2"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                    Eliminar
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div
+          class="form-control mt-6 flex justify-between items-center gap-x-4"
+        >
+          <button class="btn btn-secondary flex-1" (click)="goToStep(1)">
+            Atrás
+          </button>
+          <button class="btn btn-primary flex-1" (click)="goToStep(3)">
+            Siguiente
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 3: Confirmación -->
+      <div *ngIf="currentStep === 3">
+        <button
+          class="btn btn-outline btn-primary flex items-center"
+          (click)="this.agregarServicio()"
+        >
+          <!-- SVG del ícono de agregar -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 mr-2"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
+          Agregar Servicio
+        </button>
+        <div class="overflow-x-auto">
+          <h2 class="text-lg font-semibold mb-4">Vista de servicios</h2>
+          <table class="table table-zebra w-full min-w-[768px]">
+            <!-- head -->
+            <thead>
+              <tr>
+                <th>#</th>
+                <td>Nombre</td>
+                <td>Estado</td>
+                <td>Duración (Horas:Minutos)</td>
+                <td>Acciones</td>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- row 1 -->
+              <tr
+                *ngFor="
+                  let servicio of this.arregloServiciosEspecificos;
+                  let indice = index
+                "
+              >
+                <th>{{ indice + 1 }}</th>
+                <td>
+                  <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    [(ngModel)]="servicio.nombre"
+                    class="input input-bordered w-full"
+                    placeholder="Nombre del servicio"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    id="estado"
+                    name="estado"
+                    [(ngModel)]="servicio.estadoSerivicio.estado"
+                    class="input input-bordered w-full"
+                    placeholder="Estado del servicio"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="time"
+                    id="duracion"
+                    name="duracion"
+                    [(ngModel)]="servicio.duracionServicioPrestado.duracion"
+                    class="input input-bordered w-full"
+                  />
+                </td>
+                <td>
+                  <button
+                    class="btn btn-outline btn-primary flex items-center"
+                    (click)="eliminarServicio(servicio.id, servicio.nombre)"
+                  >
+                    <!-- SVG del ícono de eliminar -->
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-6 mr-2"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                    Eliminar
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="form-control mt-6 flex justify-between">
+          <button class="btn btn-secondary" (click)="goToStep(2)">Atrás</button>
+          <div class="flex space-x-4">
+            <button class="btn btn-primary w-full">Registrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

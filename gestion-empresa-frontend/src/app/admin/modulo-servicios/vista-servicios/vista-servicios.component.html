@@ -1,0 +1,54 @@
+<app-header-admin />
+<div class="container mx-auto mt-24">
+  <!-- Grid para servicios -->
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4"
+  >
+    <div
+      *ngFor="let servicio of servicios"
+      class="card w-full bg-base-100 shadow-xl"
+    >
+      <figure>
+        <img [src]="servicio.imagen" alt="{{ servicio.nombre }}" />
+      </figure>
+      <div class="card-body">
+        <h2 class="card-title">{{ servicio.nombre }}</h2>
+        <p>{{ servicio.descripcion }}</p>
+        <div class="badge badge-primary">{{ servicio.categoria.tipo }}</div>
+        <div class="card-actions justify-end">
+          <button
+            class="btn btn-primary"
+            [routerLink]="['/administrador/vista-servicio', servicio.id]"
+          >
+            Ver más
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid para servicios prestados -->
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4 mt-10"
+  >
+    <div
+      *ngFor="let servicioPrestado of serviciosPrestados"
+      class="card w-full bg-base-100 shadow-xl"
+    >
+      <div class="card-body">
+        <h2 class="card-title">{{ servicioPrestado.nombre }}</h2>
+        <p>Estado: {{ servicioPrestado.estadoSerivicio.estado }}</p>
+        <p>
+          Duración:
+          {{ servicioPrestado.duracionServicioPrestado.duracion.hours }} horas,
+          {{ servicioPrestado.duracionServicioPrestado.duracion.minutes }}
+          minutos
+        </p>
+        <div class="badge badge-secondary">{{ servicioPrestado.estado }}</div>
+        <div class="card-actions justify-end">
+          <button class="btn btn-outline btn-error">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -14,20 +14,29 @@ import { VerRolesComponent } from '../modulo-roles/ver-roles/ver-roles.component
 import { CrearRolComponent } from '../modulo-roles/crear-rol/crear-rol.component';
 import { LoadingComponent } from '../loading/loading.component';
 import { RolEspecificoComponent } from '../modulo-roles/rol-especifico/rol-especifico.component';
-
-
+import { CreacionServicioComponent } from '../modulo-servicios/creacion-servicio/creacion-servicio.component';
+import { VistaServiciosComponent } from '../modulo-servicios/vista-servicios/vista-servicios.component';
+import { RouterLink, RouterModule } from '@angular/router';
+import { VistaServicioEspecificoComponent } from '../modulo-servicios/vistaEspecifica/vista-servicio-especifico/vista-servicio-especifico.component';
 
 @NgModule({
   declarations: [
-     PanelAdministradorComponent,
-     HeaderAdminComponent,
-     InformacionEmpresaComponent,
-     VerRolesComponent,
-     CrearRolComponent, 
-     LoadingComponent,
-     RolEspecificoComponent
+    PanelAdministradorComponent,
+    HeaderAdminComponent,
+    InformacionEmpresaComponent,
+    VerRolesComponent,
+    CrearRolComponent,
+    LoadingComponent,
+    RolEspecificoComponent,
+    CreacionServicioComponent,
+    VistaServiciosComponent,
+    VistaServicioEspecificoComponent,
   ],
-  imports: [CommonModule, FormsModule,
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterLink,
+    RouterModule,
     FullCalendarModule,
     BrowserAnimationsModule,
     CalendarModule.forRoot({
