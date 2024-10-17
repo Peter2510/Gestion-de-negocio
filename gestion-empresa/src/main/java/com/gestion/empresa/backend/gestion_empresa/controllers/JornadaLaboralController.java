@@ -21,7 +21,7 @@ import java.util.Map;
  */
 @RestController
 @Validated
-@RequestMapping("/joranadaLaboral")
+@RequestMapping("/jornadaLaboral")
 public class JornadaLaboralController {
 
     @Autowired
