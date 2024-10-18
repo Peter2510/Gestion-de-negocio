@@ -17,8 +17,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PermisoRolDTO {
 
-    @NotNull
+    @NotBlank(message = "El id del permiso es obligatorio")
     private Long idPermiso;
+
+    @NotBlank(message = "El id del rol es obligatorio")
     @NotNull
     private Long idRol;
 

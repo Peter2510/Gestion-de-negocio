@@ -126,7 +126,7 @@ public class EmpresaController {
     @PostMapping("/actualizar-empresa/{id}")
     public ResponseEntity<Map<String, Object>> actualizarEmpresa(
             @PathVariable Long id,
-            @Valid @ModelAttribute EmpresaDTO empresaDTO) {
+            @Validated @ModelAttribute EmpresaDTO empresaDTO) {
 
 
         try{

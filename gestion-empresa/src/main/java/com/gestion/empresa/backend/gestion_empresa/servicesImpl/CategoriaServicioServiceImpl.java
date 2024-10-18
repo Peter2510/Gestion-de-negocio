@@ -3,10 +3,13 @@ package com.gestion.empresa.backend.gestion_empresa.servicesImpl;
 import com.gestion.empresa.backend.gestion_empresa.models.CategoriaServicio;
 import com.gestion.empresa.backend.gestion_empresa.repositories.CategoriaServicioRepository;
 import com.gestion.empresa.backend.gestion_empresa.services.CategoriaServicioService;
+import com.gestion.empresa.backend.gestion_empresa.utils.ResponseBackend;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Author: alexxus
@@ -30,5 +33,28 @@ public class CategoriaServicioServiceImpl implements CategoriaServicioService {
         return  this.categoriaServicioRepository.save(categoria);
     }
 
+    @Override
+    public Optional<CategoriaServicio> buscarPorTipo(String tipo) {
+        return categoriaServicioRepository.findByTipo(tipo);
+    }
+
+    public ResponseBackend registrarCategoria(CategoriaServicio categoria) {
+
+        Optional<CategoriaServicio> busqueda = this.buscarPorTipo(categoria.getTipo());
+
+        if (busqueda.isPresent()) {
+            return new ResponseBackend(false, HttpStatus.CONFLICT, "La categoria ya esta registrada");
+        }
+
+        //crear la categoria
+        CategoriaServicio creacion = categoriaServicioRepository.save(categoria);
+
+        if(creacion==null){
+            return new ResponseBackend(false, HttpStatus.INTERNAL_SERVER_ERROR, "Error al crear la categoria");
+        }
+
+        return new ResponseBackend(true, HttpStatus.CREATED, "Categoria registrada correctamente");
+
+    }
 
 }

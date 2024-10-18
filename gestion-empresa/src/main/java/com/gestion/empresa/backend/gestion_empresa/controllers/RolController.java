@@ -37,7 +37,7 @@ public class RolController {
     }
 
     @PostMapping("/crear-rol")
-    public ResponseEntity<Map<String, Object>> crearRol(@Valid @RequestBody RolPermisoDTO rol) {
+    public ResponseEntity<Map<String, Object>> crearRol(@Validated @RequestBody RolPermisoDTO rol) {
         //verificar si el rol ya existe
         if (rolService.buscarPorNombre(rol.getNombre()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("ok", false, "mensaje", "El rol " + rol.getNombre() + " ya existe"));

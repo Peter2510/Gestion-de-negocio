@@ -32,7 +32,6 @@ public class GlobalExceptionHandler {
         List<Map<String, String>> errores = new ArrayList<>();
         bindingResult.getFieldErrors().forEach(error -> {
             Map<String, String> errorDetalle = new HashMap<>();
-            errorDetalle.put("campo", error.getField());
             errorDetalle.put("mensaje", error.getDefaultMessage());
             errores.add(errorDetalle);
         });
