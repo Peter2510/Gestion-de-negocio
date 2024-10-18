@@ -29,7 +29,7 @@ public class CategoriasController {
     // creacion de categorias para usuarios que trabajen ahi
     @PostMapping("/crear-categoria")
     public ResponseEntity<Map<String, Object>> crearCategoria(
-           @Validated @RequestBody CategoriaServicio tipo
+            @Validated @RequestBody CategoriaServicio tipo
     ) {
         //crea la categoria
         CategoriaServicio categoria = new CategoriaServicio();
@@ -42,13 +42,34 @@ public class CategoriasController {
     }
 
     // PARA LISTAR A TODOS
-    @GetMapping("/obtenerTodasCategorias")
+    @GetMapping("/obtener-categorias")
     public ResponseEntity<List<CategoriaServicio>> obtenerCategorias() {
         List<CategoriaServicio> todasCategorias = this.categoriaServicioService.obtenerTodo();
         //ENVIAR UNA NUEVA RESPUESTA
         return new ResponseEntity<>(todasCategorias, HttpStatus.OK);
     }
 
+    @PutMapping("actualizar-categoria")
+    public ResponseEntity<Map<String, Object>> actualizarCategoria(
+            @Validated @RequestBody CategoriaServicio categoria
+    ) {
+        ResponseBackend respuesta = categoriaServicioService.actualizarCategoria(categoria);
+
+        return ResponseEntity.status(respuesta.getStatus()).body(Map.of("ok", respuesta.getOk(), "mensaje", respuesta.getMensaje()));
+    }
+
+    @GetMapping("/obtener-categoria/{id}")
+    public ResponseEntity<Map<String, Object>> obtenerCategoria(@PathVariable Long id) {
+
+        ResponseBackend respuesta = categoriaServicioService.buscarPorId(id);
+
+        return ResponseEntity.status(respuesta.getStatus()).body(
+                respuesta.getOk()
+                        ? Map.of("ok", true, "categoria", respuesta.getData())
+                        : Map.of("ok", false, "mensaje", respuesta.getMensaje())
+        );
+
+    }
 
 
 }

@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -36,8 +33,8 @@ public class TipoServicioController {
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "tiposServicio", tiposServicio));
     }
 
-    @RequestMapping("/crear-tipo-servicio")
-    public ResponseEntity<Map<String, Object>> crearTipoServicio(@Valid @RequestBody TipoServicio tipoServicio) {
+    @PostMapping("/crear-tipo-servicio")
+    public ResponseEntity<Map<String, Object>> crearTipoServicio(@Validated @RequestBody TipoServicio tipoServicio) {
         //verificar si el tipo de servicio ya existe
         if (tipoServicioService.buscarPorNombre(tipoServicio.getNombre()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("ok", false, "mensaje", "El tipo de servicio " + tipoServicio.getNombre() + " ya existe"));

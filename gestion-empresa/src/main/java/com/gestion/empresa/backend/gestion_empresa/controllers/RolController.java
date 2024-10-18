@@ -9,6 +9,8 @@ import com.gestion.empresa.backend.gestion_empresa.models.Rol;
 import com.gestion.empresa.backend.gestion_empresa.repositories.RolRepository;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.PermisoRolServiceImpl;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.RolServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(path = "/rol")
 @Validated
+@Tag(name="Roles")
 public class RolController {
 
     @Autowired
@@ -31,12 +34,14 @@ public class RolController {
     private PermisoRolServiceImpl permisoRolService;
 
     @GetMapping("/obtener-roles")
+    @Operation(summary = "Se obtienen los roles registrados de la aplicacion")
     public ResponseEntity<Map<String, Object>> obtenerRolesRegistrados() {
         List<Rol> roles = rolService.obtenerRolesRegistrados();
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "roles", roles));
     }
 
     @PostMapping("/crear-rol")
+    @Operation(summary = "Se crea un rol, junto con los permisos asociados")
     public ResponseEntity<Map<String, Object>> crearRol(@Validated @RequestBody RolPermisoDTO rol) {
         //verificar si el rol ya existe
         if (rolService.buscarPorNombre(rol.getNombre()).isPresent()) {
@@ -70,21 +75,5 @@ public class RolController {
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("ok", true, "mensaje", "Rol creado exitosamente"));
     }
 
-
-//    @PostMapping("actualizar-permiso-rol/{rolId}")
-//    public ResponseEntity<Map<String, Object>> actualizarPermisosRol(@PathVariable Long rolId, @RequestBody List<PermisoRolDTO> nuevosPermisos) {
-//
-//        //verificar existencia de rol
-//        Optional<Rol> existenciaRol = rolServiceImpl.buscarPorId(rolId);
-//
-//        if(existenciaRol.isEmpty()){
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("ok", false, "mensaje", "El rol no existe"));
-//        }
-//
-//        permisoRolService.actualizarPermisosRol(nuevosPermisos);
-//
-//        return null;
-//
-//    }
 
 }

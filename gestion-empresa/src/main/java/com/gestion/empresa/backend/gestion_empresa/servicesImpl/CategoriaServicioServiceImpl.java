@@ -38,6 +38,14 @@ public class CategoriaServicioServiceImpl implements CategoriaServicioService {
         return categoriaServicioRepository.findByTipo(tipo);
     }
 
+    @Override
+    public ResponseBackend buscarPorId(Long id) {
+
+        Optional<CategoriaServicio> categoriaServicio = categoriaServicioRepository.findById(id);
+        return categoriaServicio.map(servicio -> new ResponseBackend(true, HttpStatus.OK, servicio)).
+                orElseGet(() -> new ResponseBackend(false, HttpStatus.NOT_FOUND, "La categoria no existe"));
+    }
+
     public ResponseBackend registrarCategoria(CategoriaServicio categoria) {
 
         Optional<CategoriaServicio> busqueda = this.buscarPorTipo(categoria.getTipo());
@@ -54,6 +62,22 @@ public class CategoriaServicioServiceImpl implements CategoriaServicioService {
         }
 
         return new ResponseBackend(true, HttpStatus.CREATED, "Categoria registrada correctamente");
+
+    }
+
+    @Override
+    public ResponseBackend actualizarCategoria(CategoriaServicio categoria) {
+
+        Optional<CategoriaServicio> busqueda = categoriaServicioRepository.findById(categoria.getId());
+
+        if (busqueda.isEmpty()) {
+            return new ResponseBackend(false, HttpStatus.NOT_FOUND, "La categoria no esta registrada");
+        }
+
+        //actualizar la categoria
+        categoriaServicioRepository.save(categoria);
+
+        return new ResponseBackend(true, HttpStatus.OK, "Categoria actualizada correctamente");
 
     }
 
