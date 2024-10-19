@@ -15,9 +15,8 @@ import java.io.Serializable;
 public class Persona implements Serializable {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
-    private long cui;
+    private Long cui;
     
     @Column(name = "nombre", nullable = false, length = 200)
     private String nombre;
