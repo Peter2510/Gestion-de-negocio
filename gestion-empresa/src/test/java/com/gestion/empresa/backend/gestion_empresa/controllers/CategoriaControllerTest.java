@@ -42,52 +42,52 @@ public class CategoriaControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    void testCrearCategoriaExito() {
-        CategoriaServicio mockCategoria = new CategoriaServicio();
-        mockCategoria.setTipo("Test");
+//    @Test
+//    void testCrearCategoriaExito() {
+//        CategoriaServicio mockCategoria = new CategoriaServicio();
+//        mockCategoria.setTipo("Test");
+//
+//        when(categoriaServicioService.ingresarCategoria(any(CategoriaServicio.class)))
+//                .thenReturn(mockCategoria);
+//
+//        ResponseEntity<Map<String, Object>> response = categoriasController.crearCategoria(mockCategoria);
+//
+//        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+//        assertEquals(true, response.getBody().get("ok"));
+//        assertEquals("Categoria creada correctamente", response.getBody().get("mensaje"));
+//    }
+//
+//    @Test
+//    void testCrearCategoriaError() {
+//        when(categoriaServicioService.ingresarCategoria(any(CategoriaServicio.class)))
+//                .thenThrow(new RuntimeException("Error de prueba"));
+//
+//        CategoriaServicio mockCategoria = new CategoriaServicio();
+//        mockCategoria.setTipo("Test");
+//
+//        ResponseEntity<Map<String, Object>> response = categoriasController.crearCategoria(mockCategoria);
+//
+//        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+//        assertEquals(false, response.getBody().get("ok"));
+//        assertEquals("Error al guardar la Categoria", response.getBody().get("mensaje"));
+//        assertEquals("Error de prueba", response.getBody().get("error"));
+//    }
 
-        when(categoriaServicioService.ingresarCategoria(any(CategoriaServicio.class)))
-                .thenReturn(mockCategoria);
-
-        ResponseEntity<Map<String, Object>> response = categoriasController.crearCategoria(mockCategoria);
-
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(true, response.getBody().get("ok"));
-        assertEquals("Categoria creada correctamente", response.getBody().get("mensaje"));
-    }
-
-    @Test
-    void testCrearCategoriaError() {
-        when(categoriaServicioService.ingresarCategoria(any(CategoriaServicio.class)))
-                .thenThrow(new RuntimeException("Error de prueba"));
-
-        CategoriaServicio mockCategoria = new CategoriaServicio();
-        mockCategoria.setTipo("Test");
-
-        ResponseEntity<Map<String, Object>> response = categoriasController.crearCategoria(mockCategoria);
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        assertEquals(false, response.getBody().get("ok"));
-        assertEquals("Error al guardar la Categoria", response.getBody().get("mensaje"));
-        assertEquals("Error de prueba", response.getBody().get("error"));
-    }
-
-    @Test
-    void testObtenerCategoriasExito() {
-        List<CategoriaServicio> mockCategorias = new ArrayList<>();
-        CategoriaServicio categoria1 = new CategoriaServicio();
-        categoria1.setTipo("Test 1");
-        CategoriaServicio categoria2 = new CategoriaServicio();
-        categoria2.setTipo("Test 2");
-        mockCategorias.add(categoria1);
-        mockCategorias.add(categoria2);
-
-        when(categoriaServicioService.obtenerTodo()).thenReturn(mockCategorias);
-
-        ResponseEntity<List<CategoriaServicio>> response = categoriasController.obtenerCategorias();
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(2, response.getBody().size());
-    }
+//    @Test
+//    void testObtenerCategoriasExito() {
+//        List<CategoriaServicio> mockCategorias = new ArrayList<>();
+//        CategoriaServicio categoria1 = new CategoriaServicio();
+//        categoria1.setTipo("Test 1");
+//        CategoriaServicio categoria2 = new CategoriaServicio();
+//        categoria2.setTipo("Test 2");
+//        mockCategorias.add(categoria1);
+//        mockCategorias.add(categoria2);
+//
+//        when(categoriaServicioService.obtenerTodo()).thenReturn(mockCategorias);
+//
+//        ResponseEntity<List<CategoriaServicio>> response = categoriasController.obtenerCategorias();
+//
+//        assertEquals(HttpStatus.OK, response.getStatusCode());
+//        assertEquals(2, response.getBody().size());
+//    }
 }

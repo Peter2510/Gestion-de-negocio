@@ -43,10 +43,10 @@ public class CategoriasController {
 
     // PARA LISTAR A TODOS
     @GetMapping("/obtener-categorias")
-    public ResponseEntity<List<CategoriaServicio>> obtenerCategorias() {
+    public ResponseEntity<Map<String, Object>> obtenerCategorias() {
         List<CategoriaServicio> todasCategorias = this.categoriaServicioService.obtenerTodo();
         //ENVIAR UNA NUEVA RESPUESTA
-        return new ResponseEntity<>(todasCategorias, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "categorias" , todasCategorias));
     }
 
     @PutMapping("actualizar-categoria")

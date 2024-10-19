@@ -51,7 +51,7 @@ public class CategoriaServicioServiceImpl implements CategoriaServicioService {
         Optional<CategoriaServicio> busqueda = this.buscarPorTipo(categoria.getTipo());
 
         if (busqueda.isPresent()) {
-            return new ResponseBackend(false, HttpStatus.CONFLICT, "La categoria ya esta registrada");
+            return new ResponseBackend(false, HttpStatus.CONFLICT, "La categoria "+ busqueda.get().getTipo() +" ya esta registrada");
         }
 
         //crear la categoria
