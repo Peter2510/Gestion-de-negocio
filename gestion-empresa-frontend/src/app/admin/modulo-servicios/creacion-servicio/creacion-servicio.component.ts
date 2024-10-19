@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CategoriasServicioService } from '../../services/Categorias/categorias-servicio.service';
-import { jornada_laboral } from 'src/app/models/Jornadas';
+import { dias_laborales, jornada_laboral } from 'src/app/models/Jornadas';
 import { Time } from '@angular/common';
 import {
   DuracionServicioPrestado,
@@ -17,6 +17,7 @@ import {
 export class CreacionServicioComponent implements OnInit {
   servicioForm: FormGroup;
   arregloHorarios: any = [];
+  diasParaHorario: dias_laborales[] = [];
   arregloServiciosEspecificos: serviciosPrestados[] = [];
   todasCategorias: any;
   currentStep = 1;

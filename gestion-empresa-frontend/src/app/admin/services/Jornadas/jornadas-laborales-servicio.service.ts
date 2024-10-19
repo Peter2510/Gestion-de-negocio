@@ -11,6 +11,7 @@ export class JornadasLaboralesServicioService {
   private dias = 'diasLaborales';
   private rol = 'rol';
 
+  //signal
   constructor(private http: HttpClient) {}
 
   obtenerDiasLaborales(): Observable<any> {

@@ -2,12 +2,12 @@
 <div class="flex justify-center items-center min-h-screen mt-24">
   <div class="card w-full max-w-lg bg-base-100 shadow-xl">
     <div class="card-body">
-      <h2 class="card-title text-center">Creación de Servicios</h2>
+      <h2 class="card-title text-center text-primary">Creación de Servicios</h2>
 
       <!-- Stepper -->
       <ul class="steps mb-8">
         <li
-          class="step"
+          class="step text-primary"
           [class.step-primary]="currentStep >= 1"
           [class.step-complete]="currentStep > 1"
           data-content="1"
@@ -15,7 +15,7 @@
           Información de Servicio
         </li>
         <li
-          class="step"
+          class="step text-primary"
           [class.step-primary]="currentStep >= 2"
           [class.step-complete]="currentStep > 2"
           data-content="2"
@@ -23,7 +23,7 @@
           Generacion de horarios
         </li>
         <li
-          class="step"
+          class="step text-primary"
           [class.step-primary]="currentStep >= 3"
           [class.step-complete]="currentStep > 3"
           data-content="3"
@@ -31,31 +31,32 @@
           Generacion de servicios especificos
         </li>
       </ul>
-
       <!-- Step 1: Nombre del Servicio -->
       <div *ngIf="currentStep === 1" class="form-control">
         <label class="label">
-          <span class="label-text">Nombre del Servicio</span>
+          <span class="label-text text-primary">Nombre del Servicio</span>
         </label>
         <input
           type="text"
-          class="input input-bordered w-full"
+          class="input input-bordered w-full text-primary"
           placeholder="Ingrese el nombre del servicio"
         />
         <div class="form-control">
           <label class="label">
-            <span class="label-text">Descripción del Servicio</span>
+            <span class="label-text text-primary"
+              >Descripción del Servicio</span
+            >
           </label>
           <textarea
-            class="textarea textarea-bordered w-full"
+            class="textarea textarea-bordered w-full text-primary"
             placeholder="Ingrese la descripción del servicio"
           ></textarea>
         </div>
         <div class="form-control">
           <label class="label">
-            <span class="label-text">Estado del Servicio</span>
+            <span class="label-text text-primary">Estado del Servicio</span>
           </label>
-          <select class="select select-bordered w-full">
+          <select class="select select-bordered w-full text-primary">
             <option *ngFor="let estado of estados" [value]="estado.id">
               {{ estado.nombre }}
             </option>
@@ -63,9 +64,9 @@
         </div>
         <div class="form-control">
           <label class="label">
-            <span class="label-text">Categoría del Servicio</span>
+            <span class="label-text text-primary">Categoría del Servicio</span>
           </label>
-          <select class="select select-bordered w-full">
+          <select class="select select-bordered w-full text-primary">
             <option
               *ngFor="let categoria of this.todasCategorias"
               [value]="categoria.id"
@@ -84,7 +85,7 @@
       <!-- Step 2: -->
       <div *ngIf="currentStep === 2">
         <button
-          class="btn btn-outline btn-primary flex items-center"
+          class="btn btn-outline btn-primary flex items-center text-white bg-blue-600 hover:bg-blue-700"
           (click)="this.agregarHorario()"
         >
           <!-- SVG del ícono de agregar -->
@@ -104,11 +105,16 @@
           </svg>
           Agregar Horario
         </button>
+
         <div class="overflow-x-auto">
-          <h2 class="text-lg font-semibold mb-4">Vista de horario</h2>
-          <table class="table table-zebra w-full min-w-[768px]">
+          <h2 class="text-lg font-semibold mb-4 text-gray-200">
+            Vista de horario
+          </h2>
+          <table
+            class="table table-zebra w-full min-w-[768px] bg-gray-800 text-gray-100"
+          >
             <!-- head -->
-            <thead>
+            <thead class="bg-gray-700 text-gray-300">
               <tr>
                 <th>#</th>
                 <td>Nombre</td>
@@ -124,6 +130,7 @@
                   let horarioNuevos of this.arregloHorarios;
                   let indice = index
                 "
+                class="hover:bg-gray-700"
               >
                 <th>{{ indice + 1 }}</th>
                 <td>
@@ -132,7 +139,7 @@
                     id="nombre"
                     name="nombre"
                     [(ngModel)]="horarioNuevos.nombre"
-                    class="input input-bordered w-full"
+                    class="input input-bordered w-full bg-gray-700 text-gray-200"
                     placeholder="Nombre"
                   />
                 </td>
@@ -142,7 +149,7 @@
                     id="horaInicio"
                     name="horaInicio"
                     [(ngModel)]="horarioNuevos.hora_inicio"
-                    class="input input-bordered w-full"
+                    class="input input-bordered w-full bg-gray-700 text-gray-200"
                   />
                 </td>
                 <td>
@@ -151,12 +158,12 @@
                     id="horaFin"
                     name="horaFin"
                     [(ngModel)]="horarioNuevos.hora_fin"
-                    class="input input-bordered w-full"
+                    class="input input-bordered w-full bg-gray-700 text-gray-200"
                   />
                 </td>
                 <td>
                   <button
-                    class="btn btn-outline btn-primary flex items-center"
+                    class="btn btn-outline btn-primary flex items-center text-white bg-red-600 hover:bg-red-700"
                     (click)="
                       eliminarHorario(horarioNuevos.id, horarioNuevos.nombre)
                     "
@@ -187,10 +194,16 @@
         <div
           class="form-control mt-6 flex justify-between items-center gap-x-4"
         >
-          <button class="btn btn-secondary flex-1" (click)="goToStep(1)">
+          <button
+            class="btn btn-secondary flex-1 text-white bg-gray-600 hover:bg-gray-700"
+            (click)="goToStep(1)"
+          >
             Atrás
           </button>
-          <button class="btn btn-primary flex-1" (click)="goToStep(3)">
+          <button
+            class="btn btn-primary flex-1 text-white bg-blue-600 hover:bg-blue-700"
+            (click)="goToStep(3)"
+          >
             Siguiente
           </button>
         </div>
@@ -199,7 +212,7 @@
       <!-- Step 3: Confirmación -->
       <div *ngIf="currentStep === 3">
         <button
-          class="btn btn-outline btn-primary flex items-center"
+          class="btn btn-outline btn-primary flex items-center text-white bg-blue-600 hover:bg-blue-700"
           (click)="this.agregarServicio()"
         >
           <!-- SVG del ícono de agregar -->
@@ -219,11 +232,16 @@
           </svg>
           Agregar Servicio
         </button>
+
         <div class="overflow-x-auto">
-          <h2 class="text-lg font-semibold mb-4">Vista de servicios</h2>
-          <table class="table table-zebra w-full min-w-[768px]">
+          <h2 class="text-lg font-semibold mb-4 text-gray-200">
+            Vista de servicios
+          </h2>
+          <table
+            class="table table-zebra w-full min-w-[768px] bg-gray-800 text-gray-100"
+          >
             <!-- head -->
-            <thead>
+            <thead class="bg-gray-700 text-gray-300">
               <tr>
                 <th>#</th>
                 <td>Nombre</td>
@@ -239,6 +257,7 @@
                   let servicio of this.arregloServiciosEspecificos;
                   let indice = index
                 "
+                class="hover:bg-gray-700"
               >
                 <th>{{ indice + 1 }}</th>
                 <td>
@@ -247,7 +266,7 @@
                     id="nombre"
                     name="nombre"
                     [(ngModel)]="servicio.nombre"
-                    class="input input-bordered w-full"
+                    class="input input-bordered w-full bg-gray-700 text-gray-200"
                     placeholder="Nombre del servicio"
                   />
                 </td>
@@ -257,7 +276,7 @@
                     id="estado"
                     name="estado"
                     [(ngModel)]="servicio.estadoSerivicio.estado"
-                    class="input input-bordered w-full"
+                    class="input input-bordered w-full bg-gray-700 text-gray-200"
                     placeholder="Estado del servicio"
                   />
                 </td>
@@ -267,12 +286,12 @@
                     id="duracion"
                     name="duracion"
                     [(ngModel)]="servicio.duracionServicioPrestado.duracion"
-                    class="input input-bordered w-full"
+                    class="input input-bordered w-full bg-gray-700 text-gray-200"
                   />
                 </td>
                 <td>
                   <button
-                    class="btn btn-outline btn-primary flex items-center"
+                    class="btn btn-outline btn-primary flex items-center text-white bg-red-600 hover:bg-red-700"
                     (click)="eliminarServicio(servicio.id, servicio.nombre)"
                   >
                     <!-- SVG del ícono de eliminar -->
@@ -299,9 +318,18 @@
         </div>
 
         <div class="form-control mt-6 flex justify-between">
-          <button class="btn btn-secondary" (click)="goToStep(2)">Atrás</button>
+          <button
+            class="btn btn-secondary text-white bg-gray-600 hover:bg-gray-700"
+            (click)="goToStep(2)"
+          >
+            Atrás
+          </button>
           <div class="flex space-x-4">
-            <button class="btn btn-primary w-full">Registrar</button>
+            <button
+              class="btn btn-primary w-full text-white bg-blue-600 hover:bg-blue-700"
+            >
+              Registrar
+            </button>
           </div>
         </div>
       </div>

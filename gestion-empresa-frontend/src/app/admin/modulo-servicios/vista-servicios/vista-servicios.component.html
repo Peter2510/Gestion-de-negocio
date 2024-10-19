@@ -12,8 +12,10 @@
         <img [src]="servicio.imagen" alt="{{ servicio.nombre }}" />
       </figure>
       <div class="card-body">
-        <h2 class="card-title">{{ servicio.nombre }}</h2>
-        <p>{{ servicio.descripcion }}</p>
+        <!-- Título con color basado en el tema -->
+        <h2 class="card-title text-primary">{{ servicio.nombre }}</h2>
+        <!-- Descripción con color base del contenido -->
+        <p class="text-base-content">{{ servicio.descripcion }}</p>
         <div class="badge badge-primary">{{ servicio.categoria.tipo }}</div>
         <div class="card-actions justify-end">
           <button
@@ -36,9 +38,12 @@
       class="card w-full bg-base-100 shadow-xl"
     >
       <div class="card-body">
-        <h2 class="card-title">{{ servicioPrestado.nombre }}</h2>
-        <p>Estado: {{ servicioPrestado.estadoSerivicio.estado }}</p>
-        <p>
+        <!-- Título con color secundario -->
+        <h2 class="card-title text-secondary">{{ servicioPrestado.nombre }}</h2>
+        <p class="text-base-content">
+          Estado: {{ servicioPrestado.estadoSerivicio.estado }}
+        </p>
+        <p class="text-base-content">
           Duración:
           {{ servicioPrestado.duracionServicioPrestado.duracion.hours }} horas,
           {{ servicioPrestado.duracionServicioPrestado.duracion.minutes }}
