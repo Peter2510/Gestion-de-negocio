@@ -23,7 +23,7 @@ export interface estadoServicio {
 }
 
 export interface categorias_servicios {
-  id?: number;
+  id: number;
   tipo: string;
 }
 

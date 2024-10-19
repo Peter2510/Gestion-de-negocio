@@ -28,74 +28,126 @@
           tabindex="0"
           class="menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
         >
-          <li>
-            <select class="select w-full" (change)="onSelectChange($event)">
-              <option disabled selected>Gestión de empresa</option>
-              <option value="/administrador/informacion-empresa">
-                Editar información
-              </option>
-            </select>
-          </li>
-          <li>
-            <select class="select w-full" (change)="onSelectChange($event)">
-              <option disabled selected>Gestión de empleados</option>
-              <option value="/administrador/crear-empleado">Crear empleado</option>
-            </select>
-          </li>
-          <li>
-            <select class="select w-full" (change)="onSelectChange($event)">
-              <option disabled selected>Gestión de servicios</option>
-              <option value="/administrador/vista-servicio">
-                Ver servicios
-              </option>
-              <option value="/administrador/crear-servicio">
-                Crear nuevo servicio
-              </option>
-              <option>Editar servicio</option>
-            </select>
-          </li>
-          <li>
-            <select class="select w-full" (change)="onSelectChange($event)">
-              <option disabled selected>Gestión de roles</option>
-              <option value="/administrador/roles-registrados">
-                Ver roles
-              </option>
-              <option value="/administrador/crear-rol">Crear Rol</option>
-            </select>
-          </li>
+        <li *ngIf="tienePermiso(19)||tienePermiso(7)">
+          <select class="select w-full truncate" (change)="onSelectChange($event)">
+            <option disabled selected>Gestión de reservaciones</option>
+            <option value="/administrador/vista-servicio" *ngIf="tienePermiso(19)">
+              Ver reservaciones
+            </option>
+            <option value="/administrador/crear-servicio" *ngIf="tienePermiso(7)">
+              Crear reservaciones
+            </option>
+          </select>
+        </li>
+        <li *ngIf="tienePermiso(2)">
+          <select class="select w-full" (change)="onSelectChange($event)">
+            <option disabled selected>Gestión de empresa</option>
+            <option value="/administrador/informacion-empresa">
+              Editar información
+            </option>
+          </select>
+        </li>
+        <li *ngIf="tienePermiso(13)||tienePermiso(5)||tienePermiso(17)||tienePermiso(16)">
+          <select class="select w-full truncate" (change)="onSelectChange($event)">
+            <option disabled selected>Gestión de servicios</option>
+            <option value="/administrador/vista-servicio" *ngIf="tienePermiso(13)">
+              Ver servicios
+            </option>
+            <option value="/administrador/crear-servicio" *ngIf="tienePermiso(5)">
+              Crear servicio
+            </option>
+            <option value="/administrador/categorias-registradas" *ngIf="tienePermiso(17)">
+              Ver categorías
+            </option>
+            <option value="/administrador/crear-categoria" *ngIf="tienePermiso(16)">
+              Crear categoria
+            </option>
+          </select>
+        </li>
+        <li *ngIf="tienePermiso(12)||tienePermiso(3)">
+          <select class="select w-full truncate" (change)="onSelectChange($event)">
+            <option disabled selected>Gestión de roles</option>
+            <option value="/administrador/roles-registrados" *ngIf="tienePermiso(12)">
+              Ver roles
+            </option>
+            <option value="/administrador/crear-rol" *ngIf="tienePermiso(3)">
+              Crear rol
+            </option>
+          </select>
+        </li>
+        <li *ngIf="tienePermiso(10)||tienePermiso(15)">
+          <select class="select w-full truncate" (change)="onSelectChange($event)">
+            <option disabled selected >Gestión de empleados</option>
+            <option value="" *ngIf="tienePermiso(15)">
+              Ver empleados
+            </option>
+            <option value="/administrador/crear-empleado" *ngIf="tienePermiso(10)">
+              Crear empleado
+            </option>
+          </select>
+        </li>
         </ul>
       </div>
     </div>
 
     <!-- Pantallas más grandes -->
     <ul class="menu menu-horizontal p-0 hidden md:flex space-x-4">
-      <li>
+      <li *ngIf="tienePermiso(19)||tienePermiso(7)">
+        <select class="select w-full truncate" (change)="onSelectChange($event)">
+          <option disabled selected>Gestión de reservaciones</option>
+          <option value="/administrador/vista-servicio" *ngIf="tienePermiso(19)">
+            Ver reservaciones
+          </option>
+          <option value="/administrador/crear-servicio" *ngIf="tienePermiso(7)">
+            Crear reservaciones
+          </option>
+        </select>
+      </li>
+      <li *ngIf="tienePermiso(2)">
         <select class="select w-full" (change)="onSelectChange($event)">
           <option disabled selected>Gestión de empresa</option>
-          <option value="/administrador/informacion-empresa">Editar información</option>
-        </select>
-      </li>
-      <li>
-        <select class="select w-full" (change)="onSelectChange($event)">
-          <option disabled selected>Gestión de empleados</option>
-          <option value="/administrador/crear-empleado">Crear empleado</option>
-        </select>
-      </li>
-      <li>
-        <select class="select w-full" (change)="onSelectChange($event)">
-          <option disabled selected>Gestión de servicios</option>
-          <option value="/administrador/vista-servicio">Ver servicios</option>
-          <option value="/administrador/crear-servicio">
-            Crear nuevo servicio
+          <option value="/administrador/informacion-empresa">
+            Editar información
           </option>
-          <option>Editar servicio</option>
         </select>
       </li>
-      <li>
-        <select class="select w-full" (change)="onSelectChange($event)">
+      <li *ngIf="tienePermiso(13)||tienePermiso(5)||tienePermiso(17)||tienePermiso(16)">
+        <select class="select w-full truncate" (change)="onSelectChange($event)">
+          <option disabled selected>Gestión de servicios</option>
+          <option value="/administrador/vista-servicio" *ngIf="tienePermiso(13)">
+            Ver servicios
+          </option>
+          <option value="/administrador/crear-servicio" *ngIf="tienePermiso(5)">
+            Crear servicio
+          </option>
+          <option value="/administrador/categorias-registradas" *ngIf="tienePermiso(17)">
+            Ver categorías
+          </option>
+          <option value="/administrador/crear-categoria" *ngIf="tienePermiso(16)">
+            Crear categoria
+          </option>
+        </select>
+      </li>
+      <li *ngIf="tienePermiso(12)||tienePermiso(3)">
+        <select class="select w-full truncate" (change)="onSelectChange($event)">
           <option disabled selected>Gestión de roles</option>
-          <option value="/administrador/roles-registrados">Ver roles</option>
-          <option value="/administrador/crear-rol">Crear Rol</option>
+          <option value="/administrador/roles-registrados" *ngIf="tienePermiso(12)">
+            Ver roles
+          </option>
+          <option value="/administrador/crear-rol" *ngIf="tienePermiso(3)">
+            Crear rol
+          </option>
+        </select>
+      </li>
+      <li *ngIf="tienePermiso(10)||tienePermiso(15)">
+        <select class="select w-full truncate" (change)="onSelectChange($event)">
+          <option disabled selected >Gestión de empleados</option>
+          <option value="" *ngIf="tienePermiso(15)">
+            Ver empleados
+          </option>
+          <option value="/administrador/crear-empleado" *ngIf="tienePermiso(10)">
+            Crear empleado
+          </option>
         </select>
       </li>
     </ul>

@@ -69,9 +69,15 @@ export class LoginComponent {
 
       if (id === 2) {
         this.router.navigate(['/usuarios/']);
-      } else if (id === 1) {
+      } else {
         this.router.navigate(['/administrador/panel-administrador']);
       }
     }
   }
 }
+
+
+// <button class="btn">
+//   Inbox
+//   <div class="badge badge-secondary">+99</div>
+// </button>

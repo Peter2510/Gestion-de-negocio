@@ -28,8 +28,6 @@ import { RouterLink, RouterModule } from '@angular/router';
 import { EdicionPerfilComponent } from './usuarios/edicion-perfil/edicion-perfil.component';
 import { ModuloUsuariosModule } from './usuarios/modulo-usuarios/modulo-usuarios.module';
 import { VistaServicioEspecificoComponent } from './admin/modulo-servicios/vistaEspecifica/vista-servicio-especifico/vista-servicio-especifico.component';
-import { LoadingComponent } from './admin/loading/loading.component';
-
 
 
 @NgModule({
