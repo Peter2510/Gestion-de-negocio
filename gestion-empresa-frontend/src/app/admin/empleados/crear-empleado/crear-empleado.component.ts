@@ -6,6 +6,7 @@ import { RolesService } from '../../services/roles/roles.service';
 import { Rol } from 'src/app/models/Roles';
 import { NgForm } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-crear-empleado',
@@ -41,7 +42,7 @@ export class CrearEmpleadoComponent implements OnInit {
   confirmacionPassword = "";
   idRol = 0;
 
-  constructor(private rolService: RolesService) {
+  constructor(private rolService: RolesService, private router:Router) {
   }
 
   ngOnInit(): void {
@@ -76,13 +77,15 @@ export class CrearEmpleadoComponent implements OnInit {
     
 
     this.servicioAuth.registro(this.nuevaPersona, this.nombre_usuario, this.password,
-      this.nuevaPersona.genero.id, 2, this.a2f_activo, true, this.nuevaPersona.correo).subscribe({
+      this.nuevaPersona.genero.id, this.idRol, this.a2f_activo, true, this.nuevaPersona.correo).subscribe({
         next: (data) => {
           this.loading = false;
           Swal.fire({
             title: "Registrado correctamente",
             text: data.mensaje,
             icon: "success"
+          }).then(()=>{
+            window.location.reload();
           });
         },
         error: (error) => {
