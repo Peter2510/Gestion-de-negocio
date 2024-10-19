@@ -1,6 +1,8 @@
 package com.gestion.empresa.backend.gestion_empresa.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,10 +31,14 @@ public class DuracionServicioPrestado implements Serializable {
     @Column(name="nombre", nullable = false, length = 100)
     private String nombre;
 
-    @NotBlank(message = "La duracion del servicio es obligatoria")
     @Column(name="duracion", nullable = false)
     //aca ver si es long
     private Long duracion;
+
+    //aca ver para el foreing key
+    @ManyToOne
+    @JoinColumn(name = "idServicioPrestado", nullable = false)
+    private ServicioPrestado idServicioPrestado;
 
 
 }
