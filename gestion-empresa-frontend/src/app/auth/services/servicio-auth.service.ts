@@ -17,8 +17,6 @@ export class ServicioAuthService {
   //creacion de signal
   public generos = signal<Genero[]>([]);
   private cookieName = 'token';
-  private token: string =
-    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1IiwicGVyc29uYSI6eyJjdWkiOjMsIm5vbWJyZSI6Ik1hcnRpbiIsIm5pdCI6IjMzNDM0IiwibnVtZXJvIjowLCJjb3JyZW8iOiJNYXJ0aW5AY29ycmVvLmNvbSIsImRpcmVjY2lvbiI6IkNhbGxlIEZhbHNhIDEyMyIsInRlbGVmb25vIjozMzQ0LCJnZW5lcm8iOnsiaWQiOjIsImdlbmVybyI6Ik1hc2N1bGlubyJ9fSwicm9sIjp7ImlkIjoyLCJub21icmUiOiJDbGllbnRlIiwiZGVzY3JpcGNpb24iOiJVdGlsaXphIGxvcyBzZXJ2aWNpb3MgZGUgbGEgcGxhdGFmb3JtYSJ9LCJub21icmVVc3VhcmlvIjoiTWFydGluTm5Obk4iLCJpYXQiOjE3MjgwODAxMTcsImV4cCI6MTcyODExNjExN30._DZmlOsjCbvviLPhswA0bobJdpARFXtgERoz29bk2jQ';
 
   constructor(
     private http: HttpClient,
@@ -83,7 +81,7 @@ export class ServicioAuthService {
 
   //cerrar sesion -> eliminar la cookie
   logout(): void {
-    this.cookieService.delete(this.cookieName);
+    this.cookieService.delete(this.cookieName, '/');
     this.router.navigate(['/']);
   }
 

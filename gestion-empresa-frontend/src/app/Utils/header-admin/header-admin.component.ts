@@ -80,5 +80,9 @@ export class HeaderAdminComponent implements OnInit {
     return this.permisos.some(permiso => permiso.permisoId === permisoId);
   }
 
+  cerrarSesion(){        
+    this.token.logout();
+  }
+
 
 }
