@@ -8,7 +8,7 @@ module.exports = {
         daisyui: {
     themes: [
       "business",
-      "lofi"
+      "retro"
     ],
   },
   plugins: [require('flowbite/plugin'), require('daisyui') ],

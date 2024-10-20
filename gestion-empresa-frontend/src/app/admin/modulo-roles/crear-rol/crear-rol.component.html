@@ -4,7 +4,7 @@
 
 <div class="bg-base-200 min-h-screen flex justify-center items-center mt-24">
   <div class="bg-base-100 p-6 rounded-lg shadow-lg w-full max-w-2xl">
-    <h2 class="text-2xl font-semibold mb-4 text-center text-white">Creación de rol</h2>
+    <h2 class="text-2xl font-semibold mb-4 text-center text-base-content">Creación de rol</h2>
 
     <form (ngSubmit)="guardarPermisos()" #permisosForm="ngForm">
 
@@ -32,7 +32,7 @@
 
       <!-- Selección de Permisos -->
       <div>
-        <h2 class="text-xl font-semibold mb-4 text-white">Seleccione los Permisos</h2>
+        <h2 class="text-xl font-semibold mb-4 text-base-content">Seleccione los Permisos</h2>
         <div *ngFor="let permiso of permisos" class="flex items-center mb-3">
           <label class="flex items-center cursor-pointer">
             <input

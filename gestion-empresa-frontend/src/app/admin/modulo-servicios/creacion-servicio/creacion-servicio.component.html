@@ -85,7 +85,7 @@
       <!-- Step 2: -->
       <div *ngIf="currentStep === 2">
         <button
-          class="btn btn-outline btn-primary flex items-center text-white bg-blue-600 hover:bg-blue-700"
+          class="btn btn-outline btn-primary flex items-center text-base-content bg-blue-600 hover:bg-blue-700"
           (click)="this.agregarHorario()"
         >
           <!-- SVG del ícono de agregar -->
@@ -163,7 +163,7 @@
                 </td>
                 <td>
                   <button
-                    class="btn btn-outline btn-primary flex items-center text-white bg-red-600 hover:bg-red-700"
+                    class="btn btn-outline btn-primary flex items-center text-base-content bg-red-600 hover:bg-red-700"
                     (click)="
                       eliminarHorario(horarioNuevos.id, horarioNuevos.nombre)
                     "
@@ -195,13 +195,13 @@
           class="form-control mt-6 flex justify-between items-center gap-x-4"
         >
           <button
-            class="btn btn-secondary flex-1 text-white bg-gray-600 hover:bg-gray-700"
+            class="btn btn-secondary flex-1 text-base-content bg-gray-600 hover:bg-gray-700"
             (click)="goToStep(1)"
           >
             Atrás
           </button>
           <button
-            class="btn btn-primary flex-1 text-white bg-blue-600 hover:bg-blue-700"
+            class="btn btn-primary flex-1 text-base-content bg-blue-600 hover:bg-blue-700"
             (click)="goToStep(3)"
           >
             Siguiente
@@ -212,7 +212,7 @@
       <!-- Step 3: Confirmación -->
       <div *ngIf="currentStep === 3">
         <button
-          class="btn btn-outline btn-primary flex items-center text-white bg-blue-600 hover:bg-blue-700"
+          class="btn btn-outline btn-primary flex items-center text-base-content bg-blue-600 hover:bg-blue-700"
           (click)="this.agregarServicio()"
         >
           <!-- SVG del ícono de agregar -->
@@ -291,7 +291,7 @@
                 </td>
                 <td>
                   <button
-                    class="btn btn-outline btn-primary flex items-center text-white bg-red-600 hover:bg-red-700"
+                    class="btn btn-outline btn-primary flex items-center text-base-content bg-red-600 hover:bg-red-700"
                     (click)="eliminarServicio(servicio.id, servicio.nombre)"
                   >
                     <!-- SVG del ícono de eliminar -->
@@ -319,14 +319,14 @@
 
         <div class="form-control mt-6 flex justify-between">
           <button
-            class="btn btn-secondary text-white bg-gray-600 hover:bg-gray-700"
+            class="btn btn-secondary text-base-content bg-gray-600 hover:bg-gray-700"
             (click)="goToStep(2)"
           >
             Atrás
           </button>
           <div class="flex space-x-4">
             <button
-              class="btn btn-primary w-full text-white bg-blue-600 hover:bg-blue-700"
+              class="btn btn-primary w-full text-base-content bg-blue-600 hover:bg-blue-700"
             >
               Registrar
             </button>
