@@ -83,15 +83,6 @@ public class AutenticacionServiceImpl implements AutenticacionServicie {
         return Optional.ofNullable(AuthRespuesta.builder().token(token).build());
     }
 
-    private Persona guardarPersona(Persona persona) {
-        return personaRepository.save(persona);
-    }
-
-    private Usuarios guardarUsuario(Usuarios usuario) {
-        return userRepository.save(usuario);
-    }
-
-
     @Transactional(rollbackOn = Throwable.class)
     public ResponseBackend registrarUsuario(RegistroUsuariosDTO registro) {
 
