@@ -40,6 +40,7 @@ export class RolEspecificoComponent implements OnInit {
     if (this.rolIdInfo) {
       this.mostrarInfoRol();
       this.mostrarPermisosRegistrados();
+      this.rolService.clearRolId();
     } else {
       this.router.navigate(['administrador/roles-registrados']);
       this.loading = false;
@@ -53,6 +54,7 @@ export class RolEspecificoComponent implements OnInit {
         this.rol = data.rol;
         this.permisosActuales = data.permisos;
         this.asignarPermisosSeleccionados();
+        console.log(data)
       },
       error: (error) => {
         this.loading = true;

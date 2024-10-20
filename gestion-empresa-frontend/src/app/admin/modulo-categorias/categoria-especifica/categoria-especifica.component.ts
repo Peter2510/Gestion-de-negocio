@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { InfoPermiso } from 'src/app/models/Roles';
 import { categorias_servicios } from 'src/app/models/Servicios';
-import { CategoriasServicioService } from '../../services/Categorias/categorias-servicio.service';
+import { CategoriasServicioService } from '../../services/categorias/categorias-servicio.service';
 import { ServicioAuthService } from 'src/app/auth/services/servicio-auth.service';
 import { Router } from '@angular/router';
 import { RolesService } from '../../services/roles/roles.service';

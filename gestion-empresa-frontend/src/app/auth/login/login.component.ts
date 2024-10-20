@@ -20,12 +20,8 @@ export class LoginComponent {
   login() {
     this.servicioAuth.login(this.nombreUsuario, this.password).subscribe({
       next: (response: any) => {
-        console.log(response.mensaje, 'simon');
-        console.log(response.ok);
-
         if (response.ok) {
           this.inicioSesion(response.mensaje);
-          console.log(response.mensaje);
           Swal.fire({
             icon: 'success',
             title: 'Sesión Iniciada',
@@ -48,7 +44,7 @@ export class LoginComponent {
             Swal.fire({
               icon: 'error',
               title: 'Credenciales Incorrectas',
-              text: 'Las credenciales no coinciden, por favor verifique.',
+              text: 'Verifique sus credenciales y vuelva a intentar de nuevo.',
             });
             break;
         }
@@ -57,10 +53,7 @@ export class LoginComponent {
   }
 
   inicioSesion(token: string) {
-    console.log('simon');
-
     this.servicioAuth.saveToken(token);
-
     const idTipoUsuario = this.servicioAuth.getIdTipoUsuario();
     console.log(idTipoUsuario);
 

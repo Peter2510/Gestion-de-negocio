@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { CategoriasServicioService } from '../../services/Categorias/categorias-servicio.service';
+import { CategoriasServicioService } from '../../services/categorias/categorias-servicio.service';
 import { dias_laborales, jornada_laboral } from 'src/app/models/Jornadas';
 import { Time } from '@angular/common';
 import {

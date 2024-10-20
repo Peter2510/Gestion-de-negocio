@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { categorias_servicios } from 'src/app/models/Servicios';
-import { CategoriasServicioService } from '../../services/Categorias/categorias-servicio.service';
+import { CategoriasServicioService } from '../../services/categorias/categorias-servicio.service';
 import Swal from 'sweetalert2';
 
 @Component({

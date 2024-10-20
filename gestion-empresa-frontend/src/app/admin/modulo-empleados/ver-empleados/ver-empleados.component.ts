@@ -1,53 +1,49 @@
 import { Component, OnInit } from '@angular/core';
 import { InfoPermiso } from 'src/app/models/Roles';
+import { Usuario } from 'src/app/models/Usuario';
 import { RolesService } from '../../services/roles/roles.service';
 import { Router } from '@angular/router';
 import { ServicioAuthService } from 'src/app/auth/services/servicio-auth.service';
-import { categorias_servicios } from 'src/app/models/Servicios';
-import { CategoriasServicioService } from '../../services/categorias/categorias-servicio.service';
+import { UsuarioService } from '../../services/usuario/usuario.service';
 
 @Component({
-  selector: 'app-ver-categorias',
-  templateUrl: './ver-categorias.component.html',
-  styleUrls: ['./ver-categorias.component.css']
+  selector: 'app-ver-empleados',
+  templateUrl: './ver-empleados.component.html',
+  styleUrls: ['./ver-empleados.component.css']
 })
-export class VerCategoriasComponent implements OnInit{
+export class VerEmpleadosComponent implements OnInit{
 
+  empleados: Usuario[] = [];
   permisos: InfoPermiso[] = [];
-  categorias: categorias_servicios[] = []
-  loading: boolean;
-
+  loading: boolean = true;
 
   constructor(private rolService:RolesService, private router: Router, private token:ServicioAuthService,
-    private categoriaService:CategoriasServicioService){
+    private empleadosService:UsuarioService){}
 
-  }
-  
   ngOnInit(): void {
     this.obtenerPermisos();
-    this.obtenerCategorias();
+    this.obtenerEmpleados();
   }
-
 
   obtenerPermisos() {
     this.rolService.obtenerRolYPermisoEspecifico(this.token.getIdTipoUsuario()).subscribe({
       next: (data) => {
-        this.loading = false;
         this.permisos = data.permisos
       },
       error: (error) => {
-        this.loading = true;
+        this.loading = false;
         console.log(error);
       }
     });
   }
 
-  obtenerCategorias(){
-    this.categoriaService.obtenerTodasCategoriasRegistradas().subscribe({
+  obtenerEmpleados(){
+    this.empleadosService.obtenerEmpleados().subscribe({
       next: (data)=>{
-        this.categorias = data.categorias
+        this.empleados = data.empleados
         this.loading = false;
       }, error: (error)=>{
+        this.loading = false;
         console.log(error)
       }
     })
@@ -57,11 +53,8 @@ export class VerCategoriasComponent implements OnInit{
     return this.permisos.some(permiso => permiso.permisoId === permisoId);
   }
 
-  detallesCategoria(id: number) {
-    this.categoriaService.seCategoriaId(id);   
-    this.router.navigate(['administrador/detalles-categoria']);
-    
+  detallesEmpleado(id: number) {
+    this.empleadosService.setIdUsuario(id);   
+    this.router.navigate(['administrador/detalles-usuario']);
   }
-
-
 }

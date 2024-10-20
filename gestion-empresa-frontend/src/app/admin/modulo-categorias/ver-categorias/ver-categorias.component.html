@@ -1,6 +1,7 @@
 <app-header-admin></app-header-admin>
 
-<div class="flex flex-wrap bg-base-200 mt-24 w-full h-full">
+<h1 class="text-base-content bg-base-200 mt-28 pt-2 w-full h-full text-center text-2xl">Categorías registradas</h1>
+<div class="flex flex-wrap bg-base-200 w-full h-full">
   <div *ngFor="let categoria of categorias" class="card bg-base-100 w-full sm:w-96 shadow-xl m-4">
     <div class="card-body">
       <h2 class="card-title text-white">{{categoria.tipo}}</h2>

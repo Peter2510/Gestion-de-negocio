@@ -9,10 +9,12 @@ import { VistaServicioEspecificoComponent } from '../modulo-servicios/vistaEspec
 import { VerRolesComponent } from '../modulo-roles/ver-roles/ver-roles.component';
 import { CrearRolComponent } from '../modulo-roles/crear-rol/crear-rol.component';
 import { RolEspecificoComponent } from '../modulo-roles/rol-especifico/rol-especifico.component';
-import { CrearEmpleadoComponent } from '../empleados/crear-empleado/crear-empleado.component';
+import { CrearEmpleadoComponent } from '../modulo-empleados/crear-empleado/crear-empleado.component';
 import { VerCategoriasComponent } from '../modulo-categorias/ver-categorias/ver-categorias.component';
 import { CategoriaEspecificaComponent } from '../modulo-categorias/categoria-especifica/categoria-especifica.component';
 import { CrearCategoriaComponent } from '../modulo-categorias/crear-categoria/crear-categoria.component';
+import { VerEmpleadosComponent } from '../modulo-empleados/ver-empleados/ver-empleados.component';
+import { DetallesUsuarioComponent } from '../modulo-empleados/detalles-usuario/detalles-usuario.component';
 
 const routes: Routes = [
   { path: 'panel-administrador', component: PanelAdministradorComponent },
@@ -24,9 +26,11 @@ const routes: Routes = [
   { path: 'vista-servicio/:id', component: VistaServicioEspecificoComponent },
   { path: 'vista-servicio', component: VistaServiciosComponent },
   { path: 'crear-empleado', component: CrearEmpleadoComponent },
+  { path: 'empleados-registrados', component: VerEmpleadosComponent },
   { path: 'categorias-registradas', component: VerCategoriasComponent },
   { path: 'detalles-categoria', component: CategoriaEspecificaComponent },
   { path: 'crear-categoria', component: CrearCategoriaComponent },
+  { path: 'detalles-usuario', component: DetallesUsuarioComponent },
 
   
   {

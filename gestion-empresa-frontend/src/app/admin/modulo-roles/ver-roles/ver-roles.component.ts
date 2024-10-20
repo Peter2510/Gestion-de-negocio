@@ -13,6 +13,7 @@ export class VerRolesComponent implements OnInit{
 
   roles:Rol[] = [];
   permisos: InfoPermiso[] = [];
+  loading: boolean = true;
 
   constructor(private rolService:RolesService, private router: Router, private token:ServicioAuthService){
 
@@ -20,13 +21,16 @@ export class VerRolesComponent implements OnInit{
   
   ngOnInit(): void {
     this.obtenerPermisos();
+    this.obtenerRolesRegistrados();
+  }
+
+  obtenerRolesRegistrados(){
     this.rolService.obtenerRolesRegistrados().subscribe({
       next:(data)=>{
-
-        console.log(data)
         this.roles = data.roles
-
+        this.loading = false;
       },error:(error)=>{
+        this.loading = false;
         console.log(error)
       }
     });
@@ -35,7 +39,6 @@ export class VerRolesComponent implements OnInit{
   detallesRol(id: number) {
     this.rolService.setRolId(id);   
     this.router.navigate(['administrador/detalles-rol']);
-    
   }
 
   obtenerPermisos() {
@@ -44,6 +47,7 @@ export class VerRolesComponent implements OnInit{
         this.permisos = data.permisos
       },
       error: (error) => {
+        this.loading = false;
         console.log(error);
       }
     });

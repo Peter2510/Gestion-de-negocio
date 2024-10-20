@@ -78,7 +78,7 @@
         <li *ngIf="tienePermiso(10)||tienePermiso(15)">
           <select class="select w-full truncate" (change)="onSelectChange($event)">
             <option disabled selected >Gestión de empleados</option>
-            <option value="" *ngIf="tienePermiso(15)">
+            <option value="/administrador/empleados-registrados" *ngIf="tienePermiso(15)">
               Ver empleados
             </option>
             <option value="/administrador/crear-empleado" *ngIf="tienePermiso(10)">
@@ -142,7 +142,7 @@
       <li *ngIf="tienePermiso(10)||tienePermiso(15)">
         <select class="select w-full truncate" (change)="onSelectChange($event)">
           <option disabled selected >Gestión de empleados</option>
-          <option value="" *ngIf="tienePermiso(15)">
+          <option value="/administrador/empleados-registrados" *ngIf="tienePermiso(15)">
             Ver empleados
           </option>
           <option value="/administrador/crear-empleado" *ngIf="tienePermiso(10)">
