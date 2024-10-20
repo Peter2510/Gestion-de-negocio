@@ -2,6 +2,7 @@ package com.gestion.empresa.backend.gestion_empresa.dto;
 
 
 import com.gestion.empresa.backend.gestion_empresa.models.Persona;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import lombok.Setter;
  * Created on: 20/10/24
  */
 
+@Data
 @Getter
 @Setter
 public class ActualizacionUsuarioAdminDTO {

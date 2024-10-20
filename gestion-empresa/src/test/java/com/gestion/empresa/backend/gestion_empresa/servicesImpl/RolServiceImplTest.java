@@ -111,4 +111,27 @@ class RolServiceImplTest {
         verify(rolRepository, times(1)).save(rol);
     }
 
+    @Test
+    void testBuscarPorId_RolEncontrado() {
+        when(rolRepository.findById(1L)).thenReturn(Optional.of(rol));
+
+        Optional<Rol> resultado = rolService.buscarPorId(1L);
+
+        assertTrue(resultado.isPresent(), "El resultado debe estar presente");
+        assertEquals(rol, resultado.get(), "El rol devuelto debe ser igual al mock");
+        assertEquals("Contabilidad", resultado.get().getNombre(), "El nombre del rol debe ser 'Administrador'");
+
+        verify(rolRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    void testBuscarPorId_RolNoEncontrado() {
+        when(rolRepository.findById(2L)).thenReturn(Optional.empty());
+
+        Optional<Rol> resultado = rolService.buscarPorId(2L);
+
+        assertFalse(resultado.isPresent(), "El resultado no debe estar presente");
+        verify(rolRepository, times(1)).findById(2L);
+    }
+
 }

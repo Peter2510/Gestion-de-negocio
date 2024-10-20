@@ -3,9 +3,11 @@ package com.gestion.empresa.backend.gestion_empresa.dto;
 import com.gestion.empresa.backend.gestion_empresa.models.Persona;
 import com.gestion.empresa.backend.gestion_empresa.models.Rol;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+@Data
 @Getter
 @Setter
 public class RegistroUsuariosDTO {
