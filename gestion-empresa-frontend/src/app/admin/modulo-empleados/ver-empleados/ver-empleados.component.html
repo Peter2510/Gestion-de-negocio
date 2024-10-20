@@ -4,14 +4,10 @@
 
 <h1 class="text-base-content bg-base-200 mt-28 pt-2 w-full h-full text-center text-2xl">Empleados registrados</h1>
 <div class="flex flex-wrap bg-base-200 w-full h-full">
-  <div *ngFor="let empleado of empleados" class="card bg-base-100 w-full sm:w-96 shadow-xl m-4">
+  <div *ngFor="let empleado of empleados" class="card bg-base-100 w-full sm:w-96 shadow-xl m-4 cursor-pointer transform transition-transform duration-200 hover:scale-105" (click)="detallesEmpleado(empleado.id)">
     <div class="card-body">
-      <h2 class="card-title text-white">{{empleado.persona.nombre}}</h2>
-      <p class="text-white">{{empleado.rol.nombre}}</p>
-      <div class="card-actions">
-        <button *ngIf="tienePermiso(11)" class="btn btn-warning text-white"
-          (click)="detallesEmpleado(empleado.id)">Editar</button>
-      </div>
+      <h2 class="card-title text-base-content">{{empleado.persona.nombre}}</h2>
+      <p class="text-base-content">{{empleado.rol.nombre}}</p>
     </div>
   </div>
 </div>

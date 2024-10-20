@@ -4,13 +4,10 @@
 
 <h1 class="text-base-content bg-base-200 mt-28 pt-2 w-full h-full text-center text-2xl">Roles registrados</h1>
 <div class="flex flex-wrap bg-base-200 w-full h-full">
-  <div *ngFor="let rol of roles" class="card bg-base-100 w-full sm:w-96 shadow-xl m-4">
+  <div *ngFor="let rol of roles" class="card bg-base-100 w-full sm:w-96 shadow-xl m-4 cursor-pointer transform transition-transform duration-200 hover:scale-105" (click)="detallesRol(rol.id)">
     <div class="card-body">
       <h2 class="card-title text-white">{{rol.nombre}}</h2>
       <p class="text-white">{{rol.descripcion}}</p>
-      <div class="card-actions">
-        <button *ngIf="tienePermiso(4)" class="btn btn-warning text-white" (click)="detallesRol(rol.id)">Editar</button>
-      </div>
     </div>
   </div>
 </div>

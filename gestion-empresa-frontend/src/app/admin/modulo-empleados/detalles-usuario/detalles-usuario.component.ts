@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Rol } from 'src/app/models/Roles';
+import { InfoPermiso, Rol } from 'src/app/models/Roles';
 import { RolesService } from '../../services/roles/roles.service';
 import { Router } from '@angular/router';
 import { Usuario } from 'src/app/models/Usuario';
@@ -17,6 +17,7 @@ export class DetallesUsuarioComponent implements OnInit{
 
   @ViewChild('registroForm') registroForm!: NgForm;
   roles: Rol[] = [];
+  permisos: InfoPermiso[] = [];
   loading: boolean = true;
   idUsuario: any;
   servicioAuth = inject(ServicioAuthService);
@@ -47,18 +48,32 @@ export class DetallesUsuarioComponent implements OnInit{
     activo: false
   }
 
-  constructor(private rolService: RolesService, private usuarioService:UsuarioService, private router:Router) {
+  constructor(private rolService: RolesService, private usuarioService:UsuarioService, private router:Router,
+    private token:ServicioAuthService) {
   }
 
   ngOnInit(): void {
     this.idUsuario = this.usuarioService.getIdUsuario();
     if(this.idUsuario){
+      this.obtenerPermisos();
       this.obtenerRolesRegistrados();
       this.obtenerInfoUsuario();
     }else{
       this.router.navigate(["/administrador/empleados-registrados"]);
     }
     
+  }
+
+  obtenerPermisos() {
+    this.rolService.obtenerRolYPermisoEspecifico(this.token.getIdTipoUsuario()).subscribe({
+      next: (data) => {
+        this.permisos = data.permisos
+      },
+      error: (error) => {
+        this.loading = false;
+        console.log(error);
+      }
+    });
   }
 
   obtenerRolesRegistrados() {
@@ -85,6 +100,10 @@ export class DetallesUsuarioComponent implements OnInit{
         this.loading = false;
       }
     })
+  }
+
+  tienePermiso(permisoId: number): boolean {
+    return this.permisos.some(permiso => permiso.permisoId === permisoId);
   }
 
 }
