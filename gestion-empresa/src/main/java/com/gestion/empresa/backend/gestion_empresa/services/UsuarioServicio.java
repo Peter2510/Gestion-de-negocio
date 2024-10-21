@@ -16,7 +16,7 @@ public interface UsuarioServicio {
     Optional<Usuarios> buscarPorId(Long id);
     Optional<Usuarios> buscarNombreUsuario(String nombreUsuario);
     // para que pueda editar
-    ResponseBackend editarUsuario(ActualizacionUsuarioAdminDTO registro);
+    ResponseBackend actualizarUsuario(ActualizacionUsuarioAdminDTO registro);
     ResponseBackend listarUsuariosPorRol(Long idRol);
     ResponseBackend listarEmpleados(Long idRol);
 }

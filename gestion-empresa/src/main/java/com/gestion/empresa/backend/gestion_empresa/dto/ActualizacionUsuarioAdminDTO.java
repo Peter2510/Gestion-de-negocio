@@ -15,6 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ActualizacionUsuarioAdminDTO {
+    private Long idUsuario;
     private String nombreUsuario;
     private Long idRol;
     private Long idGenero;

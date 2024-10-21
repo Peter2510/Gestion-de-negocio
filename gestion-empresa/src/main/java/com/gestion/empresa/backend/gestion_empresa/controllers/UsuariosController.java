@@ -1,6 +1,7 @@
 package com.gestion.empresa.backend.gestion_empresa.controllers;
 
 
+import com.gestion.empresa.backend.gestion_empresa.dto.ActualizacionUsuarioAdminDTO;
 import com.gestion.empresa.backend.gestion_empresa.dto.Login;
 import com.gestion.empresa.backend.gestion_empresa.models.Usuarios;
 import com.gestion.empresa.backend.gestion_empresa.security.JwtServicio;
@@ -46,16 +47,17 @@ public class UsuariosController {
     }
     // para generar su edicion
 
-//    @PutMapping(value = "/editarUsuario")
-//    public ResponseEntity<Object> editarUsuario(@RequestBody Usuarios usuario) {
-//        Optional<Usuarios> usuarioEditado = this.usuarioServiceImpl.editarUsuario( usuario);
-//
-//        if (usuarioEditado.isPresent()) {
-//            return ResponseEntity.ok("Usuario actualizado correctamente");
-//        } else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
-//        }
-//    }
+    @PutMapping(value = "/actualizar-usuario")
+    public ResponseEntity<Object> editarUsuario(@RequestBody ActualizacionUsuarioAdminDTO usuario) {
+        ResponseBackend response = this.usuarioServiceImpl.actualizarUsuario( usuario);
+
+        return ResponseEntity.status(response.getStatus()).body(
+                response.getOk()
+                        ? Map.of("ok", true, "mensaje", response.getMensaje())
+                        : Map.of("ok", false, "mensaje", response.getMensaje())
+        );
+
+    }
 
     @GetMapping(value="/obtener-usuarios-por-rol/{idRol}")
     public ResponseEntity<Map<String, Object>> obtenerUsuariosPorId(@PathVariable Long idRol){
