@@ -6,8 +6,13 @@ import { Time } from '@angular/common';
 import {
   DuracionServicioPrestado,
   estadoServicio,
+  servicios,
   serviciosPrestados,
 } from 'src/app/models/Servicios';
+import { JornadasLaboralesServicioService } from '../../services/Jornadas/jornadas-laborales-servicio.service';
+import { ServiciosService } from '../../services/servicios.service';
+import { HttpStatusCode } from '@angular/common/http';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-creacion-servicio',
@@ -17,26 +22,26 @@ import {
 export class CreacionServicioComponent implements OnInit {
   servicioForm: FormGroup;
   arregloHorarios: any = [];
-  diasParaHorario: dias_laborales[] = [];
+  diasParaHorario: number[] = [];
+  servicioGenral: any = [];
   arregloServiciosEspecificos: serviciosPrestados[] = [];
+  arregloDuracionServiciosEspecificos: DuracionServicioPrestado[] = [];
   todasCategorias: any;
   currentStep = 1;
   // valores para las jornadas
   horaInicio!: Time;
   horaFin!: Time;
   nombreJornada!: string;
-  estados = [
-    { id: 1, nombre: 'Activo' },
-    { id: 2, nombre: 'Inactivo' },
-  ];
-  categorias = [
-    { id: 1, nombre: 'Tecnología' },
-    { id: 2, nombre: 'Consultoría' },
-    // Agrega más categorías si es necesario
-  ];
+  id_dia_laboral: number[] = [];
 
   //servicio
   categoriaEstadoServicio = inject(CategoriasServicioService);
+  jornadasServicio = inject(JornadasLaboralesServicioService);
+  servicioServicio = inject(ServiciosService);
+  nombreServicio: any;
+  descripcionServicio: any;
+  estadoSerivicioServicio: any;
+  categoriaServicio: any;
 
   // movimientos para el steper
   goToStep(step: number) {
@@ -49,6 +54,19 @@ export class CreacionServicioComponent implements OnInit {
     }
   }
 
+  selectedImage: string | ArrayBuffer | null = null;
+
+  onImageSelected(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.selectedImage = e.target?.result as string | ArrayBuffer; // Afirmación de tipo
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   // para agregar mas
   agregarHorario() {
     const nuevoHorario: jornada_laboral = {
@@ -58,38 +76,52 @@ export class CreacionServicioComponent implements OnInit {
       nombre: this.nombreJornada,
     };
     this.arregloHorarios.push(nuevoHorario);
-    console.log(this.arregloHorarios);
+    console.log(this.arregloHorarios, this.id_dia_laboral);
   }
 
+  //ver bien que pasa con las eliminaciones
   eliminarHorario(id: number, nombre: string) {
+    let indice = this.arregloHorarios.findIndex(
+      (elementos: any) => nombre === elementos.nombre && id === elementos.id
+    );
+    //elimina
+    this.id_dia_laboral.splice(indice, 1);
     this.arregloHorarios = this.arregloHorarios.filter(
       (elementos: any) => !(nombre === elementos.nombre && id === elementos.id)
     );
-    console.log(this.arregloHorarios);
+    console.log(this.arregloHorarios, this.id_dia_laboral);
   }
 
   //  para los servicios
 
   agregarServicio() {
+    console.log(this.arregloServiciosEspecificos);
+
     const usoEstado: estadoServicio = {
       estado: '',
     };
+
+    const nuevaJornada: serviciosPrestados = {
+      id: this.arregloServiciosEspecificos.length,
+      precio: 0,
+      nombre: '',
+      estadoServicio: usoEstado,
+    };
+
     const duracionServicio: DuracionServicioPrestado = {
       nombre: '',
       duracion: {
         hours: 0,
         minutes: 0,
       },
-    };
-    const nuevaJornada: serviciosPrestados = {
-      id: this.arregloServiciosEspecificos.length,
-      estado: '',
-      nombre: '',
-      estadoSerivicio: usoEstado,
-      duracionServicioPrestado: duracionServicio,
+      servicioPrestado: nuevaJornada,
     };
     this.arregloServiciosEspecificos.push(nuevaJornada);
-    console.log(this.arregloServiciosEspecificos);
+    this.arregloDuracionServiciosEspecificos.push(duracionServicio);
+    console.log(
+      this.arregloServiciosEspecificos,
+      this.arregloDuracionServiciosEspecificos
+    );
   }
 
   eliminarServicio(id: number | undefined, nombre: string) {
@@ -98,11 +130,67 @@ export class CreacionServicioComponent implements OnInit {
     );
     console.log(this.arregloServiciosEspecificos);
   }
+
+  //funcion para crear el servicio
+  creacionServicio() {
+    const nuevoServicio: servicios = {
+      nombre: this.nombreServicio,
+      descripcion: this.descripcionServicio,
+      imagen: 'wss',
+      estadoServicio: this.estadoSerivicioServicio,
+      categoria: this.categoriaServicio,
+    };
+    console.log(this.servicioGenral);
+
+    this.servicioServicio
+      .creacionServicio(
+        nuevoServicio,
+        this.arregloHorarios,
+        this.id_dia_laboral,
+        this.arregloServiciosEspecificos,
+        this.arregloDuracionServiciosEspecificos
+      )
+      .subscribe({
+        next: (response: any) => {
+          console.log(response.mensaje, 'simon');
+          console.log(response.ok);
+
+          if (response.ok) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Ingreso de Servicio',
+              text: 'Ingreso de Servicio exitoso.',
+            });
+          }
+        },
+        error: (err) => {
+          console.log(err);
+          switch (err.status) {
+            case HttpStatusCode.NotFound:
+              Swal.fire({
+                icon: 'warning',
+                title: 'Usuario no encontrado',
+                text: 'El usuario no existe en el sistema.',
+              });
+              break;
+
+            case HttpStatusCode.BadRequest:
+              Swal.fire({
+                icon: 'error',
+                title: 'Credenciales Incorrectas',
+                text: 'Las credenciales no coinciden, por favor verifique.',
+              });
+              break;
+          }
+        },
+      });
+  }
+
   ngOnInit(): void {
     this.categoriaEstadoServicio
       .obtenerTodasCategoriasRegistradas()
       .subscribe((elementos: any) => {
-        this.todasCategorias = elementos;
+        this.todasCategorias = elementos.categorias;
         console.log(elementos);
       });
   }
