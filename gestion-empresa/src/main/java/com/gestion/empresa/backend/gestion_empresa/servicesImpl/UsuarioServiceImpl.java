@@ -75,20 +75,20 @@ public class UsuarioServiceImpl implements UsuarioServicio {
 
     @Transactional(rollbackOn = Throwable.class)
     public ResponseBackend actualizarUsuario(ActualizacionUsuarioAdminDTO usuario) {
-        //validaciones previas
-        ResponseBackend validacionResponse = validarActualizacion(usuario.getIdUsuario(), usuario);
-        if (validacionResponse != null) {
-            return validacionResponse;
-        }
 
         try {
             //buscar usuario existente
             Usuarios usuarioExistente = usuarioRepository.findById(usuario.getIdUsuario())
                     .orElseThrow(() -> new RuntimeException("El usuario no se encuentra registrado"));
 
+            //validaciones previas
+            ResponseBackend validacionResponse = validarActualizacion(usuario.getIdUsuario(), usuario);
+            if (validacionResponse != null) {
+                return validacionResponse;
+            }
+
             //actualizar datos de la entidad Persona
             Persona personaExistente = usuarioExistente.getPersona();
-            personaExistente.setCui(usuario.getPersona().getCui());
             personaExistente.setNombre(usuario.getPersona().getNombre());
             personaExistente.setNit(usuario.getPersona().getNit());
             personaExistente.setDireccion(usuario.getPersona().getDireccion());
@@ -97,10 +97,10 @@ public class UsuarioServiceImpl implements UsuarioServicio {
             personaExistente.setGenero(generoRepository.findById(usuario.getIdGenero())
                     .orElseThrow(() -> new RuntimeException("El género no se encuentra registrado")));
 
-            //guardar los cambios en la entidad Persona
+            //guardar los cambios en la persona
             personaRepository.save(personaExistente);
 
-            //actualizar los datos de la entidad Usuarios
+            //actualizar los datos de los suarios
             usuarioExistente.setNombreUsuario(usuario.getNombreUsuario());
 
             usuarioExistente.setRol(rolRepository.findById(usuario.getIdRol())
@@ -111,49 +111,54 @@ public class UsuarioServiceImpl implements UsuarioServicio {
 
             return new ResponseBackend(true, HttpStatus.OK, "Usuario actualizado exitosamente");
 
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             System.out.println("Error al actualizar usuario: " + e.getMessage());
-            return new ResponseBackend(false, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            return new ResponseBackend(false, HttpStatus.NOT_FOUND, e.getMessage());
+
+        } catch (Exception e) {
+            System.out.println("Error inesperado al actualizar usuario: " + e.getMessage());
+            return new ResponseBackend(false, HttpStatus.INTERNAL_SERVER_ERROR, "Error al actualizar usuario");
         }
     }
+
 
     private ResponseBackend validarActualizacion(Long id, ActualizacionUsuarioAdminDTO validacion) {
 
         //validar nombre de usuario (si ha cambiado)
-        usuarioRepository.findByNombreUsuario(validacion.getNombreUsuario())
-                .ifPresent(usuario -> {
-                    // Aquí usamos autoboxing para comparar el long con el Long
-                    if (!Long.valueOf(usuario.getId()).equals(id)) {
-                        throw new ResponseStatusException(HttpStatus.CONFLICT, "El nombre de usuario ya está en uso");
-                    }
-                });
+        if (usuarioRepository.findByNombreUsuario(validacion.getNombreUsuario()).isPresent()) {
+            Usuarios usuario = usuarioRepository.findByNombreUsuario(validacion.getNombreUsuario()).get();
+            if (!Long.valueOf(usuario.getId()).equals(id)) {
+                return new ResponseBackend(false, HttpStatus.CONFLICT, "El nombre de usuario ya está en uso");
+            }
+        }
 
         //validar correo (si ha cambiado)
-        personaRepository.findByCorreo(validacion.getCorreo())
-                .ifPresent(persona -> {
-                    if (!persona.getCui().equals(validacion.getPersona().getCui())) {
-                        throw new ResponseStatusException(HttpStatus.CONFLICT, "El correo electrónico ya está registrado");
-                    }
-                });
+        if (personaRepository.findByCorreo(validacion.getCorreo()).isPresent()) {
+            Persona persona = personaRepository.findByCorreo(validacion.getCorreo()).get();
+            if (!persona.getCui().equals(validacion.getPersona().getCui())) {
+                return new ResponseBackend(false, HttpStatus.CONFLICT, "El correo electrónico ya está registrado");
+            }
+        }
 
         //validar NIT (si ha cambiado)
-        personaRepository.findByNit(validacion.getPersona().getNit())
-                .ifPresent(persona -> {
-                    if (!persona.getCui().equals(validacion.getPersona().getCui())) {
-                        throw new ResponseStatusException(HttpStatus.CONFLICT, "El NIT ya está registrado");
-                    }
-                });
+        if (personaRepository.findByNit(validacion.getPersona().getNit()).isPresent()) {
+            Persona persona = personaRepository.findByNit(validacion.getPersona().getNit()).get();
+            if (!persona.getCui().equals(validacion.getPersona().getCui())) {
+                return new ResponseBackend(false, HttpStatus.CONFLICT, "El NIT ya está registrado");
+            }
+        }
 
         //validar teléfono (si ha cambiado)
-        personaRepository.findByTelefono(validacion.getPersona().getTelefono())
-                .ifPresent(persona -> {
-                    if (!persona.getCui().equals(validacion.getPersona().getCui())) {
-                        throw new ResponseStatusException(HttpStatus.CONFLICT, "El teléfono ya está registrado");
-                    }
-                });
+        if (personaRepository.findByTelefono(validacion.getPersona().getTelefono()).isPresent()) {
+            Persona persona = personaRepository.findByTelefono(validacion.getPersona().getTelefono()).get();
+            if (!persona.getCui().equals(validacion.getPersona().getCui())) {
+                return new ResponseBackend(false, HttpStatus.CONFLICT, "El teléfono ya está registrado");
+            }
+        }
 
         return null;
     }
+
 
     @Override
     public ResponseBackend listarUsuariosPorRol(Long idRol) {
