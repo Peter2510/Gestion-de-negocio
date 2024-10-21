@@ -1,5 +1,6 @@
 package com.gestion.empresa.backend.gestion_empresa.servicesImpl;
 
+import com.gestion.empresa.backend.gestion_empresa.dto.DevolverTodoServiciosDTO;
 import com.gestion.empresa.backend.gestion_empresa.dto.NuevoServicioDTO;
 import com.gestion.empresa.backend.gestion_empresa.dto.RegistroUsuariosDTO;
 import com.gestion.empresa.backend.gestion_empresa.models.*;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Author: alexxus
@@ -189,6 +192,52 @@ public class ServiciosServiceImpl implements ServiciosService {
             e.printStackTrace();
             // En caso de error, la transacción se revertirá automáticamente
             return new ResponseBackend(false, HttpStatus.INTERNAL_SERVER_ERROR, "Error al registrar servicio: " + e.getMessage());
+        }
+    }
+
+
+    // funcion de implementacion de obtener todos los servicios
+    public DevolverTodoServiciosDTO obtenerServicios() {
+
+        try {
+            // Obtén los datos de los servicios
+            List<Servicios> servicios = serviciosRepository.findAll();
+
+            // Obtén las jornadas de servicio
+            List<JornadaServicio> jornadaServicios = jornadaServicioRepository.findAll();
+
+            // Para cada JornadaServicio, desglosamos la información
+            List<DevolverTodoServiciosDTO.JornadaDTO> jornadasDTO = jornadaServicios.stream()
+                    .map(jornadaServicio -> {
+                        Servicios servicioDeterminado = jornadaServicio.getIdServicio();
+                        JornadaPorDia jornadaPorDia = jornadaServicio.getIdJornadaDia();
+                        JornadaLaboral jornadaLaboral = jornadaPorDia.getIdJornadaLaboral();
+                        DiasLaborales diasLaborales = jornadaPorDia.getIdDiaLaboral();
+
+                        // Creamos el DTO para Jornada
+                        return new DevolverTodoServiciosDTO.JornadaDTO(servicioDeterminado, jornadaPorDia, jornadaLaboral, diasLaborales);
+                    })
+                    .collect(Collectors.toList());
+
+            // Poblar el DTO con los datos
+            DevolverTodoServiciosDTO nuevoServicioDTO = new DevolverTodoServiciosDTO();
+            nuevoServicioDTO.setServicios( servicios);
+            nuevoServicioDTO.setJornadaServicio(jornadasDTO);  // Asignamos la lista de jornadas desglosadas
+
+            // Otros datos relacionados, como Duración e Imágenes, pueden ser agregados de manera similar
+            List<DiasLaborales> diasLaborales = diasLaboralesRepository.findAll();
+            List<DuracionServicioPrestado> duracionServicioPrestados = duracionServicioPrestadoRepository.findAll();
+            List<ImagenServicioPrestado> imagenServicioPrestados = imagenServicioPrestadoRepository.findAll();
+
+            nuevoServicioDTO.setDiasLaborales(diasLaborales);
+            nuevoServicioDTO.setDuracionServicioPrestados(duracionServicioPrestados);
+            nuevoServicioDTO.setImagenServicioPrestados(imagenServicioPrestados);
+
+            return nuevoServicioDTO;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
