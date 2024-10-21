@@ -1,5 +1,6 @@
 package com.gestion.empresa.backend.gestion_empresa.controllers;
 
+import com.gestion.empresa.backend.gestion_empresa.dto.DevolverTodoServiciosDTO;
 import com.gestion.empresa.backend.gestion_empresa.dto.NuevoServicioDTO;
 import com.gestion.empresa.backend.gestion_empresa.models.JornadaPorDia;
 import com.gestion.empresa.backend.gestion_empresa.models.Servicios;
@@ -13,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -77,16 +75,25 @@ public class ServicioController {
 
     // para hacer la idea de generar todda la transaccion
     // Crear o actualizar un servicio con jornadas laborales y días laborales
-    @PostMapping("/createOrUpdate")
+    @PostMapping("/creacionNuevosServicios")
     public ResponseEntity<String> createOrUpdateServicio(
             @RequestBody NuevoServicioDTO servicioRequest) {
-
-
-            // Llamar al servicio que maneja toda la lógica de creación/actualización
-            // Llamar al servicio que maneja toda la lógica de creación/actualización
+        System.out.println(servicioRequest);
             ResponseBackend response = serviciosServiceImpl.registroServicio(servicioRequest);
-
             return ResponseEntity.status(response.getStatus()).body(Map.of("ok", response.getOk(), "mensaje", response.getMensaje()).toString());
+
+
+    }
+
+
+    // para obtener todos los servicios con la info desglozada
+
+    @GetMapping("/obtenerServiciosGenerales")
+    public ResponseEntity<Map<String, Object>> obtenerServicios() {
+
+        DevolverTodoServiciosDTO response = serviciosServiceImpl.obtenerServicios();
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "todoServicios" , response));
+
 
 
     }
