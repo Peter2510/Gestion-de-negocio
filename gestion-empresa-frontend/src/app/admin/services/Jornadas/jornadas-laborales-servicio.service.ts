@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
+import { dias_laborales } from 'src/app/models/Jornadas';
 import { environment } from 'src/environments/environment.development';
 
 @Injectable({
@@ -12,9 +13,16 @@ export class JornadasLaboralesServicioService {
   private rol = 'rol';
 
   //signal
-  constructor(private http: HttpClient) {}
+  public diasLaboralesTotales = signal<dias_laborales[]>([]);
+  constructor(private http: HttpClient) {
+    this.obtenerDiasLaborales();
+  }
 
-  obtenerDiasLaborales(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/${this.dias}/obtenerTodosDias`);
+  obtenerDiasLaborales() {
+    this.http.get(`${this.baseUrl}/${this.dias}/obtenerTodosDias`).subscribe({
+      next: (elementos: any) => {
+        this.diasLaboralesTotales.set(elementos);
+      },
+    });
   }
 }

@@ -5,16 +5,15 @@ export interface servicios {
   nombre: string;
   descripcion: string;
   imagen: string;
-  estadoSerivicio: estadoServicio;
+  estadoServicio: estadoServicio;
   categoria: categorias_servicios;
 }
 
 export interface serviciosPrestados {
   id?: number;
-  estado: string;
+  precio: number;
   nombre: string;
-  estadoSerivicio: estadoServicio;
-  duracionServicioPrestado: DuracionServicioPrestado;
+  estadoServicio: estadoServicio;
 }
 
 export interface estadoServicio {
@@ -31,4 +30,5 @@ export interface DuracionServicioPrestado {
   id?: number;
   nombre: string;
   duracion: Time;
+  servicioPrestado: serviciosPrestados;
 }

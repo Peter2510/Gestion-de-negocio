@@ -2,7 +2,7 @@
 <div class="container mx-auto mt-24">
   <!-- Grid para servicios -->
   <div
-    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4"
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4 rounded"
   >
     <div
       *ngFor="let servicio of servicios"
@@ -41,15 +41,10 @@
         <!-- Título con color secundario -->
         <h2 class="card-title text-secondary">{{ servicioPrestado.nombre }}</h2>
         <p class="text-base-content">
-          Estado: {{ servicioPrestado.estadoSerivicio.estado }}
+          Estado: {{ servicioPrestado.estadoServicio.estado }}
         </p>
-        <p class="text-base-content">
-          Duración:
-          {{ servicioPrestado.duracionServicioPrestado.duracion.hours }} horas,
-          {{ servicioPrestado.duracionServicioPrestado.duracion.minutes }}
-          minutos
-        </p>
-        <div class="badge badge-secondary">{{ servicioPrestado.estado }}</div>
+        <p class="text-base-content">Duración: horas, minutos</p>
+        <div class="badge badge-secondary">{{ servicioPrestado.precio }}</div>
         <div class="card-actions justify-end">
           <button class="btn btn-outline btn-error">Cancelar</button>
         </div>

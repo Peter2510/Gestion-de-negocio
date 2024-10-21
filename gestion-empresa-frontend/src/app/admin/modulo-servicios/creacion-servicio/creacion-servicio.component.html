@@ -40,6 +40,7 @@
           type="text"
           class="input input-bordered w-full text-primary"
           placeholder="Ingrese el nombre del servicio"
+          [(ngModel)]="this.nombreServicio"
         />
         <div class="form-control">
           <label class="label">
@@ -50,15 +51,24 @@
           <textarea
             class="textarea textarea-bordered w-full text-primary"
             placeholder="Ingrese la descripción del servicio"
+            [(ngModel)]="this.descripcionServicio"
           ></textarea>
         </div>
         <div class="form-control">
           <label class="label">
             <span class="label-text text-primary">Estado del Servicio</span>
           </label>
-          <select class="select select-bordered w-full text-primary">
-            <option *ngFor="let estado of estados" [value]="estado.id">
-              {{ estado.nombre }}
+          <select
+            class="select select-bordered w-full text-primary"
+            [(ngModel)]="this.estadoSerivicioServicio"
+          >
+            <option
+              *ngFor="
+                let estado of categoriaEstadoServicio.estadoServicioElementos()
+              "
+              [value]="estado.id"
+            >
+              {{ estado.estado }}
             </option>
           </select>
         </div>
@@ -66,7 +76,10 @@
           <label class="label">
             <span class="label-text text-primary">Categoría del Servicio</span>
           </label>
-          <select class="select select-bordered w-full text-primary">
+          <select
+            class="select select-bordered w-full text-primary"
+            [(ngModel)]="this.categoriaServicio"
+          >
             <option
               *ngFor="let categoria of this.todasCategorias"
               [value]="categoria.id"
@@ -120,6 +133,7 @@
                 <td>Nombre</td>
                 <td>Hora inicio</td>
                 <td>Hora fin</td>
+                <td>Dia laboral</td>
                 <td>Acciones</td>
               </tr>
             </thead>
@@ -160,6 +174,22 @@
                     [(ngModel)]="horarioNuevos.hora_fin"
                     class="input input-bordered w-full bg-gray-700 text-gray-200"
                   />
+                </td>
+                <td>
+                  <select
+                    class="select select-bordered w-full text-primary"
+                    [(ngModel)]="id_dia_laboral[indice]"
+                    name="dia_laboral{{ indice }}"
+                  >
+                    <option
+                      *ngFor="
+                        let dias of jornadasServicio.diasLaboralesTotales()
+                      "
+                      [value]="dias.id"
+                    >
+                      {{ dias.nombre }}
+                    </option>
+                  </select>
                 </td>
                 <td>
                   <button
@@ -233,21 +263,23 @@
           Agregar Servicio
         </button>
 
-        <div class="overflow-x-auto">
-          <h2 class="text-lg font-semibold mb-4 text-gray-200">
+        <div class="overflow-x-auto p-4">
+          <h2 class="text-lg font-semibold mb-6 text-gray-200">
             Vista de servicios
           </h2>
           <table
-            class="table table-zebra w-full min-w-[768px] bg-gray-800 text-gray-100"
+            class="table table-zebra w-full min-w-[1400px] bg-gray-800 text-gray-100"
           >
             <!-- head -->
             <thead class="bg-gray-700 text-gray-300">
               <tr>
-                <th>#</th>
-                <td>Nombre</td>
-                <td>Estado</td>
-                <td>Duración (Horas:Minutos)</td>
-                <td>Acciones</td>
+                <th class="p-4">#</th>
+                <td class="p-4">Nombre</td>
+                <td class="p-4">Estado</td>
+                <td class="p-4">Precio</td>
+                <td class="p-4">Nombre del servicio de duración</td>
+                <td class="p-4">Duración (en minutos)</td>
+                <td class="p-4">Acciones</td>
               </tr>
             </thead>
             <tbody>
@@ -259,34 +291,64 @@
                 "
                 class="hover:bg-gray-700"
               >
-                <th>{{ indice + 1 }}</th>
-                <td>
+                <th class="p-4">{{ indice + 1 }}</th>
+                <td class="p-4">
                   <input
                     type="text"
                     id="nombre"
                     name="nombre"
                     [(ngModel)]="servicio.nombre"
-                    class="input input-bordered w-full bg-gray-700 text-gray-200"
+                    class="input input-bordered w-full bg-gray-700 text-gray-200 mb-4"
                     placeholder="Nombre del servicio"
                   />
                 </td>
-                <td>
+                <td class="p-4">
+                  <select
+                    class="select select-bordered w-full text-primary mb-4"
+                    name="estado_servicio_especifico{{ indice }}"
+                    [(ngModel)]="servicio.estadoServicio"
+                  >
+                    <option
+                      *ngFor="
+                        let estado of categoriaEstadoServicio.estadoServicioElementos()
+                      "
+                      [value]="estado.id"
+                    >
+                      {{ estado.estado }}
+                    </option>
+                  </select>
+                </td>
+                <td class="p-4">
                   <input
-                    type="text"
-                    id="estado"
-                    name="estado"
-                    [(ngModel)]="servicio.estadoSerivicio.estado"
-                    class="input input-bordered w-full bg-gray-700 text-gray-200"
-                    placeholder="Estado del servicio"
+                    type="number"
+                    id="precio"
+                    name="precio"
+                    [(ngModel)]="servicio.precio"
+                    class="input input-bordered w-full bg-gray-700 text-gray-200 mb-4"
                   />
                 </td>
-                <td>
+                <td class="p-4">
                   <input
-                    type="time"
+                    type="text"
+                    id="Nombre_duracion"
+                    name="Nombre_duracion{{ indice }}"
+                    class="input input-bordered w-full bg-gray-700 text-gray-200 mb-4"
+                    placeholder="Nombre de la duración"
+                    [(ngModel)]="
+                      arregloDuracionServiciosEspecificos[indice].nombre
+                    "
+                  />
+                </td>
+                <td class="p-4">
+                  <input
+                    type="number"
                     id="duracion"
-                    name="duracion"
-                    [(ngModel)]="servicio.duracionServicioPrestado.duracion"
-                    class="input input-bordered w-full bg-gray-700 text-gray-200"
+                    name="duracion{{ indice }}"
+                    class="input input-bordered w-full bg-gray-700 text-gray-200 mb-4"
+                    placeholder="Duración (min)"
+                    [(ngModel)]="
+                      this.arregloDuracionServiciosEspecificos[indice].duracion
+                    "
                   />
                 </td>
                 <td>
@@ -294,10 +356,9 @@
                     class="btn btn-outline btn-primary flex items-center text-white bg-red-600 hover:bg-red-700"
                     (click)="eliminarServicio(servicio.id, servicio.nombre)"
                   >
-                    <!-- SVG del ícono de eliminar -->
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      class="h-6 w-6 mr-2"
+                      class="h-6 w-4"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -315,6 +376,27 @@
               </tr>
             </tbody>
           </table>
+
+          <!-- Formulario para cargar imágenes -->
+          <!-- <div class="mt-8">
+            <h2 class="text-lg font-semibold mb-4 text-gray-200">
+              Cargar Imagen
+            </h2>
+            <input
+              type="file"
+              (change)="onImageSelected($event)"
+              class="input input-bordered w-full bg-gray-700 text-gray-200 mb-4"
+              accept="image/*"
+            />
+            <div *ngIf="selectedImage" class="card bg-gray-800 p-4 mt-4">
+              <h3 class="text-gray-200">Vista previa de la imagen</h3>
+              <img
+                [src]="selectedImage"
+                alt="Vista previa"
+                class="mt-2 w-full h-auto rounded"
+              />
+            </div>
+          </div> -->
         </div>
 
         <div class="form-control mt-6 flex justify-between">
@@ -327,6 +409,7 @@
           <div class="flex space-x-4">
             <button
               class="btn btn-primary w-full text-white bg-blue-600 hover:bg-blue-700"
+              (click)="this.creacionServicio()"
             >
               Registrar
             </button>
