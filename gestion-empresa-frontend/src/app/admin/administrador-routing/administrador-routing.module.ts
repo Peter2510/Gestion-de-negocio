@@ -16,60 +16,64 @@ import { CrearCategoriaComponent } from '../modulo-categorias/crear-categoria/cr
 import { VerEmpleadosComponent } from '../modulo-empleados/ver-empleados/ver-empleados.component';
 import { DetallesUsuarioComponent } from '../modulo-empleados/detalles-usuario/detalles-usuario.component';
 import { permissionGuard } from 'src/app/auth/guard/admin/guards.guard';
+import { jwtValidoGuard } from 'src/app/auth/guard/admin/jwt-valido.guard';
+
 import { SinAutorizacionComponent } from '../sin-autorizacion/sin-autorizacion.component';
 
 const routes: Routes = [
-  { path: 'panel-administrador', component: PanelAdministradorComponent, },
+  { path: 'panel-administrador', component: PanelAdministradorComponent,
+    canActivate: [jwtValidoGuard],
+   },
   { path: 'informacion-empresa', component: InformacionEmpresaComponent,
-    canActivate: [permissionGuard],
+    canActivate: [permissionGuard,jwtValidoGuard],
     data: { permissions: [2] }
    },
   { path: 'roles-registrados', component: VerRolesComponent,
-    canActivate: [permissionGuard],
+    canActivate: [permissionGuard,jwtValidoGuard],
     data: { permissions: [12] }
    },
   { path: 'crear-rol', component: CrearRolComponent,
-    canActivate: [permissionGuard],
+    canActivate: [permissionGuard,jwtValidoGuard],
     data: { permissions: [3] }
    },
   { path: 'detalles-rol', component: RolEspecificoComponent,
-    canActivate: [permissionGuard],
+    canActivate: [permissionGuard,jwtValidoGuard],
     data: { permissions: [12, 4] }
    },
   { path: 'crear-servicio', component: CreacionServicioComponent,
-    canActivate: [permissionGuard],
+    canActivate: [permissionGuard,jwtValidoGuard],
     data: { permissions: [5] }
    },
   { path: 'vista-servicio/:id', component: VistaServicioEspecificoComponent,
-    canActivate: [permissionGuard],
+    canActivate: [permissionGuard,jwtValidoGuard],
     data: { permissions: [13,6] }
    },
   { path: 'vista-servicio', component: VistaServiciosComponent,
-    canActivate: [permissionGuard],
+    canActivate: [permissionGuard,jwtValidoGuard],
     data: { permissions: [13] }
    },
   { path: 'crear-empleado', component: CrearEmpleadoComponent,
-    canActivate: [permissionGuard],
+    canActivate: [permissionGuard,jwtValidoGuard],
     data: { permissions: [10] }
    },
   { path: 'empleados-registrados', component: VerEmpleadosComponent,
-    canActivate: [permissionGuard],
+    canActivate: [permissionGuard,jwtValidoGuard],
     data: { permissions: [15] }
    },
   { path: 'categorias-registradas', component: VerCategoriasComponent,
-    canActivate: [permissionGuard],
+    canActivate: [permissionGuard,jwtValidoGuard],
     data: { permissions: [17] }
    },
   { path: 'detalles-categoria', component: CategoriaEspecificaComponent,
-    canActivate: [permissionGuard],
+    canActivate: [permissionGuard,jwtValidoGuard],
     data: { permissions: [17, 18] }
    },
   { path: 'crear-categoria', component: CrearCategoriaComponent,
-    canActivate: [permissionGuard],
+    canActivate: [permissionGuard,jwtValidoGuard],
     data: { permissions: [16] }
    },
   { path: 'detalles-usuario', component: DetallesUsuarioComponent,
-    canActivate: [permissionGuard],
+    canActivate: [permissionGuard,jwtValidoGuard],
     data: { permissions: [15,11] }
    },
   { path: 'acceso-denegado', component: SinAutorizacionComponent },
