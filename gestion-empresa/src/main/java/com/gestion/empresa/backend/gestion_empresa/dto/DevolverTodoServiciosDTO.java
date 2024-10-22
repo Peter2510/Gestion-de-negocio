@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Author: alexxus
@@ -21,7 +22,6 @@ public class DevolverTodoServiciosDTO {
     private List<JornadaDTO> jornadaServicio;  // Cambiamos para incluir el desglose de jornada
 
     // Otros atributos relacionados
-    private List<DiasLaborales> diasLaborales;
     private List<DuracionServicioPrestado> duracionServicioPrestados;
     private List<ImagenServicioPrestado> imagenServicioPrestados;
 
@@ -31,8 +31,20 @@ public class DevolverTodoServiciosDTO {
     @NoArgsConstructor
     public static class JornadaDTO {
         private Servicios servicios;
+        private ServicioDTO serviciosEspecificos;
         private JornadaPorDia jornadaPorDia;  // Incluye JornadaPorDia y sus relaciones
         private JornadaLaboral jornadaLaboral;
         private DiasLaborales diasLaborales;
+    }
+
+//clase para servicios
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ServicioDTO {
+        private DuracionServicioPrestado duracionServicioPrestado; // para los servicios
+        private ServiciosAsignado serviciosAsignado;
+
     }
 }

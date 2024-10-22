@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -95,6 +96,24 @@ public class ServicioController {
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "todoServicios" , response));
 
 
+
+    }
+
+
+    @GetMapping("/obtenerTodosServicios")
+    public ResponseEntity<Map<String, Object>> obtenerTodosServicios() {
+
+        List<Servicios> response = serviciosServiceImpl.obtenerTodosServicios();
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "todoServicios" , response));
+
+    }
+
+
+    @GetMapping("/obtenerTodosServiciosEspecificos/{id}")
+    public ResponseEntity<Map<String, Object>> obtenerTodosServiciosEspecificos() {
+
+        List<Servicios> response = serviciosServiceImpl.obtenerTodosServicios();
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "todoServicios" , response));
 
     }
 }
