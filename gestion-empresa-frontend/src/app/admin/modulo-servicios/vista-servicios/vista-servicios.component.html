@@ -5,18 +5,20 @@
     class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4 rounded"
   >
     <div
-      *ngFor="let servicio of servicios"
+      *ngFor="let servicio of this.serviciosServicio.todosServicios()"
       class="card w-full bg-base-100 shadow-xl"
     >
-      <figure>
+      <!-- <figure>
         <img [src]="servicio.imagen" alt="{{ servicio.nombre }}" />
-      </figure>
+      </figure> -->
       <div class="card-body">
         <!-- Título con color basado en el tema -->
         <h2 class="card-title text-primary">{{ servicio.nombre }}</h2>
         <!-- Descripción con color base del contenido -->
         <p class="text-base-content">{{ servicio.descripcion }}</p>
-        <div class="badge badge-primary">{{ servicio.categoria.tipo }}</div>
+        <div class="badge badge-primary">
+          {{ servicio.idEstadoServicio.estado }}
+        </div>
         <div class="card-actions justify-end">
           <button
             class="btn btn-primary"
@@ -24,29 +26,6 @@
           >
             Ver más
           </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Grid para servicios prestados -->
-  <div
-    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4 mt-10"
-  >
-    <div
-      *ngFor="let servicioPrestado of serviciosPrestados"
-      class="card w-full bg-base-100 shadow-xl"
-    >
-      <div class="card-body">
-        <!-- Título con color secundario -->
-        <h2 class="card-title text-secondary">{{ servicioPrestado.nombre }}</h2>
-        <p class="text-base-content">
-          Estado: {{ servicioPrestado.estadoServicio.estado }}
-        </p>
-        <p class="text-base-content">Duración: horas, minutos</p>
-        <div class="badge badge-secondary">{{ servicioPrestado.precio }}</div>
-        <div class="card-actions justify-end">
-          <button class="btn btn-outline btn-error">Cancelar</button>
         </div>
       </div>
     </div>
