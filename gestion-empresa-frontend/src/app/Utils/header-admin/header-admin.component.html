@@ -30,10 +30,12 @@
         >
         <li>
           <label class="grid cursor-pointer place-items-center">
-            <input
-              type="checkbox"
-              value="retro"
-              class="toggle theme-controller bg-base-content col-span-2 col-start-1 row-start-1" />
+              <input
+                type="checkbox"
+                value="retro"
+                (change)="toggleTheme($event)"
+                [checked]="isBusinnesTheme"
+                class="toggle theme-controller bg-base-content col-span-2 col-start-1 row-start-1" />
             <svg
               class="stroke-base-100 fill-base-100 col-start-1 row-start-1"
               xmlns="http://www.w3.org/2000/svg"
@@ -229,22 +231,27 @@
     
     <div *ngIf="showNotifications" class="absolute right-0 top-20 bg-base-100 border rounded-lg shadow-lg p-4 w-72">
       <ul class="space-y-4">
-        <li *ngFor="let notificacion of notificaciones" 
-            [ngClass]="notificacion.leido ? 'bg-base-100' : 'bg-base-300'" 
-            class="text-base-content p-2 border-b last:border-b-0">
-          <h4 class="font-bold text-lg">{{ notificacion.titulo }}</h4>
-          <p class="text-sm text-base-content">{{ notificacion.mensaje }}</p>
-          <p class="text-xs text-base-content">{{ notificacion.fecha }}</p>
-          <a *ngIf="!notificacion.leido" class="link link-hover text-blue-600" (click)="actualizarNotificacion(notificacion.id)">
-            Marcar como leído
-          </a>
-        </li>
+        <ng-container *ngIf="notificaciones.length; else noMessages">
+          <li *ngFor="let notificacion of notificaciones" 
+              [ngClass]="notificacion.leido ? 'bg-base-100' : 'bg-base-300'" 
+              class="text-base-content p-2 border-b last:border-b-0">
+            <h4 class="font-bold text-lg">{{ notificacion.titulo }}</h4>
+            <p class="text-sm text-base-content">{{ notificacion.mensaje }}</p>
+            <p class="text-xs text-base-content">{{ notificacion.fecha }}</p>
+            <a *ngIf="!notificacion.leido" class="link link-hover text-blue-600" (click)="actualizarNotificacion(notificacion.id)">
+              Marcar como leído
+            </a>
+          </li>
+        </ng-container>
+        <ng-template #noMessages>
+          <li class="text-base-content text-center p-2">
+            Sin notificaciones
+          </li>
+        </ng-template>
       </ul>
     </div>
     
     
-    
-
     <!-- Avatar con Dropdown -->
     <div class="dropdown dropdown-end">
       <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
