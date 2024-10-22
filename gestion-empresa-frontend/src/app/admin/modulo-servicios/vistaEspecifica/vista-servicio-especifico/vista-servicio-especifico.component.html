@@ -57,6 +57,40 @@
           </div>
         </div>
       </section>
+      <section class="py-10 bg-gray-100">
+        <div class="container mx-auto">
+          <h1 class="text-2xl font-bold text-center mb-6">
+            Horarios de jornadas
+          </h1>
+          <div class="overflow-x-auto">
+            <table class="table table-zebra w-full">
+              <thead>
+                <tr class="text-gray-900">
+                  <th>No.</th>
+                  <th>Nombre del Corte</th>
+                  <th>Hora de Inicio</th>
+                  <th>Hora de Fin</th>
+                  <th>Día</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let jornadas of this.jornadasServicio.jornadasEspecificas();
+                    let indice = index
+                  "
+                >
+                  <td>{{ indice + 1 }}</td>
+                  <td>{{ jornadas[0] }}</td>
+                  <td>{{ jornadas[1] }}</td>
+                  <td>{{ jornadas[2] }}</td>
+                  <td>{{ jornadas[3] }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 </section>

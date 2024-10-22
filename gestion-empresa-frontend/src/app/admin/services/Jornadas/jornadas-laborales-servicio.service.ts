@@ -10,10 +10,12 @@ import { environment } from 'src/environments/environment.development';
 export class JornadasLaboralesServicioService {
   private baseUrl = environment.URL;
   private dias = 'diasLaborales';
+  private jornadasServicios = 'jornadaServicio';
   private rol = 'rol';
 
   //signal
   public diasLaboralesTotales = signal<dias_laborales[]>([]);
+  public jornadasEspecificas = signal<any[]>([]);
   constructor(private http: HttpClient) {
     this.obtenerDiasLaborales();
   }
@@ -24,5 +26,23 @@ export class JornadasLaboralesServicioService {
         this.diasLaboralesTotales.set(elementos);
       },
     });
+  }
+
+  // jornadas especificos
+  obtenerTodasJornadasEspecificos(id: number) {
+    this.http
+      .get(
+        `${this.baseUrl}/${this.jornadasServicios}/obtenerTodasJornadas/${id}`
+      )
+      .subscribe({
+        next: (data: any) => {
+          console.log(data);
+
+          this.jornadasEspecificas.set(data.todoServicios);
+        },
+        error: (err) => {
+          console.error('Error al obtener estados de servicio:', err);
+        },
+      });
   }
 }
