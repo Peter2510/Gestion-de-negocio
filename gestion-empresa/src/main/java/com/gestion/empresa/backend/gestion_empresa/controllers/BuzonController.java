@@ -37,7 +37,7 @@ public class BuzonController {
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "notificaciones", notificaciones));
     }
 
-    @PutMapping("/actualizar-notificacion/{idNotificacion}")
+    @PutMapping ("/actualizar-notificacion/{idNotificacion}")
     public ResponseEntity<Map<String, Object>> actualizarMensaje(@PathVariable Long idNotificacion) {
 
         Optional<Notificacion> notificacion = notificacionService.buscarNotificacionPorId(idNotificacion);
