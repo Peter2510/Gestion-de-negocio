@@ -15,22 +15,65 @@ import { CategoriaEspecificaComponent } from '../modulo-categorias/categoria-esp
 import { CrearCategoriaComponent } from '../modulo-categorias/crear-categoria/crear-categoria.component';
 import { VerEmpleadosComponent } from '../modulo-empleados/ver-empleados/ver-empleados.component';
 import { DetallesUsuarioComponent } from '../modulo-empleados/detalles-usuario/detalles-usuario.component';
+import { permissionGuard } from 'src/app/auth/guard/admin/guards.guard';
+import { SinAutorizacionComponent } from '../sin-autorizacion/sin-autorizacion.component';
 
 const routes: Routes = [
-  { path: 'panel-administrador', component: PanelAdministradorComponent },
-  { path: 'informacion-empresa', component: InformacionEmpresaComponent },
-  { path: 'roles-registrados', component: VerRolesComponent },
-  { path: 'crear-rol', component: CrearRolComponent },
-  { path: 'detalles-rol', component: RolEspecificoComponent },
-  { path: 'crear-servicio', component: CreacionServicioComponent },
-  { path: 'vista-servicio/:id', component: VistaServicioEspecificoComponent },
-  { path: 'vista-servicio', component: VistaServiciosComponent },
-  { path: 'crear-empleado', component: CrearEmpleadoComponent },
-  { path: 'empleados-registrados', component: VerEmpleadosComponent },
-  { path: 'categorias-registradas', component: VerCategoriasComponent },
-  { path: 'detalles-categoria', component: CategoriaEspecificaComponent },
-  { path: 'crear-categoria', component: CrearCategoriaComponent },
-  { path: 'detalles-usuario', component: DetallesUsuarioComponent },
+  { path: 'panel-administrador', component: PanelAdministradorComponent, },
+  { path: 'informacion-empresa', component: InformacionEmpresaComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: [2] }
+   },
+  { path: 'roles-registrados', component: VerRolesComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: [12] }
+   },
+  { path: 'crear-rol', component: CrearRolComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: [3] }
+   },
+  { path: 'detalles-rol', component: RolEspecificoComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: [12, 4] }
+   },
+  { path: 'crear-servicio', component: CreacionServicioComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: [5] }
+   },
+  { path: 'vista-servicio/:id', component: VistaServicioEspecificoComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: [13,6] }
+   },
+  { path: 'vista-servicio', component: VistaServiciosComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: [13] }
+   },
+  { path: 'crear-empleado', component: CrearEmpleadoComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: [10] }
+   },
+  { path: 'empleados-registrados', component: VerEmpleadosComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: [15] }
+   },
+  { path: 'categorias-registradas', component: VerCategoriasComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: [17] }
+   },
+  { path: 'detalles-categoria', component: CategoriaEspecificaComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: [17, 18] }
+   },
+  { path: 'crear-categoria', component: CrearCategoriaComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: [16] }
+   },
+  { path: 'detalles-usuario', component: DetallesUsuarioComponent,
+    canActivate: [permissionGuard],
+    data: { permissions: [15,11] }
+   },
+  { path: 'acceso-denegado', component: SinAutorizacionComponent },
+
 
   
   {

@@ -24,6 +24,7 @@ import { CategoriaEspecificaComponent } from '../modulo-categorias/categoria-esp
 import { CrearCategoriaComponent } from '../modulo-categorias/crear-categoria/crear-categoria.component';
 import { VerEmpleadosComponent } from '../modulo-empleados/ver-empleados/ver-empleados.component';
 import { DetallesUsuarioComponent } from '../modulo-empleados/detalles-usuario/detalles-usuario.component';
+import { SinAutorizacionComponent } from '../sin-autorizacion/sin-autorizacion.component';
 
 
 
@@ -44,7 +45,8 @@ import { DetallesUsuarioComponent } from '../modulo-empleados/detalles-usuario/d
     CategoriaEspecificaComponent,
     CrearCategoriaComponent,
     VerEmpleadosComponent,
-    DetallesUsuarioComponent
+    DetallesUsuarioComponent,
+    SinAutorizacionComponent
   ],
   imports: [
     CommonModule,

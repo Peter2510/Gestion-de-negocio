@@ -7,12 +7,16 @@ import { Genero, Persona } from 'src/app/models/Persona';
 import { Usuario } from 'src/app/models/Usuario';
 import { environment } from 'src/environments/environment.development';
 import { jwtDecode } from 'jwt-decode';
+import { InfoPermiso } from 'src/app/models/Roles';
+import { RolesService } from 'src/app/admin/services/roles/roles.service';
 @Injectable({
   providedIn: 'root',
 })
 export class ServicioAuthService {
   private readonly directiva = 'auth';
   private readonly url = environment.URL;
+  permisos: InfoPermiso[] = [];
+
 
   //creacion de signal
   public generos = signal<Genero[]>([]);
@@ -21,9 +25,27 @@ export class ServicioAuthService {
   constructor(
     private http: HttpClient,
     private cookieService: CookieService,
-    private router: Router
+    private router: Router,
+    private rolService:RolesService
   ) {
     this.obtenerGeneros();
+  }
+
+  async obtenerPermisos() {
+    try {
+      const data = await this.rolService.obtenerRolYPermisoEspecifico(this.getIdTipoUsuario()).toPromise();
+      this.permisos = data.permisos;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async tienePermiso(permisoId: number): Promise<boolean> {
+    if (this.permisos.length === 0) {
+      await this.obtenerPermisos();
+    }
+    console.log(this.permisos, "desde servicio");
+    return this.permisos.some(permiso => permiso.permisoId === permisoId);
   }
 
   // para el ingreso de los usuarios
