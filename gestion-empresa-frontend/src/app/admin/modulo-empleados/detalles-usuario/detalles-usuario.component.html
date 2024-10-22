@@ -26,7 +26,7 @@
           <label class="label">
             <span class="label-text">CUI de usuario</span>
           </label>
-          <input type="text" placeholder="CUI de usuario"
+          <input type="text" placeholder="CUI de usuario" readonly
             class="input input-bordered focus:bg-slate-950 text-base-content w-full" name="cui" 
             [(ngModel)]="usuario.persona.cui"
             #cui="ngModel" required pattern="^\d{10}$" minlength="10" maxlength="10" />
@@ -135,7 +135,7 @@
 
         <!-- Botón para enviar -->
         <div class="form-control mt-6 bg-base-100 border-none" *ngIf="tienePermiso(11)">
-          <button [disabled]="registroForm.invalid" class="btn btn-primary w-full">
+          <button (click)="actualizarUsuario()" [disabled]="registroForm.invalid" class="btn btn-primary w-full">
             Guardar cambios
           </button>
         </div>

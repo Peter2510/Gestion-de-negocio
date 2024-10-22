@@ -33,4 +33,8 @@ export class UsuarioService {
   obtenerUsuario(id: number):Observable<any>{
     return this.http.get(`${this.baseUrl}/${this.usuarios}/obtener-usuario/${id}`)
   }
+
+  actualizarUsuario(usuario):Observable<any>{
+    return this.http.put(`${this.baseUrl}/${this.usuarios}/actualizar-usuario`, usuario)
+  }
 }

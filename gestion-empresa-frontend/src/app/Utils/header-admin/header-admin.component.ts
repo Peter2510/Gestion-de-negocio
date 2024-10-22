@@ -6,7 +6,9 @@ import { PermisosService } from 'src/app/admin/services/permisos/permisos.servic
 import { RolesService } from 'src/app/admin/services/roles/roles.service';
 import { ServicioAuthService } from 'src/app/auth/services/servicio-auth.service';
 import { Empresa } from 'src/app/models/Empresa';
+import { Notificacion } from 'src/app/models/Notificacion';
 import { InfoPermiso, Permiso } from 'src/app/models/Roles';
+import { BuzonService } from 'src/app/services/buzon/buzon.service';
 
 @Component({
   selector: 'app-header-admin',
@@ -20,14 +22,17 @@ export class HeaderAdminComponent implements OnInit {
   permisos: InfoPermiso[] = [];
   tienePermisos = true
   isBusinnesTheme= true
+  notificaciones:Notificacion[] = []
+  showNotifications = false;
 
   constructor(private empresaService: EmpresaService, private router: Router, private rolService:RolesService, 
-    private token:ServicioAuthService) { }
+    private token:ServicioAuthService, private buzonService:BuzonService) { }
 
   ngOnInit(): void {
     this.obtenerPermisos();
     this.obtenerInfoEmpresa();
     this.validarTheme();
+    this.obtenerNotificaciones();
   }
 
   obtenerInfoEmpresa(){
@@ -41,6 +46,26 @@ export class HeaderAdminComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  obtenerNotificaciones(){
+    console.log(this.token.getIdUsuario());
+    
+    this.buzonService.obtenerNotificaciones(this.token.getIdUsuario()).subscribe({
+      next: (data) => {
+        this.notificaciones = data.notificaciones;
+        console.log(this.notificaciones);
+        console.log(data);
+        
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
+  get unreadCount(): number {
+    return this.notificaciones.filter(n => !n.leido).length;
   }
 
   validarTheme(){
@@ -84,5 +109,19 @@ export class HeaderAdminComponent implements OnInit {
     this.token.logout();
   }
 
+  toggleNotifications() {
+    this.showNotifications = !this.showNotifications;
+  }
+
+  actualizarNotificacion(id:any){
+    this.buzonService.actualizarNotificacion(id).subscribe({
+      next: (data) => {
+        this.obtenerNotificaciones();
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
 
 }

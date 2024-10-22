@@ -7,13 +7,14 @@ import { Usuario } from 'src/app/models/Usuario';
 import { ServicioAuthService } from 'src/app/auth/services/servicio-auth.service';
 import { UsuarioService } from '../../services/usuario/usuario.service';
 import Swal from 'sweetalert2';
+import { ActualizacionUsuario, PersonaActualizacion } from 'src/app/models/ActualizacionUsuario';
 
 @Component({
   selector: 'app-detalles-usuario',
   templateUrl: './detalles-usuario.component.html',
   styleUrls: ['./detalles-usuario.component.css']
 })
-export class DetallesUsuarioComponent implements OnInit{
+export class DetallesUsuarioComponent implements OnInit {
 
   @ViewChild('registroForm') registroForm!: NgForm;
   roles: Rol[] = [];
@@ -21,8 +22,9 @@ export class DetallesUsuarioComponent implements OnInit{
   loading: boolean = true;
   idUsuario: any;
   servicioAuth = inject(ServicioAuthService);
+  actualizacion: ActualizacionUsuario;
 
-  usuario:Usuario = {
+  usuario: Usuario = {
     id: 0,
     persona: {
       id: 0,
@@ -48,20 +50,20 @@ export class DetallesUsuarioComponent implements OnInit{
     activo: false
   }
 
-  constructor(private rolService: RolesService, private usuarioService:UsuarioService, private router:Router,
-    private token:ServicioAuthService) {
+  constructor(private rolService: RolesService, private usuarioService: UsuarioService, private router: Router,
+    private token: ServicioAuthService) {
   }
 
   ngOnInit(): void {
     this.idUsuario = this.usuarioService.getIdUsuario();
-    if(this.idUsuario){
+    if (this.idUsuario) {
       this.obtenerPermisos();
       this.obtenerRolesRegistrados();
       this.obtenerInfoUsuario();
-    }else{
+    } else {
       this.router.navigate(["/administrador/empleados-registrados"]);
     }
-    
+
   }
 
   obtenerPermisos() {
@@ -87,19 +89,60 @@ export class DetallesUsuarioComponent implements OnInit{
     })
   }
 
-  obtenerInfoUsuario(){
+  obtenerInfoUsuario() {
     this.usuarioService.obtenerUsuario(this.idUsuario).subscribe({
-      next: (data)=>{
+      next: (data) => {
         this.usuario = data.usuario;
         this.loading = false;
-      }, error: (error)=>{
+      }, error: (error) => {
         Swal.fire({
           title: error.error.mensaje
         })
-        console.log( error)
+        console.log(error)
         this.loading = false;
       }
     })
+  }
+
+  actualizarUsuario() {
+    this.configurarPersona();
+    this.loading = true;
+    console.log(this.actualizacion);
+
+    this.usuarioService.actualizarUsuario(this.actualizacion).subscribe({
+      next: (data) => {
+        Swal.fire({
+          title: data.mensaje,
+          icon: 'success'
+        })
+        this.loading = false;
+      }, error: (error) => {
+        Swal.fire({
+          title: error.error.mensaje,
+          icon: 'error'
+        })
+        this.loading = false;
+        console.log(error)
+      }
+    })
+  }
+
+  configurarPersona() {
+    this.actualizacion = {
+      idUsuario: this.usuario.id,
+      nombreUsuario: this.usuario.nombreUsuario,
+      idRol: this.usuario.rol.id,
+      idGenero: this.usuario.persona.genero.id,
+      persona: {
+        cui: this.usuario.persona.cui,
+        direccion: this.usuario.persona.direccion,
+        nit: this.usuario.persona.nit,
+        nombre: this.usuario.persona.nombre,
+        telefono: this.usuario.persona.telefono,
+      },
+      correo: this.usuario.persona.correo,
+      activo: this.usuario.activo
+    }
   }
 
   tienePermiso(permisoId: number): boolean {
