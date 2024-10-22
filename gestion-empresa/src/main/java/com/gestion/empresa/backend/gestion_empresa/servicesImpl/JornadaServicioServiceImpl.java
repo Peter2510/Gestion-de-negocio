@@ -19,6 +19,7 @@ public class JornadaServicioServiceImpl implements JornadaServicioService {
     private JornadaServicioRepository jornadaServicioRepository;
     @Override
     public List<Object[]> obtenerTodasJornadas(Long idServicio) {
+        System.out.println(idServicio);
         return jornadaServicioRepository.findByServicio(idServicio);
 
     }
