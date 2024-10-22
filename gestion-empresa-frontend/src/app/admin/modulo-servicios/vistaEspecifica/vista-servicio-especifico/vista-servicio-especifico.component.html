@@ -1,6 +1,6 @@
 <app-header-admin />
 
-<section class="text-gray-600 body-font">
+<section class="text-gray-600 body-font mt-6">
   <div class="container px-5 py-24 mx-auto flex flex-wrap">
     <div class="lg:w-1/2 w-full mb-10 lg:mb-0 rounded-lg overflow-hidden">
       <img
@@ -12,129 +12,51 @@
     <div
       class="flex flex-col flex-wrap lg:py-6 -mb-10 lg:w-1/2 lg:pl-12 lg:text-left text-center"
     >
-      <div class="flex flex-col mb-10 lg:items-start items-center">
-        <div
-          class="w-12 h-12 inline-flex items-center justify-center rounded-full bg-pink-100 text-pink-500 mb-5"
-        >
-          <svg
-            fill="none"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            class="w-6 h-6"
-            viewBox="0 0 24 24"
-          >
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-          </svg>
-        </div>
-        <div class="flex-grow">
-          <h2 class="text-gray-900 text-lg title-font font-medium mb-3">
-            Shooting Stars
-          </h2>
-          <p class="leading-relaxed text-base">
-            Blue bottle crucifix vinyl post-ironic four dollar toast vegan
-            taxidermy. Gastropub indxgo juice poutine.
-          </p>
-          <a class="mt-3 text-pink-500 inline-flex items-center"
-            >Learn More
-            <svg
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              class="w-4 h-4 ml-2"
-              viewBox="0 0 24 24"
+      <!-- Ciclo *ngFor para iterar sobre los servicios -->
+      <section class="py-10 bg-gray-100">
+        <div class="container mx-auto">
+          <h1 class="text-2xl font-bold text-center mb-6">
+            Servicios Disponibles
+          </h1>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div
+              *ngFor="
+                let servicio of this.serviciosServicio.serviciosEspecificos()
+              "
+              class="card w-full bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition duration-300 ease-in-out"
             >
-              <path d="M5 12h14M12 5l7 7-7 7"></path>
-            </svg>
-          </a>
+              <div class="flex items-center mb-4">
+                <div
+                  class="w-12 h-12 flex items-center justify-center rounded-full bg-pink-100 text-pink-500"
+                >
+                  <svg
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    class="w-8 h-8"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 17v2a1 1 0 01-1 1H9a1 1 0 01-1-1v-2M10 11V4m4 0v7M4 17h16M4 12V5a2 2 0 012-2h12a2 2 0 012 2v7"
+                    ></path>
+                  </svg>
+                </div>
+                <h2 class="text-gray-900 text-lg title-font font-medium ml-3">
+                  {{ servicio[2] }}
+                  <!-- Nombre del servicio -->
+                </h2>
+              </div>
+              <p class="leading-relaxed text-base mb-4">
+                Duración: {{ servicio[0] }} minutos <br />
+                Tipo: {{ servicio[1] }} <br />
+                Precio: Q{{ servicio[3] }}
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="flex flex-col mb-10 lg:items-start items-center">
-        <div
-          class="w-12 h-12 inline-flex items-center justify-center rounded-full bg-pink-100 text-pink-500 mb-5"
-        >
-          <svg
-            fill="none"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            class="w-6 h-6"
-            viewBox="0 0 24 24"
-          >
-            <circle cx="6" cy="6" r="3"></circle>
-            <circle cx="6" cy="18" r="3"></circle>
-            <path d="M20 4L8.12 15.88M14.47 14.48L20 20M8.12 8.12L12 12"></path>
-          </svg>
-        </div>
-        <div class="flex-grow">
-          <h2 class="text-gray-900 text-lg title-font font-medium mb-3">
-            The Catalyzer
-          </h2>
-          <p class="leading-relaxed text-base">
-            Blue bottle crucifix vinyl post-ironic four dollar toast vegan
-            taxidermy. Gastropub indxgo juice poutine.
-          </p>
-          <a class="mt-3 text-pink-500 inline-flex items-center"
-            >Learn More
-            <svg
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              class="w-4 h-4 ml-2"
-              viewBox="0 0 24 24"
-            >
-              <path d="M5 12h14M12 5l7 7-7 7"></path>
-            </svg>
-          </a>
-        </div>
-      </div>
-      <div class="flex flex-col mb-10 lg:items-start items-center">
-        <div
-          class="w-12 h-12 inline-flex items-center justify-center rounded-full bg-pink-100 text-pink-500 mb-5"
-        >
-          <svg
-            fill="none"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            class="w-6 h-6"
-            viewBox="0 0 24 24"
-          >
-            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-        </div>
-        <div class="flex-grow">
-          <h2 class="text-gray-900 text-lg title-font font-medium mb-3">
-            Neptune
-          </h2>
-          <p class="leading-relaxed text-base">
-            Blue bottle crucifix vinyl post-ironic four dollar toast vegan
-            taxidermy. Gastropub indxgo juice poutine.
-          </p>
-          <a class="mt-3 text-pink-500 inline-flex items-center"
-            >Learn More
-            <svg
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              class="w-4 h-4 ml-2"
-              viewBox="0 0 24 24"
-            >
-              <path d="M5 12h14M12 5l7 7-7 7"></path>
-            </svg>
-          </a>
-        </div>
-      </div>
+      </section>
     </div>
   </div>
 </section>

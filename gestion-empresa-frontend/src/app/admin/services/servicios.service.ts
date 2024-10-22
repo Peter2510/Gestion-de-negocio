@@ -15,10 +15,14 @@ import { environment } from 'src/environments/environment.development';
 export class ServiciosService {
   private baseUrl = environment.URL;
   private servicios = 'servicios';
+  private duracionServicioPrestado = 'duracionServicioPrestado';
 
   //signal
   public todosServicios = signal<any>([]);
-  constructor(private http: HttpClient) {}
+  public serviciosEspecificos = signal<any>([]);
+  constructor(private http: HttpClient) {
+    this.obtenerTodosServicios();
+  }
 
   //funcion para crear nuevos servicios
   creacionServicio(
@@ -67,12 +71,30 @@ export class ServiciosService {
   //servicio para obtener todos los servicios de un empleado y sus elementos especificos
   obtenerTodosServicios() {
     this.http
-      .get(`${this.baseUrl}/${this.servicios}/obtenerServiciosGenerales`)
+      .get(`${this.baseUrl}/${this.servicios}/obtenerTodosServicios`)
       .subscribe({
         next: (data: any) => {
           console.log(data);
 
           this.todosServicios.set(data.todoServicios);
+        },
+        error: (err) => {
+          console.error('Error al obtener estados de servicio:', err);
+        },
+      });
+  }
+
+  // servicios especificos
+  obtenerTodosServiciosEspecificos(id: number) {
+    this.http
+      .get(
+        `${this.baseUrl}/${this.duracionServicioPrestado}/obtenerTodosServiciosEspecificos/${id}`
+      )
+      .subscribe({
+        next: (data: any) => {
+          console.log(data);
+
+          this.serviciosEspecificos.set(data.todoServicios);
         },
         error: (err) => {
           console.error('Error al obtener estados de servicio:', err);
