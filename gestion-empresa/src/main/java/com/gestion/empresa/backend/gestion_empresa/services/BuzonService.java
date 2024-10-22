@@ -2,6 +2,7 @@ package com.gestion.empresa.backend.gestion_empresa.services;
 
 
 import com.gestion.empresa.backend.gestion_empresa.models.Buzon;
+import com.gestion.empresa.backend.gestion_empresa.models.Notificacion;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,5 +17,5 @@ public interface BuzonService {
     Buzon crearBuzon(Buzon buzon);
     Buzon actualizarBuzon(Buzon buzon);
     Optional<Buzon> buscarBuzonPorId(Long id);
-    List<Buzon> buscarBuzonesPorUsuario(Long idUsuario);
+    List<Notificacion> buscarBuzonesPorUsuario(Long idUsuario);
 }

@@ -2,6 +2,7 @@ package com.gestion.empresa.backend.gestion_empresa.servicesImpl;
 
 
 import com.gestion.empresa.backend.gestion_empresa.models.Buzon;
+import com.gestion.empresa.backend.gestion_empresa.models.Notificacion;
 import com.gestion.empresa.backend.gestion_empresa.repositories.BuzonRepository;
 import com.gestion.empresa.backend.gestion_empresa.services.BuzonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /*
     Author: peterg
@@ -36,7 +38,12 @@ public class BuzonServiceImpl implements BuzonService {
     }
 
     @Override
-    public List<Buzon> buscarBuzonesPorUsuario(Long idUsuario) {
-        return buzonRepository.findByUsuario_Id(idUsuario);
+    public List<Notificacion> buscarBuzonesPorUsuario(Long idUsuario) {
+        List<Buzon> buzonList = buzonRepository.findByUsuario_Id(idUsuario);
+
+        return buzonList.stream()
+                .map(Buzon::getNotificacion)
+                .sorted((n1, n2) -> n2.getFecha().compareTo(n1.getFecha()))
+                .collect(Collectors.toList());
     }
 }

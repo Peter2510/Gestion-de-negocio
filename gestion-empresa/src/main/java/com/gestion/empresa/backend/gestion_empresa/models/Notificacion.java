@@ -38,6 +38,6 @@ public class Notificacion implements Serializable {
     private boolean leido;
 
     @Column(name="fecha", nullable = false)
-    private Date fecha;
+    private String fecha;
 
 }

@@ -2,9 +2,7 @@ package com.gestion.empresa.backend.gestion_empresa.servicesImpl;
 
 import com.gestion.empresa.backend.gestion_empresa.dto.ActualizacionUsuarioAdminDTO;
 import com.gestion.empresa.backend.gestion_empresa.dto.RegistroUsuariosDTO;
-import com.gestion.empresa.backend.gestion_empresa.models.Persona;
-import com.gestion.empresa.backend.gestion_empresa.models.Rol;
-import com.gestion.empresa.backend.gestion_empresa.models.Usuarios;
+import com.gestion.empresa.backend.gestion_empresa.models.*;
 import com.gestion.empresa.backend.gestion_empresa.repositories.GeneroRepository;
 import com.gestion.empresa.backend.gestion_empresa.repositories.PersonaRepository;
 import com.gestion.empresa.backend.gestion_empresa.repositories.RolRepository;
@@ -18,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +49,14 @@ public class UsuarioServiceImpl implements UsuarioServicio {
     @Autowired
     private PersonaRepository personaRepository;
 
+    @Autowired
+    private NotificacionServiceImpl notificacionService;
+
+    @Autowired
+    private BuzonServiceImpl buzonService;
+    @Autowired
+    private BuzonServiceImpl buzonServiceImpl;
+
     @Override
     public Optional<Usuarios> buscarPorCui(Long cui) {
         Optional<Usuarios> usuarioObtenido = this.usuarioRepository.findByPersonaCui(cui);
@@ -77,17 +85,17 @@ public class UsuarioServiceImpl implements UsuarioServicio {
     public ResponseBackend actualizarUsuario(ActualizacionUsuarioAdminDTO usuario) {
 
         try {
-            //buscar usuario existente
+            // Buscar usuario existente
             Usuarios usuarioExistente = usuarioRepository.findById(usuario.getIdUsuario())
                     .orElseThrow(() -> new RuntimeException("El usuario no se encuentra registrado"));
 
-            //validaciones previas
+            // Validaciones previas
             ResponseBackend validacionResponse = validarActualizacion(usuario.getIdUsuario(), usuario);
             if (validacionResponse != null) {
                 return validacionResponse;
             }
 
-            //actualizar datos de la entidad Persona
+            // Actualizar datos de la entidad Persona
             Persona personaExistente = usuarioExistente.getPersona();
             personaExistente.setNombre(usuario.getPersona().getNombre());
             personaExistente.setNit(usuario.getPersona().getNit());
@@ -97,16 +105,43 @@ public class UsuarioServiceImpl implements UsuarioServicio {
             personaExistente.setGenero(generoRepository.findById(usuario.getIdGenero())
                     .orElseThrow(() -> new RuntimeException("El género no se encuentra registrado")));
 
-            //guardar los cambios en la persona
+            // Guardar los cambios en la entidad Persona
             personaRepository.save(personaExistente);
 
-            //actualizar los datos de los suarios
+            // Actualizar nombre de usuario
             usuarioExistente.setNombreUsuario(usuario.getNombreUsuario());
 
-            usuarioExistente.setRol(rolRepository.findById(usuario.getIdRol())
-                    .orElseThrow(() -> new RuntimeException("El rol no se encuentra registrado")));
+            // Verificar si el rol ha cambiado
+            Rol rolActual = usuarioExistente.getRol();
+            Rol nuevoRol = rolRepository.findById(usuario.getIdRol())
+                    .orElseThrow(() -> new RuntimeException("El rol no se encuentra registrado"));
 
-            //guardar los cambios en la entidad Usuarios
+            if (!rolActual.getId().equals(nuevoRol.getId())) {
+               //crear notificacion
+                Notificacion notificacion = new Notificacion();
+                notificacion.setTitulo("Cambio de rol");
+                notificacion.setMensaje("Su rol ha cambiado a " + nuevoRol.getNombre());
+
+                LocalDateTime fechaHoraActual = LocalDateTime.now();
+                DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+                String fechaHoraFormateada = fechaHoraActual.format(formato);
+                notificacion.setFecha(fechaHoraFormateada);
+                notificacion.setLeido(false);
+                //guardar la notificacion
+                Notificacion n = notificacionService.crearNotificacion(notificacion);
+
+                if(n!=null){
+                    Buzon buzon = new Buzon();
+                    buzon.setNotificacion(n);
+                    buzon.setUsuario(usuarioExistente);
+                    buzonServiceImpl.crearBuzon(buzon);
+                }
+
+            }
+
+            usuarioExistente.setRol(nuevoRol);
+
+            // Guardar los cambios en la entidad Usuarios
             usuarioRepository.save(usuarioExistente);
 
             return new ResponseBackend(true, HttpStatus.OK, "Usuario actualizado exitosamente");
@@ -120,6 +155,7 @@ public class UsuarioServiceImpl implements UsuarioServicio {
             return new ResponseBackend(false, HttpStatus.INTERNAL_SERVER_ERROR, "Error al actualizar usuario");
         }
     }
+
 
 
     private ResponseBackend validarActualizacion(Long id, ActualizacionUsuarioAdminDTO validacion) {
