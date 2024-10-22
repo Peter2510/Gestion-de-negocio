@@ -61,10 +61,10 @@ public class ServicioController {
 
             if(respuesta!= null) {
                 return ResponseEntity.status(HttpStatus.CREATED)
-                        .body(Map.of("ok", true, "mensaje", "jornada laboral creada correctamente"));
+                        .body(Map.of("ok", true, "mensaje", "Servicio creado exitosamente"));
             }
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(Map.of("ok", false, "mensaje", "error en su creacions"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("ok", false, "mensaje", "Error en la creacion del servicio"));
 
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
