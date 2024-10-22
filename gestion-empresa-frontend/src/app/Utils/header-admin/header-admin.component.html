@@ -66,14 +66,11 @@
             </svg>
           </label>
         </li>
-        <li *ngIf="tienePermiso(19)||tienePermiso(7)">
+        <li *ngIf="tienePermiso(19)">
           <select class="select w-full truncate" (change)="onSelectChange($event)">
             <option disabled selected>Gestión de reservaciones</option>
             <option value="/administrador/vista-servicio" *ngIf="tienePermiso(19)">
               Ver reservaciones
-            </option>
-            <option value="/administrador/crear-servicio" *ngIf="tienePermiso(7)">
-              Crear reservaciones
             </option>
           </select>
         </li>
@@ -125,14 +122,11 @@
 
     <!-- Pantallas más grandes -->
     <ul class="menu menu-horizontal p-0 hidden md:flex space-x-4">
-      <li *ngIf="tienePermiso(19)||tienePermiso(7)">
+      <li *ngIf="tienePermiso(19)">
         <select class="select w-full truncate" (change)="onSelectChange($event)">
           <option disabled selected>Gestión de reservaciones</option>
           <option value="/administrador/vista-servicio" *ngIf="tienePermiso(19)">
             Ver reservaciones
-          </option>
-          <option value="/administrador/crear-servicio" *ngIf="tienePermiso(7)">
-            Crear reservaciones
           </option>
         </select>
       </li>
