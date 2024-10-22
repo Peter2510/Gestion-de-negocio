@@ -2,10 +2,8 @@ package com.gestion.empresa.backend.gestion_empresa.servicesImpl;
 
 import com.gestion.empresa.backend.gestion_empresa.dto.DevolverTodoServiciosDTO;
 import com.gestion.empresa.backend.gestion_empresa.dto.NuevoServicioDTO;
-import com.gestion.empresa.backend.gestion_empresa.dto.RegistroUsuariosDTO;
 import com.gestion.empresa.backend.gestion_empresa.models.*;
 import com.gestion.empresa.backend.gestion_empresa.repositories.*;
-import com.gestion.empresa.backend.gestion_empresa.services.CategoriaServicioService;
 import com.gestion.empresa.backend.gestion_empresa.services.ServiciosService;
 import com.gestion.empresa.backend.gestion_empresa.utils.ResponseBackend;
 import jakarta.transaction.Transactional;
@@ -66,9 +64,13 @@ public class ServiciosServiceImpl implements ServiciosService {
 
     }
 
+    @Override
+    public List<Servicios> obtenerTodosServicios() {
+        return this.serviciosRepository.findAll();
+    }
 
 
-  //  @Transactional(rollbackOn = Throwable.class)
+    //  @Transactional(rollbackOn = Throwable.class)
     public ResponseBackend registroServicio(NuevoServicioDTO nuevoServicioDTO) {
 
         try {
@@ -214,22 +216,58 @@ public class ServiciosServiceImpl implements ServiciosService {
                         JornadaLaboral jornadaLaboral = jornadaPorDia.getIdJornadaLaboral();
                         DiasLaborales diasLaborales = jornadaPorDia.getIdDiaLaboral();
 
+                        // Obtener detalles del servicio
+                        Servicios servicio = jornadaServicio.getIdServicio();
+
+                        List<DuracionServicioPrestado> duracionServicioPrestados = duracionServicioPrestadoRepository.findAll();
+
+                        List<DevolverTodoServiciosDTO.ServicioDTO> servicioDto = duracionServicioPrestados.stream().map(
+                                servicioPrestadoLista -> {
+                                    // Buscar el ServicioPrestado por su ID (aunque ya lo tienes en la lista, esta búsqueda podría no ser necesaria)
+                                    Optional<DuracionServicioPrestado> duracionServicioPrestadoOptional = duracionServicioPrestadoRepository.findById(servicioPrestadoLista.getId());
+
+                                    // Si el servicio prestado está presente, continuamos
+                                    if (duracionServicioPrestadoOptional.isPresent()) {
+                                        DuracionServicioPrestado duracionServicioPrestado = duracionServicioPrestadoOptional.get();
+
+                                        // Buscar el ServiciosAsignado relacionado con el servicio prestado
+                                        Optional<ServiciosAsignado> serviciosAsignadoOpt = serviciosAsignadoRepository.findByidServicioPrestado(duracionServicioPrestado.getIdServicioPrestado());
+
+                                        // Si el serviciosAsignado está presente, continuamos
+                                        if (serviciosAsignadoOpt.isPresent()) {
+                                            ServiciosAsignado serviciosAsignado = serviciosAsignadoOpt.get();
+
+                                            // Crear el DTO de Servicio
+                                            return new DevolverTodoServiciosDTO.ServicioDTO(
+                                                    duracionServicioPrestado                                                                 ,  // El objeto ServicioPrestado
+                                                    serviciosAsignado  // El objeto ServiciosAsignado
+                                            );
+                                        } else {
+                                            // Retornar null o manejar la ausencia del ServiciosAsignado según sea necesario
+                                            return null;
+                                        }
+                                    } else {
+                                        // Retornar null o manejar la ausencia del ServicioPrestado según sea necesario
+                                        return null;
+                                    }
+                                }
+                        ).collect(Collectors.toList());
+
                         // Creamos el DTO para Jornada
-                        return new DevolverTodoServiciosDTO.JornadaDTO(servicioDeterminado, jornadaPorDia, jornadaLaboral, diasLaborales);
+                        return new DevolverTodoServiciosDTO.JornadaDTO(
+                                servicio, servicioDto.isEmpty() ? null : servicioDto.get(0), jornadaPorDia, jornadaLaboral, diasLaborales
+                        );
                     })
                     .collect(Collectors.toList());
 
             // Poblar el DTO con los datos
             DevolverTodoServiciosDTO nuevoServicioDTO = new DevolverTodoServiciosDTO();
-            nuevoServicioDTO.setServicios( servicios);
             nuevoServicioDTO.setJornadaServicio(jornadasDTO);  // Asignamos la lista de jornadas desglosadas
 
             // Otros datos relacionados, como Duración e Imágenes, pueden ser agregados de manera similar
-            List<DiasLaborales> diasLaborales = diasLaboralesRepository.findAll();
             List<DuracionServicioPrestado> duracionServicioPrestados = duracionServicioPrestadoRepository.findAll();
             List<ImagenServicioPrestado> imagenServicioPrestados = imagenServicioPrestadoRepository.findAll();
 
-            nuevoServicioDTO.setDiasLaborales(diasLaborales);
             nuevoServicioDTO.setDuracionServicioPrestados(duracionServicioPrestados);
             nuevoServicioDTO.setImagenServicioPrestados(imagenServicioPrestados);
 
@@ -240,5 +278,6 @@ public class ServiciosServiceImpl implements ServiciosService {
             return null;
         }
     }
+
 
 }
