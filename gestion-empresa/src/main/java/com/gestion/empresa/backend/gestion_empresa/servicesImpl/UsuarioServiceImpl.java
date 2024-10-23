@@ -67,13 +67,22 @@ public class UsuarioServiceImpl implements UsuarioServicio {
     }
 
     @Override
-    public Optional<Usuarios> buscarPorId(Long id) {
+    public ResponseBackend buscarPorId(Long id) {
         Optional<Usuarios> usuarioObtenido = this.usuarioRepository.findById(id);
-        if (usuarioObtenido.isPresent()) {
-            return usuarioObtenido;
-        }
-        return Optional.empty();
+
+        return usuarioObtenido.map(usuario -> {
+            Map<String, Object> filteredUser = new HashMap<>();
+            filteredUser.put("id", usuario.getId());
+            filteredUser.put("nombreUsuario", usuario.getNombreUsuario());
+            filteredUser.put("rol", usuario.getRol());
+            filteredUser.put("persona", usuario.getPersona());
+            filteredUser.put("activo", usuario.isActivo());
+            filteredUser.put("a2f_activo", usuario.isA2fActivo());
+
+            return new ResponseBackend(true, HttpStatus.OK, filteredUser);
+        }).orElseGet(() -> new ResponseBackend(false, HttpStatus.NOT_FOUND, "El usuario no existe"));
     }
+
 
     @Override
     public Optional<Usuarios> buscarNombreUsuario(String nombreUsuario) {

@@ -59,6 +59,7 @@ public class JwtServicio {
 
         System.out.println(userDetails);
         Claims claims = Jwts.claims().setSubject(String.valueOf(userDetails.getId()));
+        claims.put("id",userDetails.getId());
         claims.put("persona",userDetails.obtenerPersona());
         claims.put("rol",userDetails.obtenerRol());
         claims.put("nombreUsuario",userDetails.getNombreUsuario());

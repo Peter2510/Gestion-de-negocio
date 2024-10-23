@@ -36,13 +36,13 @@ public class UsuariosController {
     @GetMapping(value = "/obtener-usuario/{id}")
     public  ResponseEntity<Object> obtenerUsuario(@PathVariable Long id){
 
-        Optional<Usuarios> usuarioIndividual = this.usuarioServiceImpl.buscarPorId(id);
+        ResponseBackend usuarioIndividual = this.usuarioServiceImpl.buscarPorId(id);
 
-        if (usuarioIndividual.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(Map.of("usuario", usuarioIndividual.get()));
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
-        }
+        return ResponseEntity.status(usuarioIndividual.getStatus()).body(
+                usuarioIndividual.getOk()
+                        ? Map.of("ok", true, "usuario", usuarioIndividual.getData())
+                        : Map.of("ok", false, "mensaje", usuarioIndividual.getMensaje())
+        );
 
     }
     // para generar su edicion

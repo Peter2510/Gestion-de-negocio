@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface UsuarioServicio {
 
     Optional<Usuarios> buscarPorCui(Long cui);
-    Optional<Usuarios> buscarPorId(Long id);
+    ResponseBackend buscarPorId(Long id);
     Optional<Usuarios> buscarNombreUsuario(String nombreUsuario);
     // para que pueda editar
     ResponseBackend actualizarUsuario(ActualizacionUsuarioAdminDTO registro);
