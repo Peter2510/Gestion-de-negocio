@@ -28,9 +28,6 @@ import { RouterLink, RouterModule } from '@angular/router';
 import { EdicionPerfilComponent } from './usuarios/edicion-perfil/edicion-perfil.component';
 import { ModuloUsuariosModule } from './usuarios/modulo-usuarios/modulo-usuarios.module';
 import { VistaServicioEspecificoComponent } from './admin/modulo-servicios/vistaEspecifica/vista-servicio-especifico/vista-servicio-especifico.component';
-import { VerEmpleadosComponent } from './admin/modulo-empleados/ver-empleados/ver-empleados.component';
-import { DetallesUsuarioComponent } from './admin/modulo-empleados/detalles-usuario/detalles-usuario.component';
-
 
 @NgModule({
   declarations: [AppComponent, Vista2faLoginComponent],

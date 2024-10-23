@@ -1,20 +1,20 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { InfoPermiso, Rol } from 'src/app/models/Roles';
-import { RolesService } from '../../services/roles/roles.service';
-import { Router } from '@angular/router';
-import { Usuario } from 'src/app/models/Usuario';
 import { ServicioAuthService } from 'src/app/auth/services/servicio-auth.service';
+import { ActualizacionUsuario } from 'src/app/models/ActualizacionUsuario';
+import { InfoPermiso, Rol } from 'src/app/models/Roles';
+import { Usuario } from 'src/app/models/Usuario';
+import { RolesService } from '../../services/roles/roles.service';
 import { UsuarioService } from '../../services/usuario/usuario.service';
+import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { ActualizacionUsuario, PersonaActualizacion } from 'src/app/models/ActualizacionUsuario';
 
 @Component({
-  selector: 'app-detalles-usuario',
-  templateUrl: './detalles-usuario.component.html',
-  styleUrls: ['./detalles-usuario.component.css']
+  selector: 'app-perfil-usuario',
+  templateUrl: './perfil-usuario.component.html',
+  styleUrls: ['./perfil-usuario.component.css']
 })
-export class DetallesUsuarioComponent implements OnInit {
+export class PerfilUsuarioComponent implements OnInit{
 
   @ViewChild('registroForm') registroForm!: NgForm;
   roles: Rol[] = [];
@@ -56,26 +56,10 @@ export class DetallesUsuarioComponent implements OnInit {
 
   ngOnInit(): void {
     this.idUsuario = this.token.getIdUsuario();
-    if (this.idUsuario) {
-      this.obtenerPermisos();
-      this.obtenerRolesRegistrados();
-      this.obtenerInfoUsuario();
-    } else {
-      this.router.navigate(["/administrador/empleados-registrados"]);
-    }
-
-  }
-
-  obtenerPermisos() {
-    this.rolService.obtenerRolYPermisoEspecifico(this.token.getIdTipoUsuario()).subscribe({
-      next: (data) => {
-        this.permisos = data.permisos
-      },
-      error: (error) => {
-        this.loading = false;
-        console.log(error);
-      }
-    });
+    console.log(this.idUsuario, "idUsuario");
+    
+    this.obtenerInfoUsuario();
+    this.obtenerRolesRegistrados();
   }
 
   obtenerRolesRegistrados() {
@@ -107,7 +91,6 @@ export class DetallesUsuarioComponent implements OnInit {
   actualizarUsuario() {
     this.configurarPersona();
     this.loading = true;
-    console.log(this.actualizacion);
 
     this.usuarioService.actualizarUsuario(this.actualizacion).subscribe({
       next: (data) => {
@@ -148,5 +131,6 @@ export class DetallesUsuarioComponent implements OnInit {
   tienePermiso(permisoId: number): boolean {
     return this.permisos.some(permiso => permiso.permisoId === permisoId);
   }
+
 
 }
