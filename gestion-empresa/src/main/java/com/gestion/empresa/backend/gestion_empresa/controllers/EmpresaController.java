@@ -5,6 +5,7 @@ import com.gestion.empresa.backend.gestion_empresa.dto.EmpresaDTO;
 import com.gestion.empresa.backend.gestion_empresa.models.Empresa;
 import com.gestion.empresa.backend.gestion_empresa.models.TipoAsignacionCita;
 import com.gestion.empresa.backend.gestion_empresa.models.TipoServicio;
+import com.gestion.empresa.backend.gestion_empresa.repositories.UsuarioRepository;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.EmpresaServiceImpl;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.S3ServiceImpl;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.TipoAsignacionCitaServiceImpl;
@@ -42,6 +43,9 @@ public class EmpresaController {
 
     @Autowired
     private S3ServiceImpl s3Service;
+
+    @Autowired
+    private UsuarioRepository usuariosRepository;
 
     private final GenerarNombreArchivo generarNombreArchivo = new GenerarNombreArchivo();
 
@@ -112,10 +116,12 @@ public class EmpresaController {
     public ResponseEntity<Map<String, Object>> obtenerEmpresa(@PathVariable Long id) {
         Optional<Empresa> empresa = empresaService.findById(id);
         if (empresa.isEmpty()) {
-
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("ok", false, "mensaje", "La empresa no esta registrada"));
         }
+
+        int cantidadEmpleados = usuariosRepository.findByRolIdNot(2L).size();
+        empresa.get().setCantidadEmpleados(cantidadEmpleados);
 
         empresa.get().setLogo(s3Service.createPresignedGetUrl(empresa.get().getLogo()));
 

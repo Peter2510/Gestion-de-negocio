@@ -50,7 +50,7 @@ public class AuthController {
 
 
         System.out.println("no coincide");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("ok", false, "mensaje", "Credenciales no coinciden"));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("ok", false, "mensaje", "Credenciales incorrectas"));
 
     }
         System.out.println("ok");

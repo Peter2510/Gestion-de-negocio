@@ -2,6 +2,7 @@ package com.gestion.empresa.backend.gestion_empresa.controllers;
 
 
 import com.gestion.empresa.backend.gestion_empresa.dto.ActualizacionUsuarioAdminDTO;
+import com.gestion.empresa.backend.gestion_empresa.dto.ActualizarContraseniaDTO;
 import com.gestion.empresa.backend.gestion_empresa.dto.Login;
 import com.gestion.empresa.backend.gestion_empresa.models.Usuarios;
 import com.gestion.empresa.backend.gestion_empresa.security.JwtServicio;
@@ -80,6 +81,17 @@ public class UsuariosController {
         return ResponseEntity.status(response.getStatus()).body(
                 response.getOk()
                         ? Map.of("ok", true, "empleados", response.getData())
+                        : Map.of("ok", false, "mensaje", response.getMensaje())
+        );
+    }
+
+    @PutMapping(value="/actualizar-contrasenia")
+    public ResponseEntity<Map<String, Object>> actualizarContrasenia(@RequestBody ActualizarContraseniaDTO usuario){
+        ResponseBackend response = usuarioServiceImpl.actualizarContrasenia(usuario);
+
+        return ResponseEntity.status(response.getStatus()).body(
+                response.getOk()
+                        ? Map.of("ok", true, "mensaje", response.getMensaje())
                         : Map.of("ok", false, "mensaje", response.getMensaje())
         );
     }

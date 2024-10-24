@@ -50,17 +50,6 @@ public class JwtFiltroAutorizacion extends OncePerRequestFilter {
     // metodo general
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        //se obtiene la ruta de la solicitud
-        String path = request.getRequestURI();
-
-        //verifica si la ruta es permitida y no necesita validaciones de jwt (no requiere autenticación)
-        //aca agregamos las que vamos generando y no necesiten de validaciones
-        if (path.startsWith("/Genero") || path.startsWith("/Auth") || path.startsWith("/health")) {
-            //si es una ruta permitida, no se el filtro JWT
-            filterChain.doFilter(request, response);
-            // se retorna
-            return;
-        }
 
         // token
         final String token = getTokenRequest(request);
@@ -77,8 +66,12 @@ public class JwtFiltroAutorizacion extends OncePerRequestFilter {
 
         //si hay un nombre de usuario y no hay autenticación previa en el contexto de seguridad
         if (nombreUsuario != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            System.out.println("Nombre de usuario y no hay autenticación previa");
             //busca el usuario en la base de datos
             UserDetails userDetails = userDetailsService.loadUserByUsername(nombreUsuario);
+
+            System.out.println(userDetails.getAuthorities());
+            System.out.println(userDetails.getUsername());
 
             //si el token es válido, crea la autenticación
             if (jwtServicio.esValido(token, userDetails)) {
@@ -94,7 +87,6 @@ public class JwtFiltroAutorizacion extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
-
         //continúa con el siguiente filtro en la cadena
         filterChain.doFilter(request, response);
     }

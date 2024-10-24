@@ -1,6 +1,7 @@
 package com.gestion.empresa.backend.gestion_empresa.servicesImpl;
 
 import com.gestion.empresa.backend.gestion_empresa.dto.ActualizacionUsuarioAdminDTO;
+import com.gestion.empresa.backend.gestion_empresa.dto.ActualizarContraseniaDTO;
 import com.gestion.empresa.backend.gestion_empresa.dto.RegistroUsuariosDTO;
 import com.gestion.empresa.backend.gestion_empresa.models.*;
 import com.gestion.empresa.backend.gestion_empresa.repositories.GeneroRepository;
@@ -94,17 +95,17 @@ public class UsuarioServiceImpl implements UsuarioServicio {
     public ResponseBackend actualizarUsuario(ActualizacionUsuarioAdminDTO usuario) {
 
         try {
-            // Buscar usuario existente
+            //buscar usuario existente
             Usuarios usuarioExistente = usuarioRepository.findById(usuario.getIdUsuario())
                     .orElseThrow(() -> new RuntimeException("El usuario no se encuentra registrado"));
 
-            // Validaciones previas
+            //validaciones previas
             ResponseBackend validacionResponse = validarActualizacion(usuario.getIdUsuario(), usuario);
             if (validacionResponse != null) {
                 return validacionResponse;
             }
 
-            // Actualizar datos de la entidad Persona
+            //actualizar datos de la entidad Persona
             Persona personaExistente = usuarioExistente.getPersona();
             personaExistente.setNombre(usuario.getPersona().getNombre());
             personaExistente.setNit(usuario.getPersona().getNit());
@@ -114,13 +115,13 @@ public class UsuarioServiceImpl implements UsuarioServicio {
             personaExistente.setGenero(generoRepository.findById(usuario.getIdGenero())
                     .orElseThrow(() -> new RuntimeException("El género no se encuentra registrado")));
 
-            // Guardar los cambios en la entidad Persona
+            //guardar los cambios en la entidad Persona
             personaRepository.save(personaExistente);
 
-            // Actualizar nombre de usuario
+            //actualizar nombre de usuario
             usuarioExistente.setNombreUsuario(usuario.getNombreUsuario());
 
-            // Verificar si el rol ha cambiado
+            //verificar si el rol ha cambiado
             Rol rolActual = usuarioExistente.getRol();
             Rol nuevoRol = rolRepository.findById(usuario.getIdRol())
                     .orElseThrow(() -> new RuntimeException("El rol no se encuentra registrado"));
@@ -150,7 +151,7 @@ public class UsuarioServiceImpl implements UsuarioServicio {
 
             usuarioExistente.setRol(nuevoRol);
 
-            // Guardar los cambios en la entidad Usuarios
+            //guardar los cambios en la entidad Usuarios
             usuarioRepository.save(usuarioExistente);
 
             return new ResponseBackend(true, HttpStatus.OK, "Usuario actualizado exitosamente");
@@ -249,6 +250,29 @@ public class UsuarioServiceImpl implements UsuarioServicio {
 
             return new ResponseBackend(true, HttpStatus.OK, filteredUsuarios);
         }).orElseGet(() -> new ResponseBackend(false, HttpStatus.NOT_FOUND, "El rol no existe"));
+    }
+
+    @Override
+    public ResponseBackend actualizarContrasenia(ActualizarContraseniaDTO actualizacion) {
+        Optional<Usuarios> usuario = usuarioRepository.findById(actualizacion.getIdUsuario());
+
+        //validar si el usuario existe
+        if(usuario.isEmpty()){
+            return new ResponseBackend(false, HttpStatus.NOT_FOUND, "El usuario no existe");
+        }
+
+        //validar si la contraseña actual es correcta
+        if(!passwordEncoder.matches(actualizacion.getContraseniaActual(), usuario.get().getPassword())){
+            return new ResponseBackend(false, HttpStatus.BAD_REQUEST, "La contraseña actual es incorrecta");
+        }
+
+        //actualizar la contraseña
+        Usuarios usuarioActualizado = usuario.get();
+        usuarioActualizado.setPassword(passwordEncoder.encode(actualizacion.getContraseniaNueva()));
+        usuarioRepository.save(usuarioActualizado);
+
+        return new ResponseBackend(true, HttpStatus.OK, "Contraseña actualizada exitosamente");
+
     }
 
 }

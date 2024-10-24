@@ -99,6 +99,7 @@ public class JwtServicio {
     {
         return getExpiration(token).before(new Date());
     }
+
     private Claims extraerTodasLasClaims(String token) {
         return Jwts
                 .parserBuilder()
