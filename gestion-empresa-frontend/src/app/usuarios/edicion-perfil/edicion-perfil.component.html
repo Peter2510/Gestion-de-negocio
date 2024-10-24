@@ -1,99 +1,177 @@
-<app-header-usuario />
-<div class="max-w-4xl mx-auto p-4">
-  <h1 class="text-2xl font-bold mb-4">Editar Usuario</h1>
+<app-header-usuario></app-header-usuario>
 
-  <form class="space-y-4">
-    <!-- Usuario y Password -->
-    <div class="grid grid-cols-2 gap-4">
-      <div>
-        <label for="nombreUsuario" class="block">Nombre de Usuario:</label>
-        <input
-          type="text"
-          id="nombreUsuario"
-          class="input input-bordered w-full"
-        />
-      </div>
-      <div>
-        <label for="password" class="block">Contraseña:</label>
-        <input
-          type="password"
-          id="password"
-          class="input input-bordered w-full"
-        />
-      </div>
+<app-loading-cliente *ngIf="loading"></app-loading-cliente>
+
+<div class="flex justify-center items-center min-h-screen bg-base-200 px-4 mt-24">
+  <div class="card w-full max-w-lg bg-base-100 shadow-xl border border-base-300 rounded-lg my-8">
+    <div class="card-body p-6">
+      <h2 class="text-center text-base-content text-2xl font-semibold mb-6">Detalles del usuario</h2>
+
+      <form #registroForm="ngForm" (ngSubmit)="actualizarUsuario()">
+        <!-- Nombre de usuario -->
+        <div class="form-control mb-4 bg-base-200">
+          <label class="label">
+            <span class="label-text">Nombre de usuario</span>
+          </label>
+          <input type="text" placeholder="Nombre de usuario" readonly
+            class="input input-bordered focus:bg-slate-950 text-base-content w-full" name="nombreUsuario"
+            [(ngModel)]="usuario.nombreUsuario" #nombreUsuario="ngModel" maxlength="75" required />
+          <div *ngIf="nombreUsuario.invalid && nombreUsuario.touched" class="text-red-500 text-xs">
+            El nombre de usuario es requerido.
+          </div>
+        </div>
+
+        <!-- CUI de usuario -->
+        <div class="form-control mb-4 bg-base-200">
+          <label class="label">
+            <span class="label-text">CUI de usuario</span>
+          </label>
+          <input type="text" placeholder="CUI de usuario" readonly
+            class="input input-bordered focus:bg-slate-950 text-base-content w-full" name="cui" 
+            [(ngModel)]="usuario.persona.cui" #cui="ngModel" />
+        </div>
+
+        <!-- Correo -->
+        <div class="form-control mb-4 bg-base-200">
+          <label class="label">
+            <span class="label-text">Correo</span>
+          </label>
+          <input type="email" placeholder="Correo" class="input input-bordered focus:bg-slate-950 text-base-content w-full"
+            name="correo" [(ngModel)]="usuario.persona.correo" #correo="ngModel" required 
+            pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" />
+          <div *ngIf="correo.invalid && correo.touched" class="text-red-500 text-xs">
+            <div *ngIf="correo.errors?.['required']">El correo es requerido.</div>
+            <div *ngIf="correo.errors?.['pattern']">El correo debe ser válido.</div>
+          </div>
+        </div>
+
+        <!-- Persona - Nombre -->
+        <div class="form-control mb-4 bg-base-200">
+          <label class="label">
+            <span class="label-text">Nombre</span>
+          </label>
+          <input type="text" placeholder="Nombre" class="input input-bordered focus:bg-slate-950 text-base-content w-full"
+            name="persona.nombre" [(ngModel)]="usuario.persona.nombre" #nombrePersona="ngModel" maxlength="75" required />
+          <div *ngIf="nombrePersona.invalid && nombrePersona.touched" class="text-red-500 text-xs">
+            El nombre es requerido.
+          </div>
+        </div>
+
+        <!-- Persona - NIT -->
+        <div class="form-control mb-4 bg-base-200">
+          <label class="label">
+            <span class="label-text">NIT</span>
+          </label>
+          <input type="text" placeholder="NIT" class="input input-bordered focus:bg-slate-950 text-base-content w-full"
+            name="persona.nit" [(ngModel)]="usuario.persona.nit" #nitPersona="ngModel" required pattern="^\d{10}$"
+            minlength="10" maxlength="10" />
+          <div *ngIf="nitPersona.invalid && nitPersona.touched" class="text-red-500 text-xs">
+            El NIT debe tener 10 dígitos numéricos.
+          </div>
+        </div>
+
+        <!-- Persona - Número -->
+        <div class="form-control mb-4 bg-base-200">
+          <label class="label">
+            <span class="label-text">Número de teléfono</span>
+          </label>
+          <input type="text" placeholder="Número" class="input input-bordered focus:bg-slate-950 text-base-content w-full"
+            name="persona.telefono" [(ngModel)]="usuario.persona.telefono" #telefonoPersona="ngModel" required
+            pattern="^\d{8}$" minlength="8" maxlength="8" />
+          <div *ngIf="telefonoPersona.invalid && telefonoPersona.touched" class="text-red-500 text-xs">
+            El número de teléfono debe tener 8 dígitos numéricos.
+          </div>
+        </div>
+
+        <!-- Persona - Dirección -->
+        <div class="form-control mb-4 bg-base-200">
+          <label class="label">
+            <span class="label-text">Dirección</span>
+          </label>
+          <input type="text" placeholder="Dirección" class="input input-bordered focus:bg-slate-950 text-base-content w-full"
+            name="persona.direccion" [(ngModel)]="usuario.persona.direccion" #direccionPersona="ngModel" maxlength="75" required />
+          <div *ngIf="direccionPersona.invalid && direccionPersona.touched" class="text-red-500 text-xs">
+            La dirección es requerida.
+          </div>
+        </div>
+
+        <!-- Persona - Género -->
+        <div class="form-control mb-4 bg-base-200">
+          <label class="label">
+            <span class="label-text">Género</span>
+          </label>
+          <select class="select select-bordered w-full text-base-content" name="persona.genero.id"
+            [(ngModel)]="usuario.persona.genero.id" #generoPersona="ngModel" required>
+            <option disabled selected class="text-base-content">Seleccione un género</option>
+            <ng-container *ngFor="let genero of servicioAuth.generos()">
+              <option [ngValue]="genero.id" class="text-base-content">{{ genero.genero }}</option>
+            </ng-container>
+          </select>
+          <div *ngIf="generoPersona.invalid && generoPersona.touched" class="text-red-500 text-xs">
+            El género es requerido.
+          </div>
+        </div>
+
+        <!-- Botón para enviar -->
+        <div class="form-control mt-6 bg-base-100 border-none">
+          <button type="submit" [disabled]="registroForm.invalid" class="btn btn-primary w-full">
+            Guardar cambios
+          </button>
+        </div>
+      </form>
+
+      <!-- Cambiar Contraseña -->
+      <h2 class="text-center text-base-content text-2xl font-semibold mb-6 mt-8">Cambiar Contraseña</h2>
+
+      <form #cambioContrasenaForm="ngForm" (ngSubmit)="cambiarContrasena()">
+        <div class="form-control mb-4 bg-base-200">
+          <label class="label">
+            <span class="label-text">Contraseña actual</span>
+          </label>
+          <input type="password" placeholder="Contraseña actual"
+            class="input input-bordered focus:bg-slate-950 text-base-content w-full" name="passwordActual"
+            [(ngModel)]="passwordActual" #passwordActualModel="ngModel" required minlength="2" />
+          <div *ngIf="passwordActualModel.invalid && passwordActualModel.touched" class="text-red-500 text-xs">
+            La contraseña actual es requerida y debe tener al menos 2 caracteres.
+          </div>
+        </div>
+
+        <div class="form-control mb-4 bg-base-200">
+          <label class="label">
+            <span class="label-text">Nueva contraseña</span>
+          </label>
+          <input type="password" placeholder="Nueva contraseña"
+            class="input input-bordered focus:bg-slate-950 text-base-content w-full" name="nuevaPassword"
+            [(ngModel)]="nuevaPassword" #nuevaPasswordModel="ngModel" required minlength="6" />
+          <div *ngIf="nuevaPasswordModel.invalid && nuevaPasswordModel.touched" class="text-red-500 text-xs">
+            La nueva contraseña es requerida y debe tener al menos 6 caracteres.
+          </div>
+        </div>
+
+        <div class="form-control mb-4 bg-base-200">
+          <label class="label">
+            <span class="label-text">Confirmar nueva contraseña</span>
+          </label>
+          <input type="password" placeholder="Confirmar nueva contraseña"
+            class="input input-bordered focus:bg-slate-950 text-base-content w-full" name="confirmarPassword"
+            [(ngModel)]="confirmarPassword" #confirmarPasswordModel="ngModel" required minlength="6" />
+          <div *ngIf="confirmarPasswordModel.invalid && confirmarPasswordModel.touched" class="text-red-500 text-xs">
+            La confirmación de la nueva contraseña es requerida y debe tener al menos 6 caracteres.
+          </div>
+          <div *ngIf="nuevaPassword !== confirmarPassword && confirmarPasswordModel.touched" class="text-red-500 text-xs">
+            Las contraseñas no coinciden.
+          </div>
+        </div>
+
+        <!-- Botón para cambiar contraseña -->
+        <div class="form-control mt-6 bg-base-100 border-none">
+          <button type="submit"
+                  [disabled]="passwordActualModel.invalid || nuevaPasswordModel.invalid || confirmarPasswordModel.invalid || nuevaPassword !== confirmarPassword" 
+                  class="btn btn-primary w-full">
+            Cambiar Contraseña
+          </button>
+        </div>
+      </form>
     </div>
-
-    <!-- Información Personal -->
-    <h2 class="text-xl font-bold mt-4">Información Personal</h2>
-
-    <div class="grid grid-cols-2 gap-4">
-      <div>
-        <label for="nombre" class="block">Nombre:</label>
-        <input type="text" id="nombre" class="input input-bordered w-full" />
-      </div>
-      <div>
-        <label for="nit" class="block">NIT:</label>
-        <input type="text" id="nit" class="input input-bordered w-full" />
-      </div>
-    </div>
-
-    <div class="grid grid-cols-2 gap-4">
-      <div>
-        <label for="numero" class="block">Número:</label>
-        <input type="number" id="numero" class="input input-bordered w-full" />
-      </div>
-      <div>
-        <label for="correoPersona" class="block">Correo Personal:</label>
-        <input
-          type="email"
-          id="correoPersona"
-          class="input input-bordered w-full"
-        />
-      </div>
-    </div>
-
-    <div class="grid grid-cols-2 gap-4">
-      <div>
-        <label for="direccion" class="block">Dirección:</label>
-        <input type="text" id="direccion" class="input input-bordered w-full" />
-      </div>
-      <div>
-        <label for="telefono" class="block">Teléfono:</label>
-        <input
-          type="number"
-          id="telefono"
-          class="input input-bordered w-full"
-        />
-      </div>
-    </div>
-
-    <!-- Género -->
-    <div>
-      <label for="genero" class="block">Género:</label>
-      <select id="genero" class="select select-bordered w-full">
-        <option [value]="1">Femenino</option>
-        <option [value]="2">Masculino</option>
-      </select>
-    </div>
-
-    <!-- Correo de Usuario -->
-    <div>
-      <label for="correo" class="block">Correo de Usuario:</label>
-      <input type="email" id="correo" class="input input-bordered w-full" />
-    </div>
-
-    <!-- Estado de la Cuenta -->
-    <div class="grid grid-cols-2 gap-4">
-      <div>
-        <label class="block">Autenticación de Dos Factores Activa:</label>
-        <input type="checkbox" class="toggle toggle-primary" />
-      </div>
-    </div>
-
-    <div class="mt-4">
-      <button type="submit" class="btn btn-primary w-full">
-        Guardar Cambios
-      </button>
-    </div>
-  </form>
+  </div>
 </div>

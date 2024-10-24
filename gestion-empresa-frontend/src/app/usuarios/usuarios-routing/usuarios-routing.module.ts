@@ -8,7 +8,7 @@ import { VistaUsuarioComponent } from '../vista-usuario/vista-usuario.component'
 const routes: Routes = [
   { path: 'vista-usuario', component: VistaUsuarioComponent },  
   { path: 'perfil-usuario', component: VistaPerfilUsuarioComponent },
-  { path: 'edicion', component: EdicionPerfilComponent },
+  { path: 'mi-perfil', component: EdicionPerfilComponent },
 
   {
     path: '**',

@@ -166,7 +166,5 @@ export class PerfilUsuarioComponent implements OnInit {
     });
   }
 
-  tienePermiso(permisoId: number): boolean {
-    return this.permisos.some(permiso => permiso.permisoId === permisoId);
-  }
+
 }

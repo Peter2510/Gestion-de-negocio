@@ -12,12 +12,14 @@ import { VistaPerfilUsuarioComponent } from '../vista-perfil-usuario/vista-perfi
 import { RouterLink, RouterModule } from '@angular/router';
 import { EdicionPerfilComponent } from '../edicion-perfil/edicion-perfil.component';
 import { VistaUsuarioComponent } from '../vista-usuario/vista-usuario.component';
+import { LoadingClienteComponent } from '../loading-cliente/loading-cliente.component';
 @NgModule({
   declarations: [
     HeaderUsuarioComponent,
     VistaPerfilUsuarioComponent,
     EdicionPerfilComponent,
-    VistaUsuarioComponent
+    VistaUsuarioComponent,
+    LoadingClienteComponent
   ],
   imports: [
     CommonModule,
