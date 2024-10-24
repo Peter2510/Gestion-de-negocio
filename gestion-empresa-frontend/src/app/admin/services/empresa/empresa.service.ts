@@ -19,25 +19,25 @@ export class EmpresaService {
 
   public obtenerInfoEmpresa(): Observable<any> {
     return this.http.get<any>(`${this.baseURL}/${this.empresa}/obtener-empresa/1`,
-      // {
-      //   headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
-      // }
+      {
+        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      }
     );
   }
 
   public obtenerTipoServicios(): Observable<any> {
     return this.http.get<any>(`${this.baseURL}/${this.tipoServicio}/obtener-tipos-servicio`,
-      // {
-      //   headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
-      // }
+      {
+        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      }
     );
   }
 
   public obtenerTipoAsignacionCita(): Observable<any> {
     return this.http.get<any>(`${this.baseURL}/${this.tipoAsignacionCita}/obtener-tipos-asignacion-cita`,
-      // {
-      //   headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
-      // }
+      {
+        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      }
     );
   }
 
@@ -55,9 +55,9 @@ export class EmpresaService {
     }
 
     return this.http.post<any>(`${this.baseURL}/${this.empresa}/actualizar-empresa/1`, formData,
-      // {
-      //   headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
-      // }
+      {
+        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      }
     );
   }
 

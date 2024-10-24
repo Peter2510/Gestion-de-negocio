@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
   templateUrl: './perfil-usuario.component.html',
   styleUrls: ['./perfil-usuario.component.css']
 })
-export class PerfilUsuarioComponent implements OnInit{
+export class PerfilUsuarioComponent implements OnInit {
 
   @ViewChild('registroForm') registroForm!: NgForm;
   roles: Rol[] = [];
@@ -48,11 +48,15 @@ export class PerfilUsuarioComponent implements OnInit{
     password: "",
     a2f_activo: false,
     activo: false
-  }
+  };
+
+  // Propiedades para la contraseña
+  passwordActual: string = '';
+  nuevaPassword: string = '';
+  confirmarPassword: string = '';
 
   constructor(private rolService: RolesService, private usuarioService: UsuarioService, private router: Router,
-    private token: ServicioAuthService) {
-  }
+              private token: ServicioAuthService) { }
 
   ngOnInit(): void {
     this.idUsuario = this.token.getIdUsuario();
@@ -65,12 +69,12 @@ export class PerfilUsuarioComponent implements OnInit{
   obtenerRolesRegistrados() {
     this.rolService.obtenerRolesRegistrados().subscribe({
       next: (data) => {
-        this.roles = data.roles
+        this.roles = data.roles;
       }, error: (error) => {
-        console.log(error)
+        console.log(error);
         this.loading = false;
       }
-    })
+    });
   }
 
   obtenerInfoUsuario() {
@@ -81,11 +85,11 @@ export class PerfilUsuarioComponent implements OnInit{
       }, error: (error) => {
         Swal.fire({
           title: error.error.mensaje
-        })
-        console.log(error)
+        });
+        console.log(error);
         this.loading = false;
       }
-    })
+    });
   }
 
   actualizarUsuario() {
@@ -97,17 +101,17 @@ export class PerfilUsuarioComponent implements OnInit{
         Swal.fire({
           title: data.mensaje,
           icon: 'success'
-        })
+        });
         this.loading = false;
       }, error: (error) => {
         Swal.fire({
           title: error.error.mensaje,
           icon: 'error'
-        })
+        });
         this.loading = false;
-        console.log(error)
+        console.log(error);
       }
-    })
+    });
   }
 
   configurarPersona() {
@@ -125,12 +129,44 @@ export class PerfilUsuarioComponent implements OnInit{
       },
       correo: this.usuario.persona.correo,
       activo: this.usuario.activo
+    };
+  }
+
+  cambiarContrasena() {
+    if (this.nuevaPassword !== this.confirmarPassword) {
+      Swal.fire({
+        title: 'Las contraseñas no coinciden',
+        icon: 'error'
+      });
+      return;
     }
+  
+    this.loading = true;
+  
+    console.log(this.usuario.id, this.passwordActual, this.nuevaPassword);
+
+    this.usuarioService.cambiarContrasenia(this.usuario.id, this.passwordActual, this.nuevaPassword).subscribe({
+      next: (data) => {
+        Swal.fire({
+          title: data.mensaje,
+          icon: 'success'
+        });
+        this.loading = false;
+        this.passwordActual = '';
+        this.nuevaPassword = '';
+        this.confirmarPassword = '';
+      },
+      error: (error) => {
+        Swal.fire({
+          title: error.error.mensaje,
+          icon: 'error'
+        });
+        this.loading = false;
+      }
+    });
   }
 
   tienePermiso(permisoId: number): boolean {
     return this.permisos.some(permiso => permiso.permisoId === permisoId);
   }
-
-
 }

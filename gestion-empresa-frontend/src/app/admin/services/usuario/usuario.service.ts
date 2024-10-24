@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ServicioAuthService } from 'src/app/auth/services/servicio-auth.service';
 import { environment } from 'src/environments/environment.development';
 
 @Injectable({
@@ -12,7 +13,7 @@ export class UsuarioService {
   private usuarios = "usuarios";
   private idUsuario: number | null = null;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService: ServicioAuthService) { }
 
   setIdUsuario(id: number) {
     this.idUsuario = id;
@@ -26,15 +27,41 @@ export class UsuarioService {
     this.idUsuario = null;
   }
 
-  obtenerEmpleados():Observable<any>{
-    return this.http.get(`${this.baseUrl}/${this.usuarios}/listar-empleados`)
+  obtenerEmpleados(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/${this.usuarios}/listar-empleados`,
+      {
+        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      }
+    )
   }
 
-  obtenerUsuario(id: number):Observable<any>{
-    return this.http.get(`${this.baseUrl}/${this.usuarios}/obtener-usuario/${id}`)
+  obtenerUsuario(id: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/${this.usuarios}/obtener-usuario/${id}`,
+      {
+        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      }
+    )
   }
 
-  actualizarUsuario(usuario):Observable<any>{
-    return this.http.put(`${this.baseUrl}/${this.usuarios}/actualizar-usuario`, usuario)
+  actualizarUsuario(usuario): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${this.usuarios}/actualizar-usuario`, usuario,
+      {
+        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      }
+    )
   }
+
+  cambiarContrasenia(idUsuario: number, contraseniaActual: string, contraseniaNueva: string): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${this.usuarios}/actualizar-contrasenia`, {
+      idUsuario,
+      contraseniaActual,
+      contraseniaNueva
+    },
+    {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+    }
+  );
+  }
+  
+
 }

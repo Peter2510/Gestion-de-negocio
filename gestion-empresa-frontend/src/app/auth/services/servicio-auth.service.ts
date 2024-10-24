@@ -25,18 +25,26 @@ export class ServicioAuthService {
   constructor(
     private http: HttpClient,
     private cookieService: CookieService,
-    private router: Router,
-    private rolService:RolesService
+    private router: Router
   ) {
     this.obtenerGeneros();
   }
 
-  async obtenerPermisos() {
+  async obtenerPermisos(): Promise<void> {
     try {
-      const data = await this.rolService.obtenerRolYPermisoEspecifico(this.getIdTipoUsuario()).toPromise();
-      this.permisos = data.permisos;
+      const tipoUsuarioId = this.getIdTipoUsuario();
+      const data = await this.http
+        .get<{ permisos: InfoPermiso[] }>(`${this.url}/permiso-rol/obtener-permiso-rol/${tipoUsuarioId}`)
+        .toPromise();
+
+      // Verifica si data y data.permisos están definidos
+      if (data && data.permisos) {
+        this.permisos = data.permisos;
+      } else {
+        console.error("No se encontraron permisos o el formato es incorrecto.");
+      }
     } catch (error) {
-      console.error(error);
+      console.error("Error al obtener permisos:", error);
     }
   }
 

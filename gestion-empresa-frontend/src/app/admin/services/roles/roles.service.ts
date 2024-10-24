@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ServicioAuthService } from 'src/app/auth/services/servicio-auth.service';
 import { Permiso } from 'src/app/models/Roles';
 import { environment } from 'src/environments/environment.development';
 
@@ -14,7 +15,7 @@ export class RolesService {
   private permisoRol = "permiso-rol"
   private rolId: number | null = null;
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient, private authService:ServicioAuthService) { }
 
   /**Manejo interno del id del rol para no exponerlo en la url */
   setRolId(id: number) {
@@ -31,17 +32,17 @@ export class RolesService {
 
   obtenerRolesRegistrados(): Observable<any>{
     return this.http.get(`${this.baseUrl}/${this.roles}/obtener-roles`,
-      // {
-      //   headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
-      // }
+      {
+        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      }
     );
   }
 
   obtenerRolYPermisoEspecifico(id:any): Observable<any>{
     return this.http.get(`${this.baseUrl}/${this.permisoRol}/obtener-permiso-rol/${id}`,
-      // {
-      //   headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
-      // }
+      {
+        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      }
     );
   }
 
@@ -53,10 +54,10 @@ export class RolesService {
       descripcion: descripcion
   };
 
-    return this.http.post(`${this.baseUrl}/${this.permisoRol}/actualizar-permiso-rol/${idRol}`, data
-      // {
-      //   headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
-      // }
+    return this.http.post(`${this.baseUrl}/${this.permisoRol}/actualizar-permiso-rol/${idRol}`, data,
+      {
+        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      }
     );
   }
 
