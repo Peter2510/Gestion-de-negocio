@@ -10,10 +10,10 @@ import java.util.List;
 
 public interface ServiciosRepository extends JpaRepository<Servicios, Long> {
 
-    @Query("SELECT dsp.duracion, dsp.nombre , sp.nombre , sp.precio " +
-            "from DuracionServicioPrestado dsp " +
-            "join ServicioPrestado sp on dsp.idServicioPrestado.id = sp.id " +
-            "join ServiciosAsignado sa on sa.idServicioPrestado.id = sp.id " +
-            "WHERE sa.idServicio.id = :idServicio")
-    List<Object[]> findByIdUsuario(@Param("idUsuario") Long idUsuario);
+//    @Query("SELECT dsp.duracion, dsp.nombre , sp.nombre , sp.precio " +
+//            "from DuracionServicioPrestado dsp " +
+//            "join ServicioPrestado sp on dsp.idServicioPrestado.id = sp.id " +
+//            "join ServiciosAsignado sa on sa.idServicioPrestado.id = sp.id " +
+//            "WHERE sa.idServicio.id = :idServicio")
+//    List<Object[]> findByIdUsuario(@Param("idUsuario") Long idUsuario);
 }
