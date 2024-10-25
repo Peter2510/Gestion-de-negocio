@@ -168,7 +168,7 @@ public class UsuarioServiceImpl implements UsuarioServicio {
 
 
 
-    private ResponseBackend validarActualizacion(Long id, ActualizacionUsuarioAdminDTO validacion) {
+    public ResponseBackend validarActualizacion(Long id, ActualizacionUsuarioAdminDTO validacion) {
 
         //validar nombre de usuario (si ha cambiado)
         if (usuarioRepository.findByNombreUsuario(validacion.getNombreUsuario()).isPresent()) {

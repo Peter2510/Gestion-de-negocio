@@ -131,7 +131,7 @@ public class AutenticacionServiceImpl implements AutenticacionServicie {
     }
 
 
-    private ResponseBackend validarRegistro(RegistroUsuariosDTO registro) {
+    ResponseBackend validarRegistro(RegistroUsuariosDTO registro) {
 
         if (userRepository.findByNombreUsuario(registro.getNombreUsuario()).isPresent()) {
             return new ResponseBackend(false, HttpStatus.CONFLICT, "El nombre de usuario ya está en uso");

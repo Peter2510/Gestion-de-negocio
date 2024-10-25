@@ -36,6 +36,7 @@ public class S3ServiceImpl implements S3Service {
         this.s3Client = s3Client;
     }
 
+    @Override
     public String uploadFile(MultipartFile file, String fileName) {
         try {
 
