@@ -7,6 +7,7 @@ import {
   servicios,
   serviciosPrestados,
 } from 'src/app/models/Servicios';
+import { Usuario } from 'src/app/models/Usuario';
 import { environment } from 'src/environments/environment.development';
 
 @Injectable({
@@ -26,13 +27,16 @@ export class ServiciosService {
 
   //funcion para crear nuevos servicios
   creacionServicio(
+    usuario: number,
     nuevoServicio: servicios,
     jornada_laboral: jornada_laboral[],
     diasLaborel: number[],
     serviciosPrestados: serviciosPrestados[],
     duracionServicioPrestado: DuracionServicioPrestado[]
   ): Observable<any> {
+    console.log(usuario);
     const todosDatos = {
+      idUsuario: usuario,
       servicios: {
         nombre: nuevoServicio.nombre,
         descripcion: nuevoServicio.descripcion,

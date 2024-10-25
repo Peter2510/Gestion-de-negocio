@@ -6,19 +6,24 @@ import { Empresa } from '../../../models/Empresa';
 import { ServicioAuthService } from 'src/app/auth/services/servicio-auth.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EmpresaService {
-
   private baseURL = environment.URL;
-  private empresa = "empresa"
-  private tipoServicio = "tipoServicio"
-  private tipoAsignacionCita = "tipoAsignacionCita"
+  private empresa = 'empresa';
+  private tipoServicio = 'tipoServicio';
+  private tipoAsignacionCita = 'tipoAsignacionCita';
 
-  constructor(private http: HttpClient, private authService: ServicioAuthService) { }
+  //aca que se quede de una como token
+
+  constructor(
+    private http: HttpClient,
+    private authService: ServicioAuthService
+  ) {}
 
   public obtenerInfoEmpresa(): Observable<any> {
-    return this.http.get<any>(`${this.baseURL}/${this.empresa}/obtener-empresa/1`,
+    return this.http.get<any>(
+      `${this.baseURL}/${this.empresa}/obtener-empresa/1`
       // {
       //   headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
       // }
@@ -26,7 +31,8 @@ export class EmpresaService {
   }
 
   public obtenerTipoServicios(): Observable<any> {
-    return this.http.get<any>(`${this.baseURL}/${this.tipoServicio}/obtener-tipos-servicio`,
+    return this.http.get<any>(
+      `${this.baseURL}/${this.tipoServicio}/obtener-tipos-servicio`
       // {
       //   headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
       // }
@@ -34,7 +40,8 @@ export class EmpresaService {
   }
 
   public obtenerTipoAsignacionCita(): Observable<any> {
-    return this.http.get<any>(`${this.baseURL}/${this.tipoAsignacionCita}/obtener-tipos-asignacion-cita`,
+    return this.http.get<any>(
+      `${this.baseURL}/${this.tipoAsignacionCita}/obtener-tipos-asignacion-cita`
       // {
       //   headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
       // }
@@ -54,11 +61,12 @@ export class EmpresaService {
       formData.append('logoFile', logo);
     }
 
-    return this.http.post<any>(`${this.baseURL}/${this.empresa}/actualizar-empresa/1`, formData,
+    return this.http.post<any>(
+      `${this.baseURL}/${this.empresa}/actualizar-empresa/1`,
+      formData
       // {
       //   headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
       // }
     );
   }
-
 }
