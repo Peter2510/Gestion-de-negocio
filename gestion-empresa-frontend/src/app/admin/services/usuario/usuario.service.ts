@@ -5,12 +5,11 @@ import { ServicioAuthService } from 'src/app/auth/services/servicio-auth.service
 import { environment } from 'src/environments/environment.development';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UsuarioService {
-
   private baseUrl = environment.URL;
-  private usuarios = "usuarios";
+  private usuarios = 'usuarios';
   private idUsuario: number | null = null;
 
   constructor(private http: HttpClient, private authService: ServicioAuthService) { }

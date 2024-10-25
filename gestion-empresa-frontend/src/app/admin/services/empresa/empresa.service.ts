@@ -6,16 +6,20 @@ import { Empresa } from '../../../models/Empresa';
 import { ServicioAuthService } from 'src/app/auth/services/servicio-auth.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EmpresaService {
-
   private baseURL = environment.URL;
-  private empresa = "empresa"
-  private tipoServicio = "tipoServicio"
-  private tipoAsignacionCita = "tipoAsignacionCita"
+  private empresa = 'empresa';
+  private tipoServicio = 'tipoServicio';
+  private tipoAsignacionCita = 'tipoAsignacionCita';
 
-  constructor(private http: HttpClient, private authService: ServicioAuthService) { }
+  //aca que se quede de una como token
+
+  constructor(
+    private http: HttpClient,
+    private authService: ServicioAuthService
+  ) {}
 
   public obtenerInfoEmpresa(): Observable<any> {
     return this.http.get<any>(`${this.baseURL}/${this.empresa}/obtener-empresa/1`,
@@ -60,5 +64,4 @@ export class EmpresaService {
       }
     );
   }
-
 }

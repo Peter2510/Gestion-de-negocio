@@ -1,9 +1,27 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
-import { addDays, endOfDay, isSameDay, isSameMonth, startOfDay } from 'date-fns';
+import {
+  CalendarEvent,
+  CalendarEventAction,
+  CalendarEventTimesChangedEvent,
+  CalendarView,
+} from 'angular-calendar';
+import {
+  addDays,
+  endOfDay,
+  isSameDay,
+  isSameMonth,
+  startOfDay,
+} from 'date-fns';
 import { Subject } from 'rxjs';
 import { EventColor } from 'calendar-utils';
+import { CitasServicioService } from '../Services/citas-servicio.service';
 
 const colors: Record<string, EventColor> = {
   red: {
@@ -23,10 +41,9 @@ const colors: Record<string, EventColor> = {
 @Component({
   selector: 'app-vista-usuario',
   templateUrl: './vista-usuario.component.html',
-  styleUrls: ['./vista-usuario.component.css']
+  styleUrls: ['./vista-usuario.component.css'],
 })
-
-export class VistaUsuarioComponent {
+export class VistaUsuarioComponent implements OnInit {
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
   view: CalendarView = CalendarView.Month; // Cambia la vista: Month, Week o Day
   viewDate: Date = new Date(); // Fecha actual
@@ -41,7 +58,36 @@ export class VistaUsuarioComponent {
     event: CalendarEvent;
   };
   selectedDate: any;
+
+  //servicios
+  citasServicio = inject(CitasServicioService);
+  todasCitas: any;
   constructor(private modal: NgbModal) {}
+
+  ngOnInit(): void {
+    this.citasServicio.obtenerCitas().subscribe((citas: any) => {
+      this.todasCitas = citas.Citas;
+      citas.Citas.forEach((element: any) => {
+        console.log(element);
+
+        this.events = [
+          ...this.events,
+          {
+            title: element.idServicio.nombre,
+            start: new Date(element.fechaHoraInicio),
+            end: new Date(element.fechaHoraFin),
+            color: colors['blue'],
+            draggable: true,
+            resizable: {
+              beforeStart: true,
+              afterEnd: true,
+            },
+          },
+        ];
+      });
+      console.log(this.events);
+    });
+  }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
@@ -77,7 +123,7 @@ export class VistaUsuarioComponent {
   // Eventos del calendario
   events: CalendarEvent[] = [
     {
-      start: startOfDay(new Date()), // Fecha de inicio
+      start: startOfDay('2024-10-25T05:55:58.696Z'), // Fecha de inicio
       end: addDays(new Date(), 1),
       title: 'Evento del día', // Título del evento
       color: { ...colors['red'] },
@@ -91,6 +137,7 @@ export class VistaUsuarioComponent {
       draggable: true,
     },
   ];
+
   actions: CalendarEventAction[] = [
     {
       label: '<i class="fas fa-fw fa-pencil-alt"></i>',
