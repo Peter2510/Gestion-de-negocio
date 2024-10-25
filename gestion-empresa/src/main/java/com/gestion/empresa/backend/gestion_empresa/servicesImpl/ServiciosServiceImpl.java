@@ -57,6 +57,10 @@ public class ServiciosServiceImpl implements ServiciosService {
 
     @Autowired
     private ImagenServicioPrestadoRepository imagenServicioPrestadoRepository;
+    @Autowired
+    private ServicioPorUsuariosRepository servicioPorUsuariosRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @Override
     public Servicios crearServicio(Servicios servicios) {
@@ -86,6 +90,15 @@ public class ServiciosServiceImpl implements ServiciosService {
                     .orElseThrow(() -> new RuntimeException("El estado no se encuentra registrado")));
 
             Servicios servicioGuardado = serviciosRepository.save(nuevoServicio);
+            // una vez creado el servicio creamos la unionentre los usuarios
+            ServicioPorUsuarios nuevoServicioPorUsuarios = new ServicioPorUsuarios();
+            System.out.println(nuevoServicioDTO.getIdUsuario());
+            nuevoServicioPorUsuarios.setIdUsuario( usuarioRepository.findById(nuevoServicioDTO.getIdUsuario())
+                    .orElseThrow(() -> new RuntimeException("El estado no se encuentra registrado")));
+            nuevoServicioPorUsuarios.setIdServicio(servicioGuardado);
+            ServicioPorUsuarios servicioPorUsuariosGuardado = servicioPorUsuariosRepository.save(nuevoServicioPorUsuarios);
+
+
 
             System.out.println(nuevoServicio);
             System.out.println(nuevoServicioDTO);

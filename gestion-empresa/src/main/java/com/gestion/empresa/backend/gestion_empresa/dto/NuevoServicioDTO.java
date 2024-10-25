@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NuevoServicioDTO {
-
+    private Long idUsuario;
     private Servicios servicios;
     private List<JornadaLaboral> jornadaLaboral;
     private List<DiasLaborales> diasLaborales;
