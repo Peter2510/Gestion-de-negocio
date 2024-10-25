@@ -199,11 +199,11 @@ export class CreacionServicioComponent implements OnInit {
 
   ngOnInit(): void {
     this.usuariosServicio
-      .obtenerEmpleados()
+      .obtenerUsuarioRol(12)
       .subscribe((usuariosGenerales: any) => {
         console.log(usuariosGenerales);
 
-        this.todosUsuarios = usuariosGenerales.empleados;
+        this.todosUsuarios = usuariosGenerales.usuarios;
       });
     this.empresaServicio
       .obtenerInfoEmpresa()

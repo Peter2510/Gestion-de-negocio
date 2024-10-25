@@ -4,15 +4,14 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UsuarioService {
-
   private baseUrl = environment.URL;
-  private usuarios = "usuarios";
+  private usuarios = 'usuarios';
   private idUsuario: number | null = null;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   setIdUsuario(id: number) {
     this.idUsuario = id;
@@ -26,11 +25,18 @@ export class UsuarioService {
     this.idUsuario = null;
   }
 
-  obtenerEmpleados():Observable<any>{
-    return this.http.get(`${this.baseUrl}/${this.usuarios}/listar-empleados`)
+  obtenerEmpleados(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/${this.usuarios}/listar-empleados`);
   }
 
-  obtenerUsuario(id: number):Observable<any>{
-    return this.http.get(`${this.baseUrl}/${this.usuarios}/obtener-usuario/${id}`)
+  obtenerUsuario(id: number): Observable<any> {
+    return this.http.get(
+      `${this.baseUrl}/${this.usuarios}/obtener-usuario/${id}`
+    );
+  }
+  obtenerUsuarioRol(id: number): Observable<any> {
+    return this.http.get(
+      `${this.baseUrl}/${this.usuarios}/obtener-usuarios-por-rol/${id}`
+    );
   }
 }
