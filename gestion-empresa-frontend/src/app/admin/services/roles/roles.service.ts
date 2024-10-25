@@ -39,6 +39,7 @@ export class RolesService {
   }
 
   obtenerRolYPermisoEspecifico(id:any): Observable<any>{
+    console.log(this.authService.getToken(), "desde srevic");
     return this.http.get(`${this.baseUrl}/${this.permisoRol}/obtener-permiso-rol/${id}`,
       {
         headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),

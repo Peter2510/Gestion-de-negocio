@@ -65,6 +65,8 @@ export class RegistroComponent {
           title: "Registrado correctamente",
           text: data.mensaje,
           icon: "success"
+        }).then(() => {
+          this.router.navigate(['/login']);
         });
       },
       error: (error) => {

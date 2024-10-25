@@ -34,7 +34,11 @@ export class ServicioAuthService {
     try {
       const tipoUsuarioId = this.getIdTipoUsuario();
       const data = await this.http
-        .get<{ permisos: InfoPermiso[] }>(`${this.url}/permiso-rol/obtener-permiso-rol/${tipoUsuarioId}`)
+        .get<{ permisos: InfoPermiso[] }>(`${this.url}/permiso-rol/obtener-permiso-rol/${tipoUsuarioId}`,
+          {
+            headers: new HttpHeaders().set('Authorization', `Bearer ${this.getToken()}`),
+          }
+        )
         .toPromise();
 
       // Verifica si data y data.permisos están definidos
