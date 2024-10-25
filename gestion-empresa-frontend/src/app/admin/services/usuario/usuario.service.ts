@@ -36,6 +36,8 @@ export class UsuarioService {
   }
 
   obtenerUsuario(id: number): Observable<any> {
+    console.log("usuario obtener", id);
+    
     return this.http.get(`${this.baseUrl}/${this.usuarios}/obtener-usuario/${id}`,
       {
         headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),

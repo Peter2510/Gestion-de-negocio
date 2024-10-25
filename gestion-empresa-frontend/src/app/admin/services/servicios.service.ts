@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable, signal, Signal } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { inject, Injectable, signal, Signal } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ServicioAuthService } from 'src/app/auth/services/servicio-auth.service';
 import { dias_laborales, jornada_laboral } from 'src/app/models/Jornadas';
 import {
   DuracionServicioPrestado,
@@ -16,6 +17,7 @@ export class ServiciosService {
   private baseUrl = environment.URL;
   private servicios = 'servicios';
   private duracionServicioPrestado = 'duracionServicioPrestado';
+  authService = inject(ServicioAuthService);
 
   //signal
   public todosServicios = signal<any>([]);
@@ -71,7 +73,10 @@ export class ServiciosService {
   //servicio para obtener todos los servicios de un empleado y sus elementos especificos
   obtenerTodosServicios() {
     this.http
-      .get(`${this.baseUrl}/${this.servicios}/obtenerTodosServicios`)
+      .get(`${this.baseUrl}/${this.servicios}/obtenerTodosServicios`,
+      {
+        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      })
       .subscribe({
         next: (data: any) => {
           console.log(data);
@@ -88,7 +93,10 @@ export class ServiciosService {
   obtenerTodosServiciosEspecificos(id: number) {
     this.http
       .get(
-        `${this.baseUrl}/${this.duracionServicioPrestado}/obtenerTodosServiciosEspecificos/${id}`
+        `${this.baseUrl}/${this.duracionServicioPrestado}/obtenerTodosServiciosEspecificos/${id}`,
+        {
+          headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+        }
       )
       .subscribe({
         next: (data: any) => {

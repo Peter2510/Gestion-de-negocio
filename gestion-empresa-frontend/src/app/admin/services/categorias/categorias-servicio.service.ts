@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
+import { ServicioAuthService } from 'src/app/auth/services/servicio-auth.service';
 import { categorias_servicios, estadoServicio } from 'src/app/models/Servicios';
 import { environment } from 'src/environments/environment.development';
 
@@ -15,7 +16,7 @@ export class CategoriasServicioService {
   public estadoServicioElementos = signal<estadoServicio[]>([]);
   private idServicio: number | null = null;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authService: ServicioAuthService) {
     this.obtenerEstadosServicios();
   }
 
@@ -35,7 +36,10 @@ export class CategoriasServicioService {
   //funcion para obtener categorias
   obtenerTodasCategoriasRegistradas(): Observable<any> {
     return this.http.get(
-      `${this.baseUrl}/${this.categorias}/obtener-categorias`
+      `${this.baseUrl}/${this.categorias}/obtener-categorias`,
+      {
+        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      },
     );
   }
 
@@ -43,7 +47,10 @@ export class CategoriasServicioService {
   obtenerEstadosServicios() {
     this.http
       .get(
-        `${this.baseUrl}/${this.estadoServicio}/obtenerTodosEstadosServicios`
+        `${this.baseUrl}/${this.estadoServicio}/obtenerTodosEstadosServicios`,
+        {
+          headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+        }
       )
       .subscribe({
         next: (data: any) => {
@@ -59,21 +66,30 @@ export class CategoriasServicioService {
 
   obtenerCategoria(id: any): Observable<any> {
     return this.http.get(
-      `${this.baseUrl}/${this.categorias}/obtener-categoria/${id}`
+      `${this.baseUrl}/${this.categorias}/obtener-categoria/${id}`,
+      {
+        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      }
     );
   }
 
   actualizarCategoria(categoria: categorias_servicios): Observable<any> {
     return this.http.put(
       `${this.baseUrl}/${this.categorias}/actualizar-categoria`,
-      categoria
+      categoria,
+      {
+        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      },
     );
   }
 
   crearCategoria(categoria: categorias_servicios): Observable<any> {
     return this.http.post(
       `${this.baseUrl}/${this.categorias}/crear-categoria`,
-      categoria
+      categoria,
+      {
+        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      },
     );
   }
 }

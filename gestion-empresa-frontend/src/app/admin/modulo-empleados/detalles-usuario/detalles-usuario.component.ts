@@ -55,7 +55,7 @@ export class DetallesUsuarioComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.idUsuario = this.token.getIdUsuario();
+    this.idUsuario = this.usuarioService.getIdUsuario();
     if (this.idUsuario) {
       this.obtenerPermisos();
       this.obtenerRolesRegistrados();
