@@ -29,62 +29,64 @@ public class Seguridad {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Desactivar CSRF
-                .cors(Customizer.withDefaults()) // Habilitar CORS
+                .csrf(csrf -> csrf.disable()) //desactivar CSRF
+                .cors(Customizer.withDefaults()) //habilitar CORS
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/Auth/**").permitAll() // Permitir acceso a rutas de autenticación
-                        .requestMatchers("/health").permitAll() // Permitir acceso a la salud del servicio
-                        .requestMatchers("/Genero/**").permitAll() // Permitir acceso a género
-                        .requestMatchers("/correo/**").permitAll() // Permitir acceso a correo
+                        //rutas públicas que no requieren autenticación
+                        .requestMatchers("/Auth/**").permitAll()
+                        .requestMatchers("/health").authenticated()
+                        .requestMatchers("/Genero/**").permitAll()
+                        .requestMatchers("/correo/**").permitAll()
 
-                        // Rutas que requieren autenticación
-                        .requestMatchers("/buzon/**").permitAll()
-                        .requestMatchers("/categorias/**").hasAuthority("Administrador")
-                        .requestMatchers("/diasLaborales/**").hasAuthority("Administrador")
-                        .requestMatchers("/duracionServicioPrestado/**").hasAuthority("Administrador")
-                        .requestMatchers("/empresa/**").hasAnyAuthority("Administrador", "Cliente")
-                        .requestMatchers("/estadoServicio/**").hasAuthority("Administrador")
-                        .requestMatchers("/jornadaLaboral/**").hasAuthority("Administrador")
-                        .requestMatchers("/jornadaPorDia/**").hasAuthority("Administrador")
-                        .requestMatchers("/jornadaServicio/**").hasAuthority("Administrador")
-                        .requestMatchers("/permiso/**").hasAuthority("Administrador")
-                        .requestMatchers("/permiso-rol/**").permitAll()
-                        .requestMatchers("/Persona/**").hasAuthority("Administrador")
-                        .requestMatchers("/rol/**").hasAuthority("Administrador")
-                        .requestMatchers("/servicios/**").hasAuthority("Administrador")
-                        .requestMatchers("/tipoAsignacionCita/**").hasAuthority("Administrador")
-                        .requestMatchers("/tipoServicio/**").hasAuthority("Administrador")
-                        .requestMatchers("/usuarios/**").hasAuthority("Administrador")
+                        //rutas que requieren un JWT válido pero sin verificar roles
+                        .requestMatchers("/buzon/**").authenticated()
+                        .requestMatchers("/categorias/**").authenticated()
+                        .requestMatchers("/diasLaborales/**").authenticated()
+                        .requestMatchers("/duracionServicioPrestado/**").authenticated()
+                        .requestMatchers("/empresa/**").authenticated()
+                        .requestMatchers("/estadoServicio/**").authenticated()
+                        .requestMatchers("/jornadaLaboral/**").authenticated()
+                        .requestMatchers("/jornadaPorDia/**").authenticated()
+                        .requestMatchers("/jornadaServicio/**").authenticated()
+                        .requestMatchers("/permiso/**").authenticated()
+                        .requestMatchers("/permiso-rol/**").authenticated()
+                        .requestMatchers("/Persona/**").authenticated()
+                        .requestMatchers("/rol/**").authenticated()
+                        .requestMatchers("/servicios/**").authenticated()
+                        .requestMatchers("/tipoAsignacionCita/**").authenticated()
+                        .requestMatchers("/tipoServicio/**").authenticated()
+                        .requestMatchers("/usuarios/**").authenticated()
 
-                        // Cualquier otra solicitud requiere autenticación
+                        //cualquier otra solicitud requiere JWT válido
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Configurar como sin estado
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .authenticationProvider(authenticationProvider) // Configurar proveedor de autenticación
-                .addFilterBefore(jwtFiltroAutorizacion, UsernamePasswordAuthenticationFilter.class); // Agregar filtro JWT
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtFiltroAutorizacion, UsernamePasswordAuthenticationFilter.class); //filtro JWT
 
         return http.build();
     }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Permitir el origen de tu aplicación Angular
+        //permitir el origen de tu aplicación Angular
         configuration.setAllowedOrigins(List.of("http://localhost:4200"));
 
-        // Métodos permitidos
+        //metodos permitidos
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
-        // Encabezados permitidos
+        //encabezados permitidos
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
 
-        // Permitir credenciales (si necesitas enviar cookies o tokens de autenticación)
+        //permitir credenciales
         configuration.setAllowCredentials(true);
 
-        // Configurar el mapeo de URL
+        //configurar el mapeo de URL
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
 
