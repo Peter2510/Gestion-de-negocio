@@ -13,12 +13,12 @@ pipeline {
             }
         }
 
-        stage('Compile & Test') {
-            steps {
-                // Compilar y ejecutar las pruebas unitarias
-                sh 'cd gestion-empresa && mvn clean test'
-            }
-        }
+        // stage('Compile & Test') {
+        //     steps {
+        //         // Compilar y ejecutar las pruebas unitarias
+        //         sh 'cd gestion-empresa && mvn clean test'
+        //     }
+        // }
 
         stage('JaCoCo Report') {
             steps {
@@ -27,7 +27,7 @@ pipeline {
 
                 // Mostrar la cobertura en consola
                 script {
-                    def coverageReport = readFile('gestion-empresa/target/site/jacoco/jacoco-resources.csv')
+                    def coverageReport = readFile('gestion-empresa/target/site/jacoco/jacoco.csv')
                     def lines = coverageReport.split('\n')
                     def coverage = lines.find { it.contains('TOTAL') }?.split(',')[1]?.trim()
 
