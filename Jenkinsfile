@@ -20,22 +20,27 @@ pipeline {
 
         stage('Code Coverage') {
             steps {
-                // Ejecutar JaCoCo y verificar el coverage
                 script {
-                    def coverageResult = sh(script: "cd gestion-empresa && mvn jacoco:report", returnStatus: true)
-                    
-                    if (coverageResult != 0) {
-                        error "El análisis de cobertura falló."
-                    }
-
-                    // Extrae el porcentaje de cobertura de JaCoCo
+                    // Leer el archivo de cobertura
                     def report = readFile 'gestion-empresa/target/site/jacoco/jacoco.csv'
                     def lines = report.split("\n")
-                    def coverageLine = lines.find { it.contains("INSTRUCTION") }
-                    def coverage = coverageLine.split(",")[3].toFloat()
+                    def totalCovered = 0
+                    def totalMissed = 0
 
+                    // Saltar la primera línea (encabezados)
+                    for (int i = 1; i < lines.length; i++) {
+                        def coverageParts = lines[i].split(",")
+                        if (coverageParts.length > 4) {
+                            totalMissed += coverageParts[3].toInteger() // INSTRUCTION_MISSED
+                            totalCovered += coverageParts[4].toInteger() // INSTRUCTION_COVERED
+                        }
+                    }
+
+                    // Calcular la cobertura total
+                    def coverage = (totalCovered / (totalCovered + totalMissed)) * 100
                     echo "Cobertura actual: ${coverage}%"
-                    
+
+                    // Verificar si cumple con el umbral
                     if (coverage < COVERAGE_THRESHOLD) {
                         error "El porcentaje de cobertura es menor al ${COVERAGE_THRESHOLD}%. Coverage actual: ${coverage}%"
                     }
