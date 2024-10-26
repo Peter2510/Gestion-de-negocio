@@ -13,12 +13,12 @@ pipeline {
             }
         }
 
-        // stage('Compile & Test') {
-        //     steps {
-        //         // Compilar y ejecutar las pruebas unitarias
-        //         sh 'cd gestion-empresa && mvn clean test'
-        //     }
-        // }
+        stage('Compile & Test') {
+            steps {
+                // Compilar y ejecutar las pruebas unitarias
+                sh 'cd gestion-empresa && mvn clean test'
+            }
+        }
 
         stage('JaCoCo Report') {
             steps {
