@@ -4,6 +4,7 @@ import com.gestion.empresa.backend.gestion_empresa.dto.EmpresaDTO;
 import com.gestion.empresa.backend.gestion_empresa.models.Empresa;
 import com.gestion.empresa.backend.gestion_empresa.models.TipoAsignacionCita;
 import com.gestion.empresa.backend.gestion_empresa.models.TipoServicio;
+import com.gestion.empresa.backend.gestion_empresa.repositories.UsuarioRepository;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.EmpresaServiceImpl;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.S3ServiceImpl;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.TipoAsignacionCitaServiceImpl;
@@ -44,6 +45,9 @@ class EmpresaControllerTest {
 
     @Mock
     private TipoAsignacionCitaServiceImpl tipoAsignacionCitaService;
+
+    @Mock
+    private UsuarioRepository usuarioRepository;
 
     @Mock
     private S3Client s3Client;
