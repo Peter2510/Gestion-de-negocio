@@ -5,7 +5,7 @@ pipeline {
     agent any
 
     environment {
-        COVERAGE_THRESHOLD = 30 //buscamos el 80% de cobertura de pruebas
+        COVERAGE_THRESHOLD = 80 //buscamos el 80% de cobertura de pruebas
     }
 
     stages {
