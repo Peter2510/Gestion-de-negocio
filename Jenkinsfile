@@ -43,30 +43,30 @@ pipeline {
             }
         }
 
-        stage('Docker Compose') {
-            when {
-                expression { 
-                    // Solo si el coverage es >= 80%
-                    return coverage >= COVERAGE_THRESHOLD
-                }
-            }
-            steps {
-                // Construir y ejecutar Docker Compose
-                sh 'cd gestion-empresa && sudo docker-compose -f target/docker-compose.yml up --build -d'
-            }
-        }
+        // stage('Docker Compose') {
+        //     when {
+        //         expression { 
+        //             // Solo si el coverage es >= 80%
+        //             return coverage >= COVERAGE_THRESHOLD
+        //         }
+        //     }
+        //     steps {
+        //         // Construir y ejecutar Docker Compose
+        //         sh 'cd gestion-empresa && sudo docker-compose -f target/docker-compose.yml up --build -d'
+        //     }
+        // }
     }
-    post {
-        always {
-            // Limpieza, apagar contenedores
-            sh 'cd gestion-empresa && sudo docker-compose down'
-        }
-        success {
-            echo 'Pipeline completado exitosamente.'
-        }
-        failure {
-            echo 'El pipeline ha fallado.'
-        }
-    }
+    // post {
+    //     always {
+    //         // Limpieza, apagar contenedores
+    //         sh 'cd gestion-empresa && sudo docker-compose down'
+    //     }
+    //     success {
+    //         echo 'Pipeline completado exitosamente.'
+    //     }
+    //     failure {
+    //         echo 'El pipeline ha fallado.'
+    //     }
+    // }
 }
 
