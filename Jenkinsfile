@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        COVERAGE_THRESHOLD = 80
+        COVERAGE_THRESHOLD = 80.0
     }
     stages {
         stage('Checkout') {
@@ -18,7 +18,7 @@ pipeline {
             }
         }
 
-stage('Code Coverage') {
+        stage('Code Coverage') {
             steps {
                 script {
                     // Leer el archivo de cobertura
@@ -41,14 +41,14 @@ stage('Code Coverage') {
                     echo "Cobertura actual: ${coverage}%"
 
                     // Verificar si cumple con el umbral
-                    // Convertir COVERAGE_THRESHOLD a BigDecimal para la comparación
-                    def threshold = new BigDecimal(COVERAGE_THRESHOLD)
-                    if (coverage < threshold) {
+                    // Comparar con COVERAGE_THRESHOLD como un Double
+                    if (coverage < COVERAGE_THRESHOLD) {
                         error "El porcentaje de cobertura es menor al ${COVERAGE_THRESHOLD}%. Cobertura actual: ${coverage}%"
                     }
                 }
             }
         }
+
 
         // stage('Docker Compose') {
         //     when {
