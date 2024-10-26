@@ -18,7 +18,7 @@ pipeline {
             }
         }
 
-        stage('Code Coverage') {
+stage('Code Coverage') {
             steps {
                 script {
                     // Leer el archivo de cobertura
@@ -41,8 +41,10 @@ pipeline {
                     echo "Cobertura actual: ${coverage}%"
 
                     // Verificar si cumple con el umbral
-                    if (coverage < COVERAGE_THRESHOLD) {
-                        error "El porcentaje de cobertura es menor al ${COVERAGE_THRESHOLD}%. Coverage actual: ${coverage}%"
+                    // Convertir COVERAGE_THRESHOLD a BigDecimal para la comparación
+                    def threshold = new BigDecimal(COVERAGE_THRESHOLD)
+                    if (coverage < threshold) {
+                        error "El porcentaje de cobertura es menor al ${COVERAGE_THRESHOLD}%. Cobertura actual: ${coverage}%"
                     }
                 }
             }
