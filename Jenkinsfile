@@ -27,15 +27,39 @@ pipeline {
 
                 // Mostrar la cobertura en consola
                 script {
-                    def coverageReport = readFile('gestion-empresa/target/site/jacoco/jacoco.csv')
+                    // Definir la ruta del archivo de cobertura
+                    def coverageFile = 'gestion-empresa/target/site/jacoco/jacoco.csv'
+                    
+                    // Verificar si el archivo existe
+                    if (!fileExists(coverageFile)) {
+                        error "El archivo de cobertura no se encontró: ${coverageFile}"
+                    }
+
+                    // Leer el archivo de cobertura
+                    def coverageReport = readFile(coverageFile)
                     def lines = coverageReport.split('\n')
-                    def coverage = lines.find { it.contains('TOTAL') }?.split(',')[1]?.trim()
+                    
+                    // Buscar la línea que contiene 'TOTAL'
+                    def totalLine = lines.find { it.contains('TOTAL') }
 
-                    echo "Cobertura de código: ${coverage}%"
+                    // Comprobar si se encontró la línea TOTAL
+                    if (totalLine) {
+                        // Extraer la cobertura total
+                        def coverage = totalLine.split(',')[1]?.trim()
 
-                    // Verificar si la cobertura está por debajo del umbral
-                    if (coverage.toFloat() < env.COVERAGE_THRESHOLD) {
-                        error "La cobertura de código está por debajo del umbral de ${env.COVERAGE_THRESHOLD}%"
+                        // Validar que coverage no sea nulo o vacío
+                        if (coverage) {
+                            echo "Cobertura de código: ${coverage}%"
+
+                            // Verificar si la cobertura está por debajo del umbral
+                            if (coverage.toFloat() < env.COVERAGE_THRESHOLD) {
+                                error "La cobertura de código está por debajo del umbral de ${env.COVERAGE_THRESHOLD}%"
+                            }
+                        } else {
+                            error "La cobertura total no se pudo determinar."
+                        }
+                    } else {
+                        error "No se encontró la línea TOTAL en el archivo de cobertura."
                     }
                 }
             }
