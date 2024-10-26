@@ -46,7 +46,7 @@ public class UsuariosController {
         );
 
     }
-    // para generar su edicion
+    // para generar la edicion del usuario
 
     @PutMapping(value = "/actualizar-usuario")
     public ResponseEntity<Object> editarUsuario(@RequestBody ActualizacionUsuarioAdminDTO usuario) {
