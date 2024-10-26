@@ -55,9 +55,6 @@ class EmpresaControllerTest {
     @Mock
     private S3ServiceImpl s3Service;
 
-    @Mock
-    private UsuarioRepository usuarioRepository;
-
     private String bucketName ="mock-bucket";
 
     @Mock
