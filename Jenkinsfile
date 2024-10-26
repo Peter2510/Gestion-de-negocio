@@ -5,44 +5,44 @@ pipeline {
     agent any
 
     environment {
-        COVERAGE_THRESHOLD = 80 // Define tu umbral de cobertura deseado aquí
+        COVERAGE_THRESHOLD = 80 //buscamos el 80% de cobertura de pruebas
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Clonar el código de la rama específica
+                //clonar el código de la rama específica
                 checkout scm
             }
         }
 
         stage('Compile & Test') {
             steps {
-                // Compilar y ejecutar las pruebas unitarias
+                //compilar y ejecutar las pruebas unitarias
                 sh 'cd gestion-empresa && mvn clean test'
             }
         }
 
         stage('JaCoCo Report') {
             steps {
-                // Generar el informe de cobertura
+                //generar el informe de cobertura
                 sh 'cd gestion-empresa && mvn jacoco:report'
 
-                // Mostrar la cobertura en consola
+                //mostrar la la cobertura en consola
                 script {
-                    // Definir la ruta del archivo de cobertura
+                    //definir la ruta del archivo de cobertura dentro del proyecto gestion-empresa
                     def coverageFile = 'gestion-empresa/target/site/jacoco/jacoco.csv'
                     
-                    // Verificar si el archivo existe
+                    //verificar si el archivo existe
                     if (!fileExists(coverageFile)) {
                         error "El archivo de cobertura no se encontró: ${coverageFile}"
                     }
 
-                    // Leer el archivo de cobertura
+                    //leer el archivo de cobertura que es el .csv
                     def coverageReport = readFile(coverageFile)
                     def lines = coverageReport.split('\n').drop(1) // Ignorar la cabecera
 
-                    // Inicializar contadores usando BigDecimal
+                    //inicializar contadores usando BigDecimal
                     BigDecimal totalInstructionMissed = BigDecimal.ZERO
                     BigDecimal totalInstructionCovered = BigDecimal.ZERO
                     BigDecimal totalBranchMissed = BigDecimal.ZERO
@@ -50,10 +50,10 @@ pipeline {
                     BigDecimal totalLineMissed = BigDecimal.ZERO
                     BigDecimal totalLineCovered = BigDecimal.ZERO
 
-                    // Iterar sobre cada línea y acumular los totales
+                    //iterar sobre cada línea y acumular los totales
                     lines.each { line ->
                         def columns = line.split(',')
-                        if (columns.size() >= 9) { // Asegúrate de que hay suficientes columnas
+                        if (columns.size() >= 9) { //hay suficientes columnas
                             totalInstructionMissed = totalInstructionMissed.add(new BigDecimal(columns[3]))
                             totalInstructionCovered = totalInstructionCovered.add(new BigDecimal(columns[4]))
                             totalBranchMissed = totalBranchMissed.add(new BigDecimal(columns[5]))
@@ -63,7 +63,7 @@ pipeline {
                         }
                     }
 
-                    // Calcular porcentajes usando BigDecimal
+                    //calcular porcentajes usando BigDecimal
                     BigDecimal instructionCoverage = totalInstructionCovered.multiply(BigDecimal.valueOf(100))
                         .divide(totalInstructionCovered.add(totalInstructionMissed), 2, RoundingMode.HALF_UP)
 
@@ -73,15 +73,15 @@ pipeline {
                     BigDecimal lineCoverage = totalLineCovered.multiply(BigDecimal.valueOf(100))
                         .divide(totalLineCovered.add(totalLineMissed), 2, RoundingMode.HALF_UP)
 
-                    // Mostrar la cobertura en consola
+                    //mostrar la cobertura en consola de lo que llevamos
                     echo "Cobertura de instrucciones: ${instructionCoverage}%"
                     echo "Cobertura de ramas: ${branchCoverage}%"
                     echo "Cobertura de líneas: ${lineCoverage}%"
 
-                    // Verificar si la cobertura está por debajo del umbral
+                    //verificar si la cobertura está por debajo del umbral
                     BigDecimal coverageThreshold = new BigDecimal(env.COVERAGE_THRESHOLD)
-                    if (lineCoverage.compareTo(coverageThreshold) < 0) {
-                      echo "Advertencia: La cobertura de líneas actual es de ${lineCoverage} y está por debajo del umbral de ${coverageThreshold}%"
+                    if (instructionCoverage.compareTo(coverageThreshold) < 0) {
+                      echo "Advertencia: La cobertura actual es de ${instructionCoverage} y está por debajo del umbral de ${coverageThreshold}%"
                     }
                 }
             }
