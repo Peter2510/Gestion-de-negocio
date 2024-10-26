@@ -14,7 +14,7 @@ pipeline {
         stage('Compile & Test') {
             steps {
                 // Compilar y ejecutar las pruebas unitarias
-                sh './mvnw clean test'
+                sh 'cd gestion-empresa && mvn clean test'
             }
         }
 
@@ -52,14 +52,14 @@ pipeline {
             }
             steps {
                 // Construir y ejecutar Docker Compose
-                sh 'docker-compose -f target/docker-compose.yml up --build -d'
+                sh 'cd gestion-empresa && sudo docker-compose -f target/docker-compose.yml up --build -d'
             }
         }
     }
     post {
         always {
             // Limpieza, apagar contenedores
-            sh 'docker-compose down'
+            sh 'cd gestion-empresa && sudo docker-compose down'
         }
         success {
             echo 'Pipeline completado exitosamente.'
