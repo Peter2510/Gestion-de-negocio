@@ -22,7 +22,7 @@ pipeline {
             steps {
                 // Ejecutar JaCoCo y verificar el coverage
                 script {
-                    def coverageResult = sh(script: "./mvnw jacoco:report", returnStatus: true)
+                    def coverageResult = sh(script: "./mvn jacoco:report", returnStatus: true)
                     
                     if (coverageResult != 0) {
                         error "El análisis de cobertura falló."
