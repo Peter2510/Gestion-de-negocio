@@ -1,9 +1,10 @@
 pipeline {
     agent any
+    
     environment {
-                COVERAGE_THRESHOLD = 80 // Define tu umbral de cobertura deseado aquí
-
+        COVERAGE_THRESHOLD = 80 // Define tu umbral de cobertura deseado aquí
     }
+
     stages {
         stage('Checkout') {
             steps {
@@ -19,7 +20,6 @@ pipeline {
             }
         }
 
- stages {
         stage('Code Coverage') {
             steps {
                 script {
@@ -48,31 +48,37 @@ pipeline {
                 }
             }
         }
+
+        // Uncomment if you want to add the Docker Compose stage
+        /*
+        stage('Docker Compose') {
+            when {
+                expression { 
+                    // Solo si el coverage es >= 80%
+                    return coverage >= COVERAGE_THRESHOLD
+                }
+            }
+            steps {
+                // Construir y ejecutar Docker Compose
+                sh 'cd gestion-empresa && sudo docker-compose -f target/docker-compose.yml up --build -d'
+            }
+        }
+        */
     }
 
-        // stage('Docker Compose') {
-        //     when {
-        //         expression { 
-        //             // Solo si el coverage es >= 80%
-        //             return coverage >= COVERAGE_THRESHOLD
-        //         }
-        //     }
-        //     steps {
-        //         // Construir y ejecutar Docker Compose
-        //         sh 'cd gestion-empresa && sudo docker-compose -f target/docker-compose.yml up --build -d'
-        //     }
-        // }
+    // Uncomment if you want to add post actions
+    /*
+    post {
+        always {
+            // Limpieza, apagar contenedores
+            sh 'cd gestion-empresa && sudo docker-compose down'
+        }
+        success {
+            echo 'Pipeline completado exitosamente.'
+        }
+        failure {
+            echo 'El pipeline ha fallado.'
+        }
     }
-    // post {
-    //     always {
-    //         // Limpieza, apagar contenedores
-    //         sh 'cd gestion-empresa && sudo docker-compose down'
-    //     }
-    //     success {
-    //         echo 'Pipeline completado exitosamente.'
-    //     }
-    //     failure {
-    //         echo 'El pipeline ha fallado.'
-    //     }
-    // }
+    */
 }
