@@ -86,7 +86,7 @@ pipeline {
                         echo "La cobertura actual es de ${instructionCoverage} y cumple con el umbral de ${coverageThreshold}%, iniciando el despliegue"
                         sh 'cd gestion-empresa && mvn clean install -DskipTests'
                         sh 'cd gestion-empresa/target && sudo docker compose up --build -d'
-                        sh 'Despliegue exitoso'
+                        echo "Despliegue exitoso"
                     }
                 }
             }
