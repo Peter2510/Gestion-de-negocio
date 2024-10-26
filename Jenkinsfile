@@ -81,7 +81,7 @@ pipeline {
                     // Verificar si la cobertura está por debajo del umbral
                     BigDecimal coverageThreshold = new BigDecimal(env.COVERAGE_THRESHOLD)
                     if (lineCoverage.compareTo(coverageThreshold) < 0) {
-                      echo "Advertencia: La cobertura de líneas está por debajo del umbral de ${coverageThreshold}%"
+                      echo "Advertencia: La cobertura de líneas actual es de ${lineCoverage} y está por debajo del umbral de ${coverageThreshold}%"
                     }
                 }
             }
