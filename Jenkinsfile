@@ -1,7 +1,8 @@
 pipeline {
     agent any
     environment {
-        COVERAGE_THRESHOLD = 80.0
+                COVERAGE_THRESHOLD = 80 // Define tu umbral de cobertura deseado aquí
+
     }
     stages {
         stage('Checkout') {
@@ -18,13 +19,14 @@ pipeline {
             }
         }
 
+ stages {
         stage('Code Coverage') {
             steps {
                 script {
                     // Leer el archivo de cobertura en formato XML
                     def xmlReport = readFile 'gestion-empresa/target/site/jacoco/jacoco.xml'
                     
-                    // Usar expresiones regulares para obtener la cobertura
+                    // Usar expresiones regulares para obtener la cobertura de líneas
                     def matcher = xmlReport =~ /<counter type="LINE" missed="(\d+)" covered="(\d+)"/
                     def totalCovered = 0
                     def totalMissed = 0
@@ -46,6 +48,7 @@ pipeline {
                 }
             }
         }
+    }
 
         // stage('Docker Compose') {
         //     when {
