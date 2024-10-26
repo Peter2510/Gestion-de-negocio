@@ -23,11 +23,16 @@ pipeline {
                 script {
                     // Leer el archivo de cobertura en formato XML
                     def xmlReport = readFile 'gestion-empresa/target/site/jacoco/jacoco.xml'
-                    def parser = new XmlSlurper().parseText(xmlReport)
+                    
+                    // Usar expresiones regulares para obtener la cobertura
+                    def matcher = xmlReport =~ /<counter type="LINE" missed="(\d+)" covered="(\d+)"/
+                    def totalCovered = 0
+                    def totalMissed = 0
 
-                    // Extraer datos de cobertura
-                    def totalCovered = parser.counter.find { it.@type == 'LINE' }.@covered.toInteger()
-                    def totalMissed = parser.counter.find { it.@type == 'LINE' }.@missed.toInteger()
+                    matcher.each { 
+                        totalMissed += it[0][1].toInteger()
+                        totalCovered += it[0][2].toInteger()
+                    }
 
                     // Calcular la cobertura total
                     def totalLines = totalCovered + totalMissed
