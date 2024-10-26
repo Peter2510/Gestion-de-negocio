@@ -31,17 +31,17 @@ pipeline {
                     for (int i = 1; i < lines.length; i++) {
                         def coverageParts = lines[i].split(",")
                         if (coverageParts.length > 4) {
+                            // Convertir a Integer para evitar errores de tipo
                             totalMissed += coverageParts[3].toInteger() // INSTRUCTION_MISSED
                             totalCovered += coverageParts[4].toInteger() // INSTRUCTION_COVERED
                         }
                     }
 
                     // Calcular la cobertura total
-                    def coverage = (totalCovered / (totalCovered + totalMissed)) * 100
+                    def coverage = (totalCovered + totalMissed > 0) ? (totalCovered / (totalCovered + totalMissed)) * 100 : 0
                     echo "Cobertura actual: ${coverage}%"
 
                     // Verificar si cumple con el umbral
-                    // Comparar con COVERAGE_THRESHOLD como un Double
                     if (coverage < COVERAGE_THRESHOLD) {
                         error "El porcentaje de cobertura es menor al ${COVERAGE_THRESHOLD}%. Cobertura actual: ${coverage}%"
                     }
@@ -50,30 +50,5 @@ pipeline {
         }
 
 
-        // stage('Docker Compose') {
-        //     when {
-        //         expression { 
-        //             // Solo si el coverage es >= 80%
-        //             return coverage >= COVERAGE_THRESHOLD
-        //         }
-        //     }
-        //     steps {
-        //         // Construir y ejecutar Docker Compose
-        //         sh 'cd gestion-empresa && sudo docker-compose -f target/docker-compose.yml up --build -d'
-        //     }
-        // }
-    }
-    // post {
-    //     always {
-    //         // Limpieza, apagar contenedores
-    //         sh 'cd gestion-empresa && sudo docker-compose down'
-    //     }
-    //     success {
-    //         echo 'Pipeline completado exitosamente.'
-    //     }
-    //     failure {
-    //         echo 'El pipeline ha fallado.'
-    //     }
-    // }
 }
 
