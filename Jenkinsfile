@@ -29,7 +29,7 @@ pipeline {
                     }
 
                     // Extrae el porcentaje de cobertura de JaCoCo
-                    def report = readFile 'target/site/jacoco/jacoco.csv'
+                    def report = readFile 'gestion-empresa/target/site/jacoco/jacoco.csv'
                     def lines = report.split("\n")
                     def coverageLine = lines.find { it.contains("INSTRUCTION") }
                     def coverage = coverageLine.split(",")[3].toFloat()
