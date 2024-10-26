@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    
+
     environment {
         COVERAGE_THRESHOLD = 80 // Define tu umbral de cobertura deseado aquí
     }
@@ -32,8 +32,17 @@ pipeline {
                     def totalMissed = 0
 
                     matcher.each { 
-                        totalMissed += it[0][1].toInteger()
-                        totalCovered += it[0][2].toInteger()
+                        // Validar que los grupos coincidan
+                        def missed = it[0][1]
+                        def covered = it[0][2]
+
+                        // Verificar si los valores son numéricos
+                        if (missed.isNumber() && covered.isNumber()) {
+                            totalMissed += missed.toInteger()
+                            totalCovered += covered.toInteger()
+                        } else {
+                            echo "Advertencia: Valores no numéricos encontrados en el XML: missed='${missed}', covered='${covered}'"
+                        }
                     }
 
                     // Calcular la cobertura total
@@ -49,7 +58,7 @@ pipeline {
             }
         }
 
-        // Uncomment if you want to add the Docker Compose stage
+        // Puedes añadir la etapa de Docker Compose si es necesario
         /*
         stage('Docker Compose') {
             when {
@@ -66,7 +75,7 @@ pipeline {
         */
     }
 
-    // Uncomment if you want to add post actions
+    // Puedes añadir las acciones post si es necesario
     /*
     post {
         always {
