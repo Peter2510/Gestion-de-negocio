@@ -23,7 +23,7 @@ pipeline {
             }
         }
 
-        stage('JaCoCo Report') {
+        stage('JaCoCo Report and Deploy') {
             steps {
                 //generar el informe de cobertura
                 sh 'cd gestion-empresa && mvn jacoco:report'
@@ -82,6 +82,10 @@ pipeline {
                     BigDecimal coverageThreshold = new BigDecimal(env.COVERAGE_THRESHOLD)
                     if (instructionCoverage.compareTo(coverageThreshold) < 0) {
                       echo "Advertencia: La cobertura actual es de ${instructionCoverage} y está por debajo del umbral de ${coverageThreshold}%"
+                    }else{
+                        echo "La cobertura actual es de ${instructionCoverage} y cumple con el umbral de ${coverageThreshold}%, iniciando el despliegue"
+                        sh 'cd gestion-empresa/target && sudo docker compose up --build -d'
+                        sh 'Despliegue exitoso'
                     }
                 }
             }
