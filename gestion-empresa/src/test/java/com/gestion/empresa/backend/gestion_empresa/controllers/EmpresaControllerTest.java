@@ -47,6 +47,9 @@ class EmpresaControllerTest {
     private TipoAsignacionCitaServiceImpl tipoAsignacionCitaService;
 
     @Mock
+    private UsuarioRepository usuarioRepository;
+
+    @Mock
     private S3Client s3Client;
 
     @Mock
