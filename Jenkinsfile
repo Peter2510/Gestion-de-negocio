@@ -37,29 +37,42 @@ pipeline {
 
                     // Leer el archivo de cobertura
                     def coverageReport = readFile(coverageFile)
-                    def lines = coverageReport.split('\n')
-                    
-                    // Buscar la línea que contiene 'TOTAL'
-                    def totalLine = lines.find { it.contains('TOTAL') }
+                    def lines = coverageReport.split('\n').drop(1) // Ignorar la cabecera
 
-                    // Comprobar si se encontró la línea TOTAL
-                    if (totalLine) {
-                        // Extraer la cobertura total
-                        def coverage = totalLine.split(',')[1]?.trim()
+                    // Inicializar contadores
+                    def totalInstructionMissed = 0
+                    def totalInstructionCovered = 0
+                    def totalBranchMissed = 0
+                    def totalBranchCovered = 0
+                    def totalLineMissed = 0
+                    def totalLineCovered = 0
 
-                        // Validar que coverage no sea nulo o vacío
-                        if (coverage) {
-                            echo "Cobertura de código: ${coverage}%"
-
-                            // Verificar si la cobertura está por debajo del umbral
-                            if (coverage.toFloat() < env.COVERAGE_THRESHOLD) {
-                                error "La cobertura de código está por debajo del umbral de ${env.COVERAGE_THRESHOLD}%"
-                            }
-                        } else {
-                            error "La cobertura total no se pudo determinar."
+                    // Iterar sobre cada línea y acumular los totales
+                    lines.each { line ->
+                        def columns = line.split(',')
+                        if (columns.size() >= 8) { // Asegurarse de que hay suficientes columnas
+                            totalInstructionMissed += columns[3].toInteger()
+                            totalInstructionCovered += columns[4].toInteger()
+                            totalBranchMissed += columns[5].toInteger()
+                            totalBranchCovered += columns[6].toInteger()
+                            totalLineMissed += columns[7].toInteger()
+                            totalLineCovered += columns[8].toInteger()
                         }
-                    } else {
-                        error "No se encontró la línea TOTAL en el archivo de cobertura."
+                    }
+
+                    // Calcular porcentajes
+                    def instructionCoverage = (totalInstructionCovered * 100.0) / (totalInstructionCovered + totalInstructionMissed)
+                    def branchCoverage = (totalBranchCovered * 100.0) / (totalBranchCovered + totalBranchMissed)
+                    def lineCoverage = (totalLineCovered * 100.0) / (totalLineCovered + totalLineMissed)
+
+                    // Mostrar la cobertura en consola
+                    echo "Cobertura de instrucciones: ${instructionCoverage}%"
+                    echo "Cobertura de ramas: ${branchCoverage}%"
+                    echo "Cobertura de líneas: ${lineCoverage}%"
+
+                    // Verificar si la cobertura está por debajo del umbral (en este caso, podemos usar líneas como referencia)
+                    if (lineCoverage < env.COVERAGE_THRESHOLD) {
+                        error "La cobertura de líneas está por debajo del umbral de ${env.COVERAGE_THRESHOLD}%"
                     }
                 }
             }
