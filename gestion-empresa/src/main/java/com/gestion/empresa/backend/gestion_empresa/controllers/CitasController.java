@@ -44,7 +44,7 @@ public class CitasController {
     ) {
         //ingreso de elementos
         ResponseBackend respuesta = citasServiceImpl.registrarCitas(ingresoCitas);
-
+        System.out.println("respuesta = " + respuesta);
         return ResponseEntity.status(respuesta.getStatus()).body(Map.of("ok", respuesta.getOk(), "mensaje", respuesta.getMensaje()));
 
     }

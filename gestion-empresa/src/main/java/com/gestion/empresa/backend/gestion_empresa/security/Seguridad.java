@@ -56,6 +56,7 @@ public class Seguridad {
                         .requestMatchers("/tipoAsignacionCita/**").authenticated()
                         .requestMatchers("/tipoServicio/**").authenticated()
                         .requestMatchers("/usuarios/**").authenticated()
+                        .requestMatchers("/citas/**").authenticated()
 
                         //cualquier otra solicitud requiere JWT válido
                         .anyRequest().authenticated()
