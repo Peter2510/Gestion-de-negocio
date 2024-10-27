@@ -22,11 +22,4 @@ public class CorreoConfirmacion {
     private String correo;
     private String codigo;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
 }

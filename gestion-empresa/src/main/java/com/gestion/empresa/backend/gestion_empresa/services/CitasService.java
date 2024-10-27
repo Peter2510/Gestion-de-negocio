@@ -11,5 +11,4 @@ import java.util.List;
 public interface CitasService {
 
     List<Citas> obtenerTodasCitas();
-    ResponseBackend ingresarCitas(Citas citas);
 }

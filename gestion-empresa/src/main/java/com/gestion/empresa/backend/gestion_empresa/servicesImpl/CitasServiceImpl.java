@@ -45,20 +45,6 @@ public class CitasServiceImpl implements CitasService {
         return (citasRepository.findAll());
     }
 
-    //metodo para ingresar nuevas citas
-    @Override
-    public ResponseBackend ingresarCitas(Citas citas) {
-        try {
-            System.out.println(citas);
-            return new ResponseBackend(true, HttpStatus.CREATED, "Servicio registrado exitosamente");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            // En caso de error, la transacción se revertirá automáticamente
-            return new ResponseBackend(false, HttpStatus.INTERNAL_SERVER_ERROR, "Error al registrar servicio: " + e.getMessage());
-        }
-    }
-
     //funcion para registrar
     @Transactional(rollbackOn = Throwable.class)
     public ResponseBackend registrarCitas(RegistroCitasDTO registroCitasDTO) {
