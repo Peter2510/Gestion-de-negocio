@@ -3,6 +3,7 @@ package com.gestion.empresa.backend.gestion_empresa.controllers;
 import com.gestion.empresa.backend.gestion_empresa.dto.DevolverTodoServiciosDTO;
 import com.gestion.empresa.backend.gestion_empresa.dto.NuevoServicioDTO;
 import com.gestion.empresa.backend.gestion_empresa.models.JornadaPorDia;
+import com.gestion.empresa.backend.gestion_empresa.models.ServicioPrestado;
 import com.gestion.empresa.backend.gestion_empresa.models.Servicios;
 import com.gestion.empresa.backend.gestion_empresa.services.DiasLaboralesService;
 import com.gestion.empresa.backend.gestion_empresa.services.JornadaLaboralService;
@@ -109,11 +110,12 @@ public class ServicioController {
     }
 
 
+
+
     @GetMapping("/obtenerTodosServiciosEspecificos/{id}")
-    public ResponseEntity<Map<String, Object>> obtenerTodosServiciosEspecificos() {
-
-        List<Servicios> response = serviciosServiceImpl.obtenerTodosServicios();
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "todoServicios" , response));
-
+    public ResponseEntity<Map<String, Object>> obtenerTodosServiciosEspecificos(@PathVariable Long id) {
+        List<ServicioPrestado> response = serviciosServiceImpl.obtenerSeriviosPrestadosId(id);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "todoServiciosEspecificos", response));
     }
+
 }

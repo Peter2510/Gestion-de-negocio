@@ -5,6 +5,7 @@ import com.gestion.empresa.backend.gestion_empresa.models.*;
 import com.gestion.empresa.backend.gestion_empresa.repositories.*;
 import com.gestion.empresa.backend.gestion_empresa.services.CitasService;
 import com.gestion.empresa.backend.gestion_empresa.utils.ResponseBackend;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Author: alexxus
@@ -33,6 +35,10 @@ public class CitasServiceImpl implements CitasService {
 
     @Autowired
     private CitasRepository citasRepository;
+    @Autowired
+    private DetalleCitaRepository detalleCitaRepository;
+    @Autowired
+    private ServicioPrestadoRepository servicioPrestadoRepository;
 
     @Override
     public List<Citas> obtenerTodasCitas() {
@@ -54,6 +60,7 @@ public class CitasServiceImpl implements CitasService {
     }
 
     //funcion para registrar
+    @Transactional(rollbackOn = Throwable.class)
     public ResponseBackend registrarCitas(RegistroCitasDTO registroCitasDTO) {
 
 
@@ -79,6 +86,20 @@ public class CitasServiceImpl implements CitasService {
                     .orElseThrow(() -> new RuntimeException("El servicio no se encuentra registrado")));
 
             Citas ingresoCitas = citasRepository.save(nuevaCitas);
+
+
+            //luego de registrado entonces se hace el ciclo para las otras citas
+
+            for (Long elementos : registroCitasDTO.getListadoServiciosEspecificos()) {
+                DetalleCita detalleCita = new DetalleCita();
+                detalleCita.setIdServicioPrestado( servicioPrestadoRepository.findById(elementos)
+                        .orElseThrow(() -> new RuntimeException("El servicio no se encuentra registrado")));
+                detalleCita.setIdCita(ingresoCitas);
+                System.out.println(detalleCita);
+                DetalleCita detalleCitaFinal = detalleCitaRepository.save(detalleCita);
+
+            }
+
             return new ResponseBackend(true, HttpStatus.CREATED, "CITA registrada correctamente");
         } catch (Exception e) {
             e.printStackTrace();
@@ -86,4 +107,14 @@ public class CitasServiceImpl implements CitasService {
         }
 
     }
+
+    public List<Citas> obtenerCitasId(Long id){
+        Usuarios determinadoUsuarios = this.usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("El estado no se encuentra registrado"));
+
+        List<Citas> todasCitas = this.citasRepository.findAllByIdUsuario(determinadoUsuarios);
+        return todasCitas;
+    }
+
+
 }

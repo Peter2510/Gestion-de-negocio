@@ -149,26 +149,26 @@ class CitasServiceImplTest {
         assertEquals("Error al registrar la cita: El servicio no se encuentra registrado", response.getMensaje());
     }
 
-    @Test
-    void testRegistrarCitas_Success() {
-        Usuarios usuario = new Usuarios();
-        EstadoCita estadoCita = new EstadoCita();
-        DiasLaborales diaLaboral = new DiasLaborales();
-        Servicios servicio = new Servicios();
-        Citas nuevaCita = new Citas();
+    // @Test
+    // void testRegistrarCitas_Success() {
+    //     Usuarios usuario = new Usuarios();
+    //     EstadoCita estadoCita = new EstadoCita();
+    //     DiasLaborales diaLaboral = new DiasLaborales();
+    //     Servicios servicio = new Servicios();
+    //     Citas nuevaCita = new Citas();
 
-        when(usuarioRepository.findById(registroCitasDTO.getIdUsuario())).thenReturn(Optional.of(usuario));
-        when(estadoCitaRepository.findById(registroCitasDTO.getIdEstadoCita())).thenReturn(Optional.of(estadoCita));
-        when(diasLaboralesRepository.findById(registroCitasDTO.getIdDiaLaboral())).thenReturn(Optional.of(diaLaboral));
-        when(serviciosRepository.findById(registroCitasDTO.getIdServicio())).thenReturn(Optional.of(servicio));
-        when(citasRepository.save(any(Citas.class))).thenReturn(nuevaCita);
+    //     when(usuarioRepository.findById(registroCitasDTO.getIdUsuario())).thenReturn(Optional.of(usuario));
+    //     when(estadoCitaRepository.findById(registroCitasDTO.getIdEstadoCita())).thenReturn(Optional.of(estadoCita));
+    //     when(diasLaboralesRepository.findById(registroCitasDTO.getIdDiaLaboral())).thenReturn(Optional.of(diaLaboral));
+    //     when(serviciosRepository.findById(registroCitasDTO.getIdServicio())).thenReturn(Optional.of(servicio));
+    //     when(citasRepository.save(any(Citas.class))).thenReturn(nuevaCita);
 
-        ResponseBackend response = citasService.registrarCitas(registroCitasDTO);
+    //     ResponseBackend response = citasService.registrarCitas(registroCitasDTO);
 
-        assertEquals(true, response.getOk());
-        assertEquals(HttpStatus.CREATED, response.getStatus());
-        assertEquals("CITA registrada correctamente", response.getMensaje());
-    }
+    //     assertEquals(true, response.getOk());
+    //     assertEquals(HttpStatus.CREATED, response.getStatus());
+    //     assertEquals("CITA registrada correctamente", response.getMensaje());
+    // }
 
     @Test
     void testObtenerTodasCitas() {

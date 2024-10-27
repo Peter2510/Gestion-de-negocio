@@ -4,6 +4,7 @@ import com.gestion.empresa.backend.gestion_empresa.dto.RegistroCitasDTO;
 import com.gestion.empresa.backend.gestion_empresa.models.CategoriaServicio;
 import com.gestion.empresa.backend.gestion_empresa.models.Citas;
 import com.gestion.empresa.backend.gestion_empresa.models.EstadoCita;
+import com.gestion.empresa.backend.gestion_empresa.models.ServicioPrestado;
 import com.gestion.empresa.backend.gestion_empresa.repositories.UsuarioRepository;
 import com.gestion.empresa.backend.gestion_empresa.services.CitasService;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.CategoriaServicioServiceImpl;
@@ -54,6 +55,14 @@ public class CitasController {
         //ENVIAR UNA NUEVA RESPUESTA
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "Citas" , todasCitas));
     }
+
+
+    @GetMapping("/obtenerTodasCitasEspecificos/{id}")
+    public ResponseEntity<Map<String, Object>> obtenerCitasEspecificas(@PathVariable Long id) {
+        List<Citas> response = citasServiceImpl.obtenerCitasId(id);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "todoServiciosEspecificos", response));
+    }
+
 
 
 }
