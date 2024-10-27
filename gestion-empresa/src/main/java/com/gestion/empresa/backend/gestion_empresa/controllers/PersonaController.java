@@ -4,6 +4,7 @@ package com.gestion.empresa.backend.gestion_empresa.controllers;
 import com.gestion.empresa.backend.gestion_empresa.models.Persona;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.PersonaServicioImpl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +14,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/Persona")
 public class PersonaController {
-    private final PersonaServicioImpl servicio;
 
-    public PersonaController(PersonaServicioImpl servicio) {
-        this.servicio = servicio;
-    }
+    @Autowired
+    private PersonaServicioImpl servicio;
 
 
     // rutas

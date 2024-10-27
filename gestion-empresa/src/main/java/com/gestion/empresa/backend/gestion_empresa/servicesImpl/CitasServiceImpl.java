@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Author: alexxus
@@ -56,32 +57,33 @@ public class CitasServiceImpl implements CitasService {
     public ResponseBackend registrarCitas(RegistroCitasDTO registroCitasDTO) {
 
 
-        try{
+        try {
             //crear la estado
             Citas nuevaCitas = new Citas();
 
+            Optional<Usuarios> optionalUsuario = usuarioRepository.findById(registroCitasDTO.getIdUsuario());
+            if (optionalUsuario.isEmpty()) {
+                return new ResponseBackend(false, HttpStatus.INTERNAL_SERVER_ERROR, "El usuario no se encuentra registrado");
+            }
+            nuevaCitas.setIdUsuario(optionalUsuario.get());
+
             nuevaCitas.setFechaHoraInicio(registroCitasDTO.getHoraInicio());
             nuevaCitas.setFechaHoraFin(registroCitasDTO.getHoraFin());
-            nuevaCitas.setIdUsuario( usuarioRepository.findById(registroCitasDTO.getIdUsuario())
+            nuevaCitas.setIdUsuario(usuarioRepository.findById(registroCitasDTO.getIdUsuario())
                     .orElseThrow(() -> new RuntimeException("El usuario no se encuentra registrado")));
-            nuevaCitas.setIdEstadoCita( estadoCitaRepository.findById(registroCitasDTO.getIdEstadoCita())
+            nuevaCitas.setIdEstadoCita(estadoCitaRepository.findById(registroCitasDTO.getIdEstadoCita())
                     .orElseThrow(() -> new RuntimeException("El estado no se encuentra registrado")));
-            nuevaCitas.setIdDiaLaboral( diasLaboralesRepository.findById(registroCitasDTO.getIdDiaLaboral())
+            nuevaCitas.setIdDiaLaboral(diasLaboralesRepository.findById(registroCitasDTO.getIdDiaLaboral())
                     .orElseThrow(() -> new RuntimeException("El dia no se encuentra registrado")));
-            nuevaCitas.setIdServicio( serviciosRepository.findById(registroCitasDTO.getIdServicio())
+            nuevaCitas.setIdServicio(serviciosRepository.findById(registroCitasDTO.getIdServicio())
                     .orElseThrow(() -> new RuntimeException("El servicio no se encuentra registrado")));
 
             Citas ingresoCitas = citasRepository.save(nuevaCitas);
             return new ResponseBackend(true, HttpStatus.CREATED, "CITA registrada correctamente");
         } catch (Exception e) {
             e.printStackTrace();
-            // En caso de error, la transacción se revertirá automáticamente
             return new ResponseBackend(false, HttpStatus.INTERNAL_SERVER_ERROR, "Error al registrar la cita: " + e.getMessage());
-
         }
 
-
     }
-
-
 }

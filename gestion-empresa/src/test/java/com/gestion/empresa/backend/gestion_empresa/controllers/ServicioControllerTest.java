@@ -92,10 +92,11 @@ class ServicioControllerTest {
 
         when(serviciosServiceImpl.registroServicio(any(NuevoServicioDTO.class))).thenReturn(responseBackend);
 
-        ResponseEntity<String> response = servicioController.createOrUpdateServicio(nuevoServicioDTO);
+        ResponseEntity<Map<String, Object>> response = servicioController.createOrUpdateServicio(nuevoServicioDTO);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals("{ok=true, mensaje=Servicio registrado exitosamente}", response.getBody());
+        assertEquals("Servicio registrado exitosamente", response.getBody().get("mensaje"));
+        assertEquals(true, response.getBody().get("ok"));
     }
 
     @Test
@@ -120,4 +121,23 @@ class ServicioControllerTest {
         assertEquals(true, response.getBody().get("ok"));
         assertEquals(List.of(new Servicios()), response.getBody().get("todoServicios"));
     }
+
+    @Test
+    void testObtenerTodosServiciosEspecificos() {
+        Long id = 1L; // ID de ejemplo
+        List<Servicios> serviciosEspecificos = List.of(new Servicios()); // Inicializa con un servicio de ejemplo
+
+        // Simulamos la respuesta del servicio
+        when(serviciosServiceImpl.obtenerTodosServicios()).thenReturn(serviciosEspecificos);
+
+        // Llamamos al método del controlador
+        ResponseEntity<Map<String, Object>> response = servicioController.obtenerTodosServiciosEspecificos();
+
+        // Verificamos el resultado
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(true, response.getBody().get("ok"));
+        assertEquals(serviciosEspecificos, response.getBody().get("todoServicios"));
+    }
+
+
 }

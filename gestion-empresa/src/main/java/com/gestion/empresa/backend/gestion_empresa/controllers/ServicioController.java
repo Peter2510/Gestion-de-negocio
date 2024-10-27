@@ -77,11 +77,11 @@ public class ServicioController {
     // para hacer la idea de generar todda la transaccion
     // Crear o actualizar un servicio con jornadas laborales y días laborales
     @PostMapping("/creacionNuevosServicios")
-    public ResponseEntity<String> createOrUpdateServicio(
+    public ResponseEntity<Map<String, Object>> createOrUpdateServicio(
             @RequestBody NuevoServicioDTO servicioRequest) {
         System.out.println(servicioRequest);
             ResponseBackend response = serviciosServiceImpl.registroServicio(servicioRequest);
-            return ResponseEntity.status(response.getStatus()).body(Map.of("ok", response.getOk(), "mensaje", response.getMensaje()).toString());
+            return ResponseEntity.status(response.getStatus()).body(Map.of("ok", response.getOk(), "mensaje", response.getMensaje()));
 
 
     }
