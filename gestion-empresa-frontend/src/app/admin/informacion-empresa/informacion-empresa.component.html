@@ -38,16 +38,20 @@
         </label>
 
         <label class="block" *ngIf="empresa?.tipoServicio">
-            <span class="label-text">Tipo de Empresa</span>
-            <select name="tipoEmpresa" class="select select-bordered select-secondary w-full" [(ngModel)]="empresa.tipoServicio.id">
-                <option *ngFor="let tipoServicio of tiposServicios" [value]="tipoServicio.id">{{tipoServicio.nombre}}</option>
+            <span class="label-text">Tipo de servicio que ofrece la empresa</span>
+            <select name="tipoEmpresa" class="select select-bordered select-secondary w-full"
+                [(ngModel)]="empresa.tipoServicio.id" (change)="onTipoServicioChange($event)">
+                <option *ngFor="let tipoServicio of tiposServicios" [value]="tipoServicio.id">{{tipoServicio.nombre}}
+                </option>
             </select>
         </label>
 
         <label class="block" *ngIf="empresa?.tipoAsignacionCita">
             <span class="label-text">Forma de asignación de las citas</span>
-            <select name="formaAsignacion" class="select select-bordered select-secondary w-full" [(ngModel)]="empresa.tipoAsignacionCita.id">
-                <option *ngFor="let tipoAsignacion of tipoAsignacionCitas" [value]="tipoAsignacion.id">{{tipoAsignacion.tipo}}</option>
+            <select name="formaAsignacion" class="select select-bordered select-secondary w-full"
+                [(ngModel)]="empresa.tipoAsignacionCita.id" (change)="onTipoAsignacionChange($event)">
+                <option *ngFor="let tipoAsignacion of tipoAsignacionCitas" [value]="tipoAsignacion.id">
+                    {{tipoAsignacion.tipo}}</option>
             </select>
         </label>
 
@@ -64,20 +68,16 @@
 
         <label class="block">
             <span class="label-text">Ingresa nuevo logo de la empresa</span>
-            <input type="file" 
-                   accept="image/*" 
-                   class="file-input file-input-bordered file-input-secondary w-full" 
-                   (change)="onFileSelected($event)" />
-          </label>
+            <input type="file" accept="image/*" class="file-input file-input-bordered file-input-secondary w-full"
+                (change)="onFileSelected($event)" />
+        </label>
 
-          <div class="flex justify-center items-center">
+        <div class="flex justify-center items-center">
             <label for="image-modal" class="flex justify-center">
-              <img *ngIf="empresa.logo" 
-                   [src]="empresa.logo" 
-                   alt="Current Image" 
-                   class="w-24 h-24 rounded-full mx-auto cursor-pointer" />
+                <img *ngIf="empresa.logo" [src]="empresa.logo" alt="Current Image"
+                    class="w-24 h-24 rounded-full mx-auto cursor-pointer" />
             </label>
-          </div>
+        </div>
 
         <div class="flex justify-center">
             <button type="submit" class="btn btn-accent text-base-content w-full">Actualizar</button>

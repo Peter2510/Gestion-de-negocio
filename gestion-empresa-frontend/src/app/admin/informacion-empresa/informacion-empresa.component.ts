@@ -9,10 +9,10 @@ import Swal from 'sweetalert2';
   styleUrls: ['./informacion-empresa.component.css']
 })
 export class InformacionEmpresaComponent implements OnInit {
-  
-  constructor(private empresaService: EmpresaService) {}
 
-  selectedFile: File | null = null; 
+  constructor(private empresaService: EmpresaService) { }
+
+  selectedFile: File | null = null;
   tiposServicios: TipoServicio[] = [];
   tipoAsignacionCitas: TipoAsignacionCita[] = [];
 
@@ -44,7 +44,7 @@ export class InformacionEmpresaComponent implements OnInit {
   cargarInfoEmpresa(): void {
     this.empresaService.obtenerInfoEmpresa().subscribe({
       next: (data) => {
-        this.empresa = data.empresa; 
+        this.empresa = data.empresa;
         this.loading = false;
         console.log(this.empresa);
       },
@@ -79,9 +79,29 @@ export class InformacionEmpresaComponent implements OnInit {
     });
   }
 
+  onTipoAsignacionChange(event: Event): void {
+    const selectedId = (event.target as HTMLSelectElement).value;
+    const selectedTipoAsignacion = this.tipoAsignacionCitas.find(tac => tac.id.toString() === selectedId);
+
+    if (selectedTipoAsignacion) {
+      this.empresa.tipoAsignacionCita.tipo = selectedTipoAsignacion.tipo;
+    }
+  }
+
+
+  onTipoServicioChange(event: Event): void {
+    const selectedId = (event.target as HTMLSelectElement).value;
+    const selectedTipoServicio = this.tiposServicios.find(ts => ts.id.toString() === selectedId);
+
+    if (selectedTipoServicio) {
+      this.empresa.tipoServicio.nombre = selectedTipoServicio.nombre;
+    }
+  }
+
+
   actualizarEmpresa(): void {
     this.loading = true;
-    console.log(this.empresa, "Edicionnnnnnnnn");
+    console.log(this.empresa);
     this.empresaService.actualizarEmpresa(this.empresa, this.selectedFile).subscribe({
       next: (data) => {
         console.log(data);
@@ -105,7 +125,7 @@ export class InformacionEmpresaComponent implements OnInit {
       }
     });
   }
-  
+
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
