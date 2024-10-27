@@ -18,10 +18,6 @@ import java.util.List;
 public class JornadaLaboralServiceImpl implements JornadaLaboralService {
     @Autowired
     private JornadaLaboralRepository jornadaLaboralRepository;
-    @Override
-    public List<JornadaLaboral> obtenerTodasJornadas() {
-        return List.of();
-    }
 
     @Override
     public JornadaLaboral ingresarJornada(JornadaLaboral jornadaLaboral) {

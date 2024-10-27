@@ -10,6 +10,5 @@ import java.util.List;
 @Service
 public interface JornadaLaboralService {
 
-    List<JornadaLaboral> obtenerTodasJornadas();
     JornadaLaboral ingresarJornada(JornadaLaboral jornadaLaboral);
 }
