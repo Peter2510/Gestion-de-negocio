@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Author: alexxus
@@ -101,6 +102,14 @@ public class CitasServiceImpl implements CitasService {
         }
 
 
+    }
+
+    public List<Citas> obtenerCitasId(Long id){
+        Usuarios determinadoUsuarios = this.usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("El estado no se encuentra registrado"));
+
+        List<Citas> todasCitas = this.citasRepository.findAllByIdUsuario(determinadoUsuarios);
+        return todasCitas;
     }
 
 
