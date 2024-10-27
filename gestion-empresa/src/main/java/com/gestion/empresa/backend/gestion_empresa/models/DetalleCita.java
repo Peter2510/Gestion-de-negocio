@@ -25,8 +25,8 @@ public class DetalleCita implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     //aca ver para el foreing key
-
-    @Column(name="idCita", nullable = false)
+    @ManyToOne
+    @JoinColumn(name="idCita")
     private Citas idCita;
     @ManyToOne
     @JoinColumn(name = "idServicioPrestado")

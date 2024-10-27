@@ -293,4 +293,14 @@ public class ServiciosServiceImpl implements ServiciosService {
     }
 
 
+
+    public List<ServicioPrestado> obtenerSeriviosPrestadosId(Long idServicio){
+        Servicios nuevoServicios = this.serviciosRepository.findById(idServicio)
+                .orElseThrow(() -> new RuntimeException("El estado no se encuentra registrado"));
+        List<ServiciosAsignado> serviciosAsignados = this.serviciosAsignadoRepository.findAllByIdServicio(nuevoServicios);
+        return serviciosAsignados.stream()
+                .map(ServiciosAsignado::getIdServicioPrestado) // Mapea a ServicioPrestado
+                .collect(Collectors.toList());
+    }
+
 }

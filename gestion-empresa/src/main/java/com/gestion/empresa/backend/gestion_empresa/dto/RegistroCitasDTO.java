@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 /**
  * Author: alexxus
@@ -25,4 +26,5 @@ public class RegistroCitasDTO {
      private Long idServicio;
      private Long idUsuario;
      private Long idDiaLaboral;
+     private List<Long> listadoServiciosEspecificos;
 }
