@@ -1,5 +1,6 @@
 package com.gestion.empresa.backend.gestion_empresa.validation;
 
+import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 
 @ControllerAdvice
+@Data
 public class manejadorExcepciones {
 
     @ExceptionHandler(BadCredentialsException.class)

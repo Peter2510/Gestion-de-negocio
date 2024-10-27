@@ -56,7 +56,6 @@ public class AutenticacionServiceImpl implements AutenticacionServicie {
         if (user.isEmpty()) {
             System.out.println("vacio");
             return Optional.empty();
-
         }
         // Comparar la contraseña ingresada con la contraseña encriptada en la base de datos
         if (!passwordEncoder.matches(valor.getPassword(), user.get().getPassword())) {
