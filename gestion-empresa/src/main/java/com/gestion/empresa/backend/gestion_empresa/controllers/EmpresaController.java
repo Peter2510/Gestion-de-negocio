@@ -160,6 +160,8 @@ public class EmpresaController {
             nuevosDatosEmpresa.setTelefono(empresaDTO.getTelefono());
             nuevosDatosEmpresa.setEmail(empresaDTO.getEmail());
             nuevosDatosEmpresa.setDescripcion(empresaDTO.getDescripcion());
+            nuevosDatosEmpresa.setTipoServicio(busquedaTipoServicio.get());
+            nuevosDatosEmpresa.setTipoAsignacionCita(busquedaTipoAsignacionServicio.get());
 
             //subida del logo
             if (empresaDTO.getLogoFile() != null && !empresaDTO.getLogoFile().isEmpty()) {
