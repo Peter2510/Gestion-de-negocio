@@ -63,6 +63,15 @@ export class UsuarioService {
     }
   );
   }
+
+  obtenerUsuarioRol(id: number): Observable<any> {
+    return this.http.get(
+      `${this.baseUrl}/${this.usuarios}/obtener-usuarios-por-rol/${id}`,
+      {
+        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      }
+    );
+  }
   
 
 }

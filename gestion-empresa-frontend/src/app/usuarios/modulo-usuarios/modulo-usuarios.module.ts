@@ -13,13 +13,19 @@ import { RouterLink, RouterModule } from '@angular/router';
 import { EdicionPerfilComponent } from '../edicion-perfil/edicion-perfil.component';
 import { VistaUsuarioComponent } from '../vista-usuario/vista-usuario.component';
 import { LoadingClienteComponent } from '../loading-cliente/loading-cliente.component';
+import { ModalCreacionCitaComponent } from '../modal-creacion-cita/modal-creacion-cita.component';
+import { HistorialCitasComponent } from '../historial-citas/historial-citas.component';
+import { FacturasComprobantesComponent } from '../facturas-comprobantes/facturas-comprobantes.component';
 @NgModule({
   declarations: [
     HeaderUsuarioComponent,
     VistaPerfilUsuarioComponent,
     EdicionPerfilComponent,
     VistaUsuarioComponent,
-    LoadingClienteComponent
+    LoadingClienteComponent,
+    ModalCreacionCitaComponent,
+    HistorialCitasComponent,
+    FacturasComprobantesComponent,
   ],
   imports: [
     CommonModule,

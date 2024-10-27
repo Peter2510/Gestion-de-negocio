@@ -16,6 +16,7 @@ import Swal from 'sweetalert2';
 import { EmpresaService } from '../../services/empresa/empresa.service';
 import { UsuarioService } from '../../services/usuario/usuario.service';
 import { Usuario } from 'src/app/models/Usuario';
+import { Empresa } from 'src/app/models/Empresa';
 
 @Component({
   selector: 'app-creacion-servicio',
@@ -51,7 +52,26 @@ export class CreacionServicioComponent implements OnInit {
   categoriaServicio: any;
 
   //valor de la empresa
-  empresa: any = '';
+  empresa: Empresa = {
+    id: 0,
+    nombre: '',
+    descripcion: '',
+    direccion: '',
+    telefono: '',
+    email: '',
+    logo: '',
+    cantidadEmpleados: 0,
+    cantidadServicios: 0,
+    tipoServicio: {
+      id: 0,
+      nombre: '',
+    },
+    tipoAsignacionCita: {
+      id: 0,
+      tipo: '',
+      activo: false,
+    },
+  };
   todosUsuarios: Usuario[] = [];
   // movimientos para el steper
   goToStep(step: number) {
@@ -207,11 +227,17 @@ export class CreacionServicioComponent implements OnInit {
       });
     this.empresaServicio
       .obtenerInfoEmpresa()
-      .subscribe((empresaDeterminada: any) => {
-        console.log(empresaDeterminada);
-
-        this.empresa = empresaDeterminada.empresa.tipoServicio;
+      .subscribe({
+        next: (response: any) => {
+          this.empresa = response.empresa;
+          console.log(this.empresa.tipoServicio);
+        },
+        error: (err) => {
+          console.log(err);
+        },
       });
+
+      
     this.categoriaEstadoServicio
       .obtenerTodasCategoriasRegistradas()
       .subscribe((elementos: any) => {

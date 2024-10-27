@@ -70,7 +70,10 @@ export class ServiciosService {
 
     return this.http.post(
       `${this.baseUrl}/${this.servicios}/creacionNuevosServicios`,
-      todosDatos
+      todosDatos,
+      {
+        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      }
     );
   }
 
@@ -95,22 +98,11 @@ export class ServiciosService {
 
   // servicios especificos
   obtenerTodosServiciosEspecificos(id: number) {
-    this.http
-      .get(
-        `${this.baseUrl}/${this.duracionServicioPrestado}/obtenerTodosServiciosEspecificos/${id}`,
-        {
-          headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
-        }
-      )
-      .subscribe({
-        next: (data: any) => {
-          console.log(data);
-
-          this.serviciosEspecificos.set(data.todoServicios);
-        },
-        error: (err) => {
-          console.error('Error al obtener estados de servicio:', err);
-        },
-      });
+    return this.http.get(
+      `${this.baseUrl}/${this.servicios}/obtenerTodosServiciosEspecificos/${id}`,
+      {
+        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      }
+    );
   }
 }

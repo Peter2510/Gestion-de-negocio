@@ -81,6 +81,7 @@ export class InformacionEmpresaComponent implements OnInit {
 
   actualizarEmpresa(): void {
     this.loading = true;
+    console.log(this.empresa, "Edicionnnnnnnnn");
     this.empresaService.actualizarEmpresa(this.empresa, this.selectedFile).subscribe({
       next: (data) => {
         console.log(data);

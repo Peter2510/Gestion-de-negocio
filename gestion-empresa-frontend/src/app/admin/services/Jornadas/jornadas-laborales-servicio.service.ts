@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable, signal } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { inject, Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ServicioAuthService } from 'src/app/auth/services/servicio-auth.service';
 import { dias_laborales } from 'src/app/models/Jornadas';
 import { environment } from 'src/environments/environment.development';
 
@@ -13,6 +14,8 @@ export class JornadasLaboralesServicioService {
   private jornadasServicios = 'jornadaServicio';
   private rol = 'rol';
 
+  authService = inject(ServicioAuthService);
+
   //signal
   public diasLaboralesTotales = signal<dias_laborales[]>([]);
   public jornadasEspecificas = signal<any[]>([]);
@@ -21,7 +24,11 @@ export class JornadasLaboralesServicioService {
   }
 
   obtenerDiasLaborales() {
-    this.http.get(`${this.baseUrl}/${this.dias}/obtenerTodosDias`).subscribe({
+    this.http.get(`${this.baseUrl}/${this.dias}/obtenerTodosDias`,
+      {
+        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      }
+    ).subscribe({
       next: (elementos: any) => {
         this.diasLaboralesTotales.set(elementos);
       },
@@ -32,7 +39,10 @@ export class JornadasLaboralesServicioService {
   obtenerTodasJornadasEspecificos(id: number) {
     this.http
       .get(
-        `${this.baseUrl}/${this.jornadasServicios}/obtenerTodasJornadas/${id}`
+        `${this.baseUrl}/${this.jornadasServicios}/obtenerTodasJornadas/${id}`,
+        {
+          headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+        }
       )
       .subscribe({
         next: (data: any) => {
