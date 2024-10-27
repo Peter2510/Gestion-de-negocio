@@ -12,8 +12,12 @@
     />
     <a class="btn btn-ghost text-xl">{{ this.empresa?.nombre }}</a>
     <div class="divider lg:divider-horizontal"></div>
-    <a class="btn btn-ghost text-xl">Historial de citas</a>
-    <a class="btn btn-ghost text-xl">Facturas y comprobantes</a>
+    <a class="btn btn-ghost text-xl" [routerLink]="'/usuarios/historial-citas'"
+      >Historial de citas</a
+    >
+    <a class="btn btn-ghost text-xl" [routerLink]="'/usuarios/facturas'"
+      >Facturas y comprobantes</a
+    >
   </div>
   <div class="flex-none gap-2">
     <div class="dropdown dropdown-end">

@@ -62,6 +62,22 @@ export class VistaUsuarioComponent implements OnInit {
   //servicios
   citasServicio = inject(CitasServicioService);
   todasCitas: any;
+
+  // para el modal
+  modalOpen = false;
+
+  openModal() {
+    this.modalOpen = true;
+  }
+
+  closeModal() {
+    this.modalOpen = false;
+  }
+
+  saveCita(citaData: any) {
+    console.log('Cita guardada:', citaData);
+  }
+
   constructor(private modal: NgbModal) {}
 
   ngOnInit(): void {
@@ -171,17 +187,6 @@ export class VistaUsuarioComponent implements OnInit {
   }
 
   isModalOpen = false;
-
-  openModal(event: any) {
-    this.selectedEvent = event;
-    this.eventDate = this.formatDate(event.start);
-    this.isModalOpen = true;
-  }
-
-  closeModal() {
-    this.isModalOpen = false;
-    this.modal.dismissAll();
-  }
 
   saveEvent(): void {
     console.log('Evento actualizado:', this.selectedEvent);

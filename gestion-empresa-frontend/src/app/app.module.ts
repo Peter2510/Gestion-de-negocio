@@ -30,7 +30,9 @@ import { ModuloUsuariosModule } from './usuarios/modulo-usuarios/modulo-usuarios
 import { VistaServicioEspecificoComponent } from './admin/modulo-servicios/vistaEspecifica/vista-servicio-especifico/vista-servicio-especifico.component';
 import { VerEmpleadosComponent } from './admin/modulo-empleados/ver-empleados/ver-empleados.component';
 import { DetallesUsuarioComponent } from './admin/modulo-empleados/detalles-usuario/detalles-usuario.component';
-
+import { ModalCreacionCitaComponent } from './usuarios/modal-creacion-cita/modal-creacion-cita.component';
+import { HistorialCitasComponent } from './usuarios/historial-citas/historial-citas.component';
+import { FacturasComprobantesComponent } from './usuarios/facturas-comprobantes/facturas-comprobantes.component';
 
 @NgModule({
   declarations: [AppComponent, Vista2faLoginComponent],

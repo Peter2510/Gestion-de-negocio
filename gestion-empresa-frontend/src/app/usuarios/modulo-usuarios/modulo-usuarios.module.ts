@@ -12,12 +12,18 @@ import { VistaPerfilUsuarioComponent } from '../vista-perfil-usuario/vista-perfi
 import { RouterLink, RouterModule } from '@angular/router';
 import { EdicionPerfilComponent } from '../edicion-perfil/edicion-perfil.component';
 import { VistaUsuarioComponent } from '../vista-usuario/vista-usuario.component';
+import { ModalCreacionCitaComponent } from '../modal-creacion-cita/modal-creacion-cita.component';
+import { HistorialCitasComponent } from '../historial-citas/historial-citas.component';
+import { FacturasComprobantesComponent } from '../facturas-comprobantes/facturas-comprobantes.component';
 @NgModule({
   declarations: [
     HeaderUsuarioComponent,
     VistaPerfilUsuarioComponent,
     EdicionPerfilComponent,
-    VistaUsuarioComponent
+    VistaUsuarioComponent,
+    ModalCreacionCitaComponent,
+    HistorialCitasComponent,
+    FacturasComprobantesComponent,
   ],
   imports: [
     CommonModule,

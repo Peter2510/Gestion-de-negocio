@@ -1,0 +1,106 @@
+<!-- Modal -->
+<div class="modal modal-open" *ngIf="isOpen">
+  <div class="modal-box relative bg-base-content">
+    <button
+      class="btn btn-sm btn-circle absolute right-2 top-2"
+      (click)="this.cerrarModal()"
+    >
+      ✕
+    </button>
+    <h3 class="text-lg font-bold">Crear Cita</h3>
+    <form>
+      <div class="form-control">
+        <label class="label">Hora de Inicio</label>
+        <input
+          class="w-full p-2 border rounded"
+          type="date"
+          name="horainicio"
+          mwlFlatpickr
+          [(ngModel)]="this.horaInicio"
+          [altInput]="true"
+          [convertModelValue]="true"
+          [enableTime]="true"
+          dateFormat="dd/MM/yyyy HH:mm:ss"
+          altFormat="F j, Y H:i"
+          placeholder="Not set"
+        />
+      </div>
+      <div class="form-control mt-2">
+        <label class="label">Hora de Fin</label>
+        <input
+          class="w-full p-2 border rounded"
+          type="date"
+          mwlFlatpickr
+          name="horafin"
+          [(ngModel)]="this.horaFin"
+          [altInput]="true"
+          [convertModelValue]="true"
+          [enableTime]="true"
+          dateFormat="dd/MM/yyyy HH:mm:ss"
+          altFormat="F j, Y H:i"
+          placeholder="Not set"
+        />
+      </div>
+
+      <div class="form-control mt-2">
+        <label class="label">ID Día Laboral</label>
+        <input
+          type="number"
+          name="idDiaLaboral"
+          class="input input-bordered bg-base-content"
+          [(ngModel)]="diaLaboral"
+          required
+        />
+      </div>
+      <div class="form-control mt-2">
+        <label class="label">Servicio</label>
+        <!--
+        
+        -->
+        <select
+          class="select select-bordered w-full text-primary"
+          (change)="onSelectChange($event)"
+          name="ServicioDeterminado"
+        >
+          <option
+            *ngFor="let servicio of this.serviciosService.todosServicios()"
+            [value]="servicio.id"
+          >
+            {{ servicio.nombre }}
+          </option>
+        </select>
+      </div>
+      <div *ngIf="seleccionado > 1">
+        <div class="form-control mt-2">
+          <label class="label">Servicio especifico</label>
+
+          <select
+            class="select select-bordered w-full text-primary"
+            [(ngModel)]="this.idserviciosEspecificos"
+            name="servicioEspecifico"
+          >
+            <option
+              *ngFor="let especifico of this.serviciosEspecificos"
+              [value]="especifico.id"
+            >
+              {{ especifico.nombre }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-action">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          (click)="this.crearCita()"
+        >
+          Guardar Cita
+        </button>
+        <button type="button" class="btn" (click)="this.cerrarModal()">
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

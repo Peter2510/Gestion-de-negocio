@@ -90,19 +90,8 @@ export class ServiciosService {
 
   // servicios especificos
   obtenerTodosServiciosEspecificos(id: number) {
-    this.http
-      .get(
-        `${this.baseUrl}/${this.duracionServicioPrestado}/obtenerTodosServiciosEspecificos/${id}`
-      )
-      .subscribe({
-        next: (data: any) => {
-          console.log(data);
-
-          this.serviciosEspecificos.set(data.todoServicios);
-        },
-        error: (err) => {
-          console.error('Error al obtener estados de servicio:', err);
-        },
-      });
+    return this.http.get(
+      `${this.baseUrl}/${this.servicios}/obtenerTodosServiciosEspecificos/${id}`
+    );
   }
 }
