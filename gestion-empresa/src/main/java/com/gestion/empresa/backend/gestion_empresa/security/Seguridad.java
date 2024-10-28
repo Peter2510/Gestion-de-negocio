@@ -59,7 +59,7 @@ public class Seguridad {
                         .requestMatchers("/citas/**").authenticated()
 
                         //cualquier otra solicitud requiere JWT válido
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

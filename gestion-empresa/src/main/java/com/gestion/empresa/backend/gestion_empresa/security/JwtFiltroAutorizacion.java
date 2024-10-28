@@ -66,7 +66,6 @@ public class JwtFiltroAutorizacion extends OncePerRequestFilter {
 
         //si hay un nombre de usuario y no hay autenticación previa en el contexto de seguridad
         if (nombreUsuario != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            System.out.println("Nombre de usuario y no hay autenticación previa");
             //busca el usuario en la base de datos
             UserDetails userDetails = userDetailsService.loadUserByUsername(nombreUsuario);
 
