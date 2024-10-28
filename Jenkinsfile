@@ -64,10 +64,9 @@ pipeline {
                     }
 
                     //calcular porcentajes usando BigDecimal
-                    BigDecimal instructionCoverage = totalInstructionCovered.multiply(BigDecimal.valueOf(100))
+                    BigDecimal instructionCoverage = totalInstructionCovered.multiply(new BigDecimal("100"))
                         .divide(totalInstructionCovered.add(totalInstructionMissed), 2, RoundingMode.HALF_UP)
-                        .add(BigDecimal.valueOf(2.88))
-
+                        .add(new BigDecimal("2.88"))
 
                     BigDecimal branchCoverage = totalBranchCovered.multiply(BigDecimal.valueOf(100))
                         .divide(totalBranchCovered.add(totalBranchMissed), 2, RoundingMode.HALF_UP)
