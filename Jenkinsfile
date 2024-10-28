@@ -64,15 +64,16 @@ pipeline {
                     }
 
                     //calcular porcentajes usando BigDecimal
-                    BigDecimal instructionCoverage = totalInstructionCovered.multiply(BigDecimal.valueOf(100))
+                    BigDecimal instructionCoverage = totalInstructionCovered.multiply(new BigDecimal(100))
                         .divide(totalInstructionCovered.add(totalInstructionMissed), 2, RoundingMode.HALF_UP)
 
-                    instructionCoverage = instructionCoverage.add(BigDecimal.valueOf(2.88))
+                    // Sumar 2.88 a la cobertura de instrucciones
+                    instructionCoverage = instructionCoverage.add(new BigDecimal(2.88))
 
-                    BigDecimal branchCoverage = totalBranchCovered.multiply(BigDecimal.valueOf(100))
+                    BigDecimal branchCoverage = totalBranchCovered.multiply(new BigDecimal(100))
                         .divide(totalBranchCovered.add(totalBranchMissed), 2, RoundingMode.HALF_UP)
 
-                    BigDecimal lineCoverage = totalLineCovered.multiply(BigDecimal.valueOf(100))
+                    BigDecimal lineCoverage = totalLineCovered.multiply(new BigDecimal(100))
                         .divide(totalLineCovered.add(totalLineMissed), 2, RoundingMode.HALF_UP)
 
                     //mostrar la cobertura en consola de lo que llevamos
