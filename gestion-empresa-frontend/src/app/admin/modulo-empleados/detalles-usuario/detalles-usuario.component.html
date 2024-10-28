@@ -45,7 +45,8 @@
                   [disabled]="usuario.rol.id === 12">
             <option disabled selected class="text-base-content">Seleccione un rol</option>
             <ng-container *ngFor="let rol of roles">
-              <option [ngValue]="rol.id" class="text-base-content">{{ rol.nombre }}</option>
+              <option *ngIf="!(rol.id === 1 && !tienePermiso(20))" 
+                      [ngValue]="rol.id" class="text-base-content">{{ rol.nombre }}</option>
             </ng-container>
           </select>
           <div *ngIf="Rol.invalid && Rol.touched" class="text-red-500 text-xs">
