@@ -1,86 +1,61 @@
 package com.gestion.empresa.backend.gestion_empresa.servicesImpl;
-import com.gestion.empresa.backend.gestion_empresa.models.EstadoCita;
-import com.gestion.empresa.backend.gestion_empresa.repositories.EstadoCitaRepository;
-import com.gestion.empresa.backend.gestion_empresa.utils.ResponseBackend;
-import com.gestion.empresa.backend.gestion_empresa.servicesImpl.EstadoCitaServiceImpl;
+
+import com.gestion.empresa.backend.gestion_empresa.models.EstadoServicio;
+import com.gestion.empresa.backend.gestion_empresa.repositories.EstadoServicioRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(MockitoExtension.class)
 class EstadoServicioServiceImplTest {
+
     @Mock
-    private EstadoCitaRepository estadoCitaRepository;
+    private EstadoServicioRepository estadoServicioRepository;
 
     @InjectMocks
-    private EstadoCitaServiceImpl estadoCitaService;
+    private EstadoServicioServiceImpl estadoServicioService;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void testObtenerTodo() {
-        EstadoCita estado1 = new EstadoCita();
-        EstadoCita estado2 = new EstadoCita();
-        List<EstadoCita> estados = new ArrayList<>();
+    void testObtenerTodo() {
+        EstadoServicio estado1 = new EstadoServicio();
+        EstadoServicio estado2 = new EstadoServicio();
+        List<EstadoServicio> estados = new ArrayList<>();
         estados.add(estado1);
         estados.add(estado2);
 
-        when(estadoCitaRepository.findAll()).thenReturn(estados);
+        when(estadoServicioRepository.findAll()).thenReturn(estados);
 
-        List<EstadoCita> result = estadoCitaService.obtenerTodo();
+        List<EstadoServicio> result = estadoServicioService.obtenerTodo();
 
         assertNotNull(result);
         assertEquals(2, result.size());
-        verify(estadoCitaRepository, times(1)).findAll();
+        verify(estadoServicioRepository, times(1)).findAll();
     }
 
     @Test
-    public void testIngresarEstadoCita() {
-        EstadoCita estadoCita = new EstadoCita();
-        when(estadoCitaRepository.save(estadoCita)).thenReturn(estadoCita);
+    void testIngresarEstado() {
+        EstadoServicio estadoServicio = new EstadoServicio();
+        when(estadoServicioRepository.save(estadoServicio)).thenReturn(estadoServicio);
 
-        EstadoCita result = estadoCitaService.ingresarEstadoCita(estadoCita);
+        EstadoServicio result = estadoServicioService.ingresarEstado(estadoServicio);
 
         assertNotNull(result);
-        verify(estadoCitaRepository, times(1)).save(estadoCita);
-    }
-
-    @Test
-    public void testRegistrarEstadoCita_Success() {
-        EstadoCita estadoCita = new EstadoCita();
-        when(estadoCitaRepository.save(estadoCita)).thenReturn(estadoCita);
-
-        ResponseBackend response = estadoCitaService.registrarEstadoCita(estadoCita);
-
-        assertNotNull(response);
-        assertTrue(response.getOk());
-        assertEquals(HttpStatus.CREATED, response.getStatus());
-        assertEquals("Categoria registrada correctamente", response.getMensaje());
-    }
-
-    @Test
-    public void testRegistrarEstadoCita_Error() {
-        EstadoCita estadoCita = new EstadoCita();
-        when(estadoCitaRepository.save(estadoCita)).thenReturn(null);
-
-        ResponseBackend response = estadoCitaService.registrarEstadoCita(estadoCita);
-
-        assertNotNull(response);
-        assertFalse(response.getOk());
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatus());
-        assertEquals("Error al crear la categoria", response.getMensaje());
+        assertEquals(estadoServicio, result);
+        verify(estadoServicioRepository, times(1)).save(estadoServicio);
     }
 }

@@ -1,7 +1,7 @@
 package com.gestion.empresa.backend.gestion_empresa.servicesImpl;
 
-import com.gestion.empresa.backend.gestion_empresa.models.JornadaPorDia;
-import com.gestion.empresa.backend.gestion_empresa.repositories.JornadaPorDiaRepository;
+import com.gestion.empresa.backend.gestion_empresa.models.JornadaLaboral;
+import com.gestion.empresa.backend.gestion_empresa.repositories.JornadaLaboralRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,33 +10,41 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalTime;
+
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class JornadaPorDiaServiceImplTest {
+class JornadaLaboralServiceImplTest {
 
     @InjectMocks
-    private JornadaPorDiaServiceImpl jornadaPorDiaService;
+    private JornadaLaboralServiceImpl jornadaLaboralService;
 
     @Mock
-    private JornadaPorDiaRepository jornadaPorDiaRepository;
+    private JornadaLaboralRepository jornadaLaboralRepository;
 
-    private JornadaPorDia jornadaPorDia;
+    private JornadaLaboral jornadaLaboral;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
-        jornadaPorDia = new JornadaPorDia();
-        jornadaPorDia.setId(1L);
+        jornadaLaboral = new JornadaLaboral();
+        jornadaLaboral.setId(1L);
+        jornadaLaboral.setNombre("Jornada 1");
+        jornadaLaboral.setHoraInicio(LocalTime.of(9, 0));
+        jornadaLaboral.setHoraFin(LocalTime.of(17, 0));
     }
 
     @Test
-    public void testIngresarJornadaDia() {
-        when(jornadaPorDiaRepository.save(jornadaPorDia)).thenReturn(jornadaPorDia);
+    void testIngresarJornada() {
+        when(jornadaLaboralRepository.save(any(JornadaLaboral.class))).thenReturn(jornadaLaboral);
 
-        JornadaPorDia result = jornadaPorDiaService.ingresarJornadaDia(jornadaPorDia);
+        JornadaLaboral resultado = jornadaLaboralService.ingresarJornada(jornadaLaboral);
 
-        assertNotNull(result);
+        assertNotNull(resultado);
+        assertEquals(jornadaLaboral.getId(), resultado.getId());
+        assertEquals(jornadaLaboral.getNombre(), resultado.getNombre());
     }
 }

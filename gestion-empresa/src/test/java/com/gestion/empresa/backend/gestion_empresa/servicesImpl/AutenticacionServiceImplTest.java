@@ -52,12 +52,16 @@ public class AutenticacionServiceImplTest {
     @Mock
     private RolRepository rolRepository;
 
+    @Mock
+    private UsuarioRepository userRepository;
+
+    private Persona persona;
+
     private Usuarios usuario;
     private Login login;
     private RegistroUsuariosDTO registro;
     private Rol rol;
     private Genero genero;
-    private Persona persona;
 
     @BeforeEach
     public void setUp() {
@@ -80,6 +84,7 @@ public class AutenticacionServiceImplTest {
         registro.setPersona(persona);
         registro.setIdGenero(1L);
         registro.setIdRol(1L);
+
     }
 
     @Test
@@ -121,4 +126,25 @@ public class AutenticacionServiceImplTest {
         assertEquals(HttpStatus.CREATED, response.getStatus());
         assertEquals("Usuario creado exitosamente", response.getMensaje());
     }
+
+    @Test
+    public void testValidarRegistro_SinErrores() {
+        registro.setNombreUsuario("nuevoUsuario");
+        registro.setCorreo("nuevo@ejemplo.com");
+        persona.setCui(123456789L);
+        persona.setNit("987654321");
+        persona.setTelefono("1234567890");
+
+        lenient().when(userRepository.findByNombreUsuario("nuevoUsuario")).thenReturn(Optional.empty());
+        lenient().when(personaRepository.findByCorreo("nuevo@ejemplo.com")).thenReturn(Optional.empty());
+        lenient().when(personaRepository.findByCui(123456789L)).thenReturn(Optional.empty());
+        lenient().when(personaRepository.findByNit("987654321")).thenReturn(Optional.empty());
+        lenient().when(personaRepository.findByTelefono("1234567890")).thenReturn(Optional.empty());
+
+        ResponseBackend response = autenticacionService.validarRegistro(registro);
+
+        assertNull(response);
+    }
+
+
 }
