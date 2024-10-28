@@ -85,7 +85,7 @@ pipeline {
                       echo "Advertencia: La cobertura actual es de ${instructionCoverage} y está por debajo del umbral de ${coverageThreshold}%"
                     }else{
                         echo "La cobertura actual es de ${instructionCoverage} y cumple con el umbral de ${coverageThreshold}%, iniciando el despliegue"
-                        sh 'cd gestion-empresa && mvn clean install'
+                        sh 'cd gestion-empresa && mvn test'
                         sh 'cd gestion-empresa/target && sudo docker compose up --build -d'
                         echo "Despliegue exitoso"
                     }
