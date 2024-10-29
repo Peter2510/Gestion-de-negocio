@@ -88,6 +88,24 @@
             </option>
           </select>
         </div>
+        <div *ngIf="this.empresa.nombre !== 'canchas'" class="form-control">
+          <label class="label">
+            <span class="label-text text-primary"
+              >Seleccione al usuario asociado a este servicio</span
+            >
+          </label>
+          <select
+            class="select select-bordered w-full text-primary"
+            [(ngModel)]="this.usuarioSeleccionado"
+          >
+            <option
+              *ngFor="let usuario of this.todosUsuarios"
+              [value]="usuario.id"
+            >
+              {{ usuario.persona.nombre }}
+            </option>
+          </select>
+        </div>
         <div class="form-control mt-6">
           <button class="btn btn-primary w-full" (click)="goToStep(2)">
             Siguiente

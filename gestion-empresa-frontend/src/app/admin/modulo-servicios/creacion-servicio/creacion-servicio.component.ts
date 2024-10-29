@@ -13,6 +13,9 @@ import { JornadasLaboralesServicioService } from '../../services/Jornadas/jornad
 import { ServiciosService } from '../../services/servicios.service';
 import { HttpStatusCode } from '@angular/common/http';
 import Swal from 'sweetalert2';
+import { EmpresaService } from '../../services/empresa/empresa.service';
+import { UsuarioService } from '../../services/usuario/usuario.service';
+import { Usuario } from 'src/app/models/Usuario';
 
 @Component({
   selector: 'app-creacion-servicio',
@@ -24,6 +27,7 @@ export class CreacionServicioComponent implements OnInit {
   arregloHorarios: any = [];
   diasParaHorario: number[] = [];
   servicioGenral: any = [];
+  usuarioSeleccionado: number = 0;
   arregloServiciosEspecificos: serviciosPrestados[] = [];
   arregloDuracionServiciosEspecificos: DuracionServicioPrestado[] = [];
   todasCategorias: any;
@@ -37,12 +41,18 @@ export class CreacionServicioComponent implements OnInit {
   //servicio
   categoriaEstadoServicio = inject(CategoriasServicioService);
   jornadasServicio = inject(JornadasLaboralesServicioService);
+  empresaServicio = inject(EmpresaService);
+  usuariosServicio = inject(UsuarioService);
+
   servicioServicio = inject(ServiciosService);
   nombreServicio: any;
   descripcionServicio: any;
   estadoSerivicioServicio: any;
   categoriaServicio: any;
 
+  //valor de la empresa
+  empresa: any = '';
+  todosUsuarios: Usuario[] = [];
   // movimientos para el steper
   goToStep(step: number) {
     if (this.currentStep === 1) {
@@ -144,6 +154,7 @@ export class CreacionServicioComponent implements OnInit {
 
     this.servicioServicio
       .creacionServicio(
+        this.usuarioSeleccionado,
         nuevoServicio,
         this.arregloHorarios,
         this.id_dia_laboral,
@@ -187,6 +198,20 @@ export class CreacionServicioComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.usuariosServicio
+      .obtenerEmpleados()
+      .subscribe((usuariosGenerales: any) => {
+        console.log(usuariosGenerales);
+
+        this.todosUsuarios = usuariosGenerales.empleados;
+      });
+    this.empresaServicio
+      .obtenerInfoEmpresa()
+      .subscribe((empresaDeterminada: any) => {
+        console.log(empresaDeterminada);
+
+        this.empresa = empresaDeterminada.empresa.tipoServicio;
+      });
     this.categoriaEstadoServicio
       .obtenerTodasCategoriasRegistradas()
       .subscribe((elementos: any) => {
