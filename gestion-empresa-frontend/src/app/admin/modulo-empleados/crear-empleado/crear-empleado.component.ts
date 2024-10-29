@@ -3,7 +3,7 @@ import { ServicioAuthService } from 'src/app/auth/services/servicio-auth.service
 import { Persona } from 'src/app/models/Persona';
 import { Usuario } from 'src/app/models/Usuario';
 import { RolesService } from '../../services/roles/roles.service';
-import { Rol } from 'src/app/models/Roles';
+import { InfoPermiso, Rol } from 'src/app/models/Roles';
 import { NgForm } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
@@ -17,6 +17,8 @@ export class CrearEmpleadoComponent implements OnInit {
 
   @ViewChild('registroForm') registroForm!: NgForm;
   servicioAuth = inject(ServicioAuthService);
+  permisos: InfoPermiso[] = [];
+  
   roles: Rol[] = [];
   loading: boolean;
   nuevaPersona: Persona = {
@@ -42,11 +44,24 @@ export class CrearEmpleadoComponent implements OnInit {
   confirmacionPassword = "";
   idRol = 0;
 
-  constructor(private rolService: RolesService, private router:Router) {
+  constructor(private rolService: RolesService, private router:Router, private token: ServicioAuthService) {
   }
 
   ngOnInit(): void {
+    this.obtenerPermisos();
     this.obtenerRolesRegistrados();
+  }
+
+  obtenerPermisos() {
+    this.rolService.obtenerRolYPermisoEspecifico(this.token.getIdTipoUsuario()).subscribe({
+      next: (data) => {
+        this.permisos = data.permisos
+      },
+      error: (error) => {
+        this.loading = false;
+        console.log(error);
+      }
+    });
   }
 
   obtenerRolesRegistrados() {
@@ -60,6 +75,11 @@ export class CrearEmpleadoComponent implements OnInit {
       }
     })
   }
+
+  tienePermiso(permisoId: number): boolean {
+    return this.permisos.some(permiso => permiso.permisoId === permisoId);
+  }
+
 
 
   registrar() {

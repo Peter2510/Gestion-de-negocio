@@ -41,17 +41,19 @@
             <span class="label-text">Rol</span>
           </label>
           <select class="select select-bordered w-full text-base-content" name="usuario.rol"
-            [(ngModel)]="usuario.rol.id" #Rol="ngModel" required>
+                  [(ngModel)]="usuario.rol.id" #Rol="ngModel" required
+                  [disabled]="usuario.rol.id === 12">
             <option disabled selected class="text-base-content">Seleccione un rol</option>
             <ng-container *ngFor="let rol of roles">
-              <option [ngValue]="rol.id" class="text-base-content">{{ rol.nombre }}</option>
+              <option *ngIf="!(rol.id === 1 && !tienePermiso(20))" 
+                      [ngValue]="rol.id" class="text-base-content">{{ rol.nombre }}</option>
             </ng-container>
           </select>
           <div *ngIf="Rol.invalid && Rol.touched" class="text-red-500 text-xs">
             El rol es requerido.
           </div>
         </div>
-
+       
         <!-- Correo -->
         <div class="form-control mb-4 bg-base-200">
           <label class="label">

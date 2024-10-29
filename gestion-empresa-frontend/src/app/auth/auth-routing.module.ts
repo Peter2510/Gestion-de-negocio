@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'registro', component: RegistroComponent },
   { path: 'Autenticacion2FA', component: Vista2faLoginComponent },
-  { path: 'recuperarCredencial', component: RecuperacionContraseniaComponent },
+  { path: 'cambio-contrasenia', component: RecuperacionContraseniaComponent },
 ];
 
 @NgModule({
