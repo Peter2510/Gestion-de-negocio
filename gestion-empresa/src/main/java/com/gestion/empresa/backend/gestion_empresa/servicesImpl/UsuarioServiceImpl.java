@@ -12,11 +12,16 @@ import com.gestion.empresa.backend.gestion_empresa.services.UsuarioServicio;
 import com.gestion.empresa.backend.gestion_empresa.utils.ResponseBackend;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -29,9 +34,8 @@ import java.util.stream.Collectors;
  * Author: alexxus
  * Created on: 11/10/24
  */
-
+@EnableCaching
 @Service
-
 public class UsuarioServiceImpl implements UsuarioServicio {
 
     //injeccion
@@ -54,9 +58,23 @@ public class UsuarioServiceImpl implements UsuarioServicio {
     private NotificacionServiceImpl notificacionService;
 
     @Autowired
-    private BuzonServiceImpl buzonService;
+    private PersonaServicioImpl personaServicio;
+
     @Autowired
     private BuzonServiceImpl buzonServiceImpl;
+
+    @Autowired
+    private CorreoMensajeServiceImpl emailService;
+
+    @Autowired
+    private CacheServiceImpl cacheService;
+
+    @Autowired
+    private CacheManager cacheManager;
+
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private static final int CODE_LENGTH = 6;
+    private static final SecureRandom random = new SecureRandom();
 
     @Override
     public Optional<Usuarios> buscarPorCui(Long cui) {
@@ -127,7 +145,7 @@ public class UsuarioServiceImpl implements UsuarioServicio {
                     .orElseThrow(() -> new RuntimeException("El rol no se encuentra registrado"));
 
             if (!rolActual.getId().equals(nuevoRol.getId())) {
-               //crear notificacion
+                //crear notificacion
                 Notificacion notificacion = new Notificacion();
                 notificacion.setTitulo("Cambio de rol");
                 notificacion.setMensaje("Su rol ha cambiado a " + nuevoRol.getNombre());
@@ -140,7 +158,7 @@ public class UsuarioServiceImpl implements UsuarioServicio {
                 //guardar la notificacion
                 Notificacion n = notificacionService.crearNotificacion(notificacion);
 
-                if(n!=null){
+                if (n != null) {
                     Buzon buzon = new Buzon();
                     buzon.setNotificacion(n);
                     buzon.setUsuario(usuarioExistente);
@@ -165,7 +183,6 @@ public class UsuarioServiceImpl implements UsuarioServicio {
             return new ResponseBackend(false, HttpStatus.INTERNAL_SERVER_ERROR, "Error al actualizar usuario");
         }
     }
-
 
 
     public ResponseBackend validarActualizacion(Long id, ActualizacionUsuarioAdminDTO validacion) {
@@ -204,7 +221,6 @@ public class UsuarioServiceImpl implements UsuarioServicio {
 
         return null;
     }
-
 
     @Override
     public ResponseBackend listarUsuariosPorRol(Long idRol) {
@@ -257,12 +273,12 @@ public class UsuarioServiceImpl implements UsuarioServicio {
         Optional<Usuarios> usuario = usuarioRepository.findById(actualizacion.getIdUsuario());
 
         //validar si el usuario existe
-        if(usuario.isEmpty()){
+        if (usuario.isEmpty()) {
             return new ResponseBackend(false, HttpStatus.NOT_FOUND, "El usuario no existe");
         }
 
         //validar si la contraseña actual es correcta
-        if(!passwordEncoder.matches(actualizacion.getContraseniaActual(), usuario.get().getPassword())){
+        if (!passwordEncoder.matches(actualizacion.getContraseniaActual(), usuario.get().getPassword())) {
             return new ResponseBackend(false, HttpStatus.BAD_REQUEST, "La contraseña actual es incorrecta");
         }
 
@@ -274,5 +290,58 @@ public class UsuarioServiceImpl implements UsuarioServicio {
         return new ResponseBackend(true, HttpStatus.OK, "Contraseña actualizada exitosamente");
 
     }
+
+    //genera el codigo para recuperacion de contrasenña el tamaño depende de la constante definida arriba
+    public String generarCodigo() {
+        StringBuilder codigo = new StringBuilder(CODE_LENGTH);
+        for (int i = 0; i < CODE_LENGTH; i++) {
+            codigo.append(CHARACTERS.charAt(random.nextInt(CHARACTERS.length())));
+        }
+        return codigo.toString();
+    }
+
+    @Override
+    public ResponseBackend recuperarContrasenia(String correo) {
+
+        Optional<Persona> existenciaUsuario = personaServicio.buscarPorCorreo(correo);
+
+        if (existenciaUsuario.isEmpty()) {
+            return new ResponseBackend(false, HttpStatus.NOT_FOUND, "El correo electrónico no está asociado " +
+                    "a ninguna cuenta");
+        }
+
+        String codigoGenerado = generarCodigo();
+
+        //almacenar el código en caché con el correo como clave
+        String codigo = cacheService.almacenarCodigoEnCache(correo, codigoGenerado);
+
+        //verificar si se almacenó correctamente
+        Object cachedValue = cacheManager.getCache("myCache").get(correo, String.class);
+        System.out.println("Valor en caché para " + correo + ": " + cachedValue);
+
+        String cuerpo = "<p>Este es un <strong>correo de recuperación de contraseña</strong>.</p>" +
+                "<p>Tu código de recuperación es: <strong>" + codigo + "</strong></p>" +
+                "<p>Tiene validez de 10 minutos</p>";
+
+        System.out.println("Código generado: " + codigo);
+        return emailService.generarCorreo(correo, "Recuperación de contraseña", cuerpo);
+    }
+
+    @Override
+    public ResponseBackend validarCodigoRecuperacion(String correo, String codigoRecuperacion) {
+        String  codigoAlmacenado = cacheService.recuperarCodigoDelCache(correo);
+
+        //valida si el código almacenado coincide con el código ingresado
+        if (codigoAlmacenado != null && codigoAlmacenado.equals(codigoRecuperacion)) {
+            cacheService.limpiarCodigoDelCache(correo);
+            Optional<Persona> existenciaUsuario = personaServicio.buscarPorCorreo(correo);
+            Optional<Usuarios> idUsuario = usuarioRepository.findByPersonaCui(existenciaUsuario.get().getCui());
+            //retorna el id del usuario para cambiar la contraseña
+            return new ResponseBackend(true, HttpStatus.OK, "Codigo válido", idUsuario.get().getId() );
+        } else {
+            return new ResponseBackend(false, HttpStatus.BAD_REQUEST, "Código invalido");
+        }
+    }
+
 
 }

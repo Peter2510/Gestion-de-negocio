@@ -4,6 +4,7 @@ package com.gestion.empresa.backend.gestion_empresa.controllers;
 import com.gestion.empresa.backend.gestion_empresa.dto.ActualizacionUsuarioAdminDTO;
 import com.gestion.empresa.backend.gestion_empresa.dto.ActualizarContraseniaDTO;
 import com.gestion.empresa.backend.gestion_empresa.dto.Login;
+import com.gestion.empresa.backend.gestion_empresa.dto.RecuperarContraseniaDTO;
 import com.gestion.empresa.backend.gestion_empresa.models.Usuarios;
 import com.gestion.empresa.backend.gestion_empresa.security.JwtServicio;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.AutenticacionServiceImpl;

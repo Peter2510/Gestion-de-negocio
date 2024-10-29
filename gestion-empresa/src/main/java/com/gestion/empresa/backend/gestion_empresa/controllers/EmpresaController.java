@@ -11,6 +11,7 @@ import com.gestion.empresa.backend.gestion_empresa.servicesImpl.S3ServiceImpl;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.TipoAsignacionCitaServiceImpl;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.TipoServicioServiceImpl;
 import com.gestion.empresa.backend.gestion_empresa.utils.GenerarNombreArchivo;
+import com.gestion.empresa.backend.gestion_empresa.utils.ResponseBackend;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -192,6 +193,16 @@ public class EmpresaController {
 
     private Optional<TipoAsignacionCita> obtenerTipoAsignacionCita(Long idTipoAsignacionCita) {
         return tipoAsignacionCitaService.buscarPorId(idTipoAsignacionCita);
+    }
+
+    @GetMapping("obtener-logo/{id}")
+    public ResponseEntity<Map<String, Object>> obtenerLogoEmpresa(@PathVariable Long id) {
+        ResponseBackend response = empresaService.obtenerLogoBase64(id);
+        return ResponseEntity.status(response.getStatus()).body(
+                response.getOk()
+                        ? Map.of("ok", true, "mensaje", response.getData())
+                        : Map.of("ok", false, "mensaje", response.getMensaje())
+        );
     }
 
 }

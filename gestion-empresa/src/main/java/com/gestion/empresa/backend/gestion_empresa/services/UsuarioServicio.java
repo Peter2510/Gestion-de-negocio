@@ -21,4 +21,6 @@ public interface UsuarioServicio {
     ResponseBackend listarUsuariosPorRol(Long idRol);
     ResponseBackend listarEmpleados(Long idRol);
     ResponseBackend actualizarContrasenia(ActualizarContraseniaDTO registro);
+    ResponseBackend recuperarContrasenia(String correo);
+    ResponseBackend validarCodigoRecuperacion(String correo, String codigoRecuperacion);
 }

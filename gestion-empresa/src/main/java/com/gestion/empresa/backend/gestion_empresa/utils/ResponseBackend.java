@@ -20,6 +20,7 @@ public class ResponseBackend {
     private String mensaje;
     private Object data;
 
+
     public ResponseBackend(Boolean ok, HttpStatus status, String mensaje) {
         this.ok = ok;
         this.status = status;
@@ -31,4 +32,12 @@ public class ResponseBackend {
         this.status = status;
         this.data = data;
     }
+
+    public ResponseBackend(Boolean ok, HttpStatus status, String mensaje, Object data) {
+        this.ok = ok;
+        this.status = status;
+        this.mensaje = mensaje;
+        this.data = data;
+    }
+
 }
