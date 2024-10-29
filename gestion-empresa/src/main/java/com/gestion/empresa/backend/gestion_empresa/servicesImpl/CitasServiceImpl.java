@@ -40,6 +40,8 @@ public class CitasServiceImpl implements CitasService {
     @Autowired
     private ServicioPrestadoRepository servicioPrestadoRepository;
 
+
+
     @Override
     public List<Citas> obtenerTodasCitas() {
         return (citasRepository.findAll());
@@ -51,9 +53,12 @@ public class CitasServiceImpl implements CitasService {
 
 
         try {
+            // ahora ver si se acepta generar esa cita en base al tiempo
+            List<Citas> todasLasCitas = citasRepository.findAll();
+
             //crear la estado
             Citas nuevaCitas = new Citas();
-
+            System.out.println(registroCitasDTO);
             Optional<Usuarios> optionalUsuario = usuarioRepository.findById(registroCitasDTO.getIdUsuario());
             if (optionalUsuario.isEmpty()) {
                 return new ResponseBackend(false, HttpStatus.INTERNAL_SERVER_ERROR, "El usuario no se encuentra registrado");
@@ -64,7 +69,7 @@ public class CitasServiceImpl implements CitasService {
             nuevaCitas.setFechaHoraFin(registroCitasDTO.getHoraFin());
             nuevaCitas.setIdUsuario(usuarioRepository.findById(registroCitasDTO.getIdUsuario())
                     .orElseThrow(() -> new RuntimeException("El usuario no se encuentra registrado")));
-            nuevaCitas.setIdEstadoCita(estadoCitaRepository.findById(registroCitasDTO.getIdEstadoCita())
+            nuevaCitas.setIdEstadoCita(estadoCitaRepository.findById(2L)
                     .orElseThrow(() -> new RuntimeException("El estado no se encuentra registrado")));
             nuevaCitas.setIdDiaLaboral(diasLaboralesRepository.findById(registroCitasDTO.getIdDiaLaboral())
                     .orElseThrow(() -> new RuntimeException("El dia no se encuentra registrado")));
