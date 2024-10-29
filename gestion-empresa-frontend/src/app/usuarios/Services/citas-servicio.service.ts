@@ -15,26 +15,32 @@ export class CitasServicioService {
   constructor(
     private http: HttpClient,
     private servicioCookie: ServicioAuthService
-  ) { }
+  ) {}
 
   //funcion para obtener las citas
   obtenerCitas(): Observable<any> {
     return this.http.get(`${this.baseUrl}/${this.citas}/obtener-Citas`, {
-      headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      headers: new HttpHeaders().set(
+        'Authorization',
+        `Bearer ${this.authService.getToken()}`
+      ),
     });
   }
 
   //funcion para obtener las citas por id
   obtenerCitasId(): Observable<any> {
-    console.log(this.servicioCookie.getIdUsuario());
+    console.log(this.servicioCookie.getIdUsuario(), '---------');
 
     return this.http.get(
-      `${this.baseUrl}/${this.citas
-      }/obtenerTodasCitasEspecificos/${this.servicioCookie.getIdUsuario(),
+      `${this.baseUrl}/${
+        this.citas
+      }/obtenerTodasCitasEspecificos/${this.servicioCookie.getIdUsuario()}`,
       {
-        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+        headers: new HttpHeaders().set(
+          'Authorization',
+          `Bearer ${this.authService.getToken()}`
+        ),
       }
-      }`
     );
   }
   //funcion para crear nuevas citas
@@ -65,7 +71,10 @@ export class CitasServicioService {
       `${this.baseUrl}/${this.citas}/crearCita`,
       elementos,
       {
-        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+        headers: new HttpHeaders().set(
+          'Authorization',
+          `Bearer ${this.authService.getToken()}`
+        ),
       }
     );
   }

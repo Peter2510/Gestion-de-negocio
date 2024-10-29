@@ -1,1 +1,101 @@
 <app-header-usuario></app-header-usuario>
+
+<div class="container">
+  <div class="p-4">
+    <h1 class="text-2xl font-bold mb-4">Panel de generacion de pdf</h1>
+
+    <div class="flex flex-col items-center">
+      <!-- Navegación entre vistas del calendario -->
+      <div class="calendar-container">
+        <div class="col-md-4 mb-4"></div>
+        <h2>Historial de citas anteriores</h2>
+        <!--generacion de una tabla-->
+
+        <div class="mt-8 w-full max-w-4xl p-4">
+          <h1 class="text-2xl font-bold mb-4">Historial de Citas personales</h1>
+
+          <table class="table w-full">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+                <th>Servicio</th>
+                <th>Estado de Cita</th>
+                <th>Fecha Hora Inicio</th>
+                <th>Fecha Hora Fin</th>
+                <th>Día Laboral</th>
+                <th>facturas</th>
+                <th>Comprobantes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let servicio of this.paginatedItems">
+                <td>{{ servicio.id }}</td>
+                <td>{{ servicio.idUsuario.nombreUsuario }}</td>
+                <td>{{ servicio.idUsuario.persona.correo }}</td>
+                <td>{{ servicio.idUsuario.persona.telefono }}</td>
+                <td>{{ servicio.idServicio.nombre }}</td>
+                <td>{{ servicio.idEstadoCita.nombre }}</td>
+                <td>
+                  {{ servicio.fechaHoraInicio | date : "dd/MM/yyyy HH:mm:ss" }}
+                </td>
+                <td>
+                  {{ servicio.fechaHoraFin | date : "dd/MM/yyyy HH:mm:ss" }}
+                </td>
+                <td>{{ servicio.idDiaLaboral.nombre }}</td>
+                <td>
+                  <div class="mt-4">
+                    <button
+                      class="btn btn-primary hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                      (click)="generatePDF(servicio)"
+                    >
+                      Generar Factura
+                    </button>
+                  </div>
+                  <div class="mt-4">
+                    <button
+                      class="btn btn-secondary hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                      (click)="generatePDF(servicio)"
+                    >
+                      Generar Factura Excel
+                    </button>
+                  </div>
+                </td>
+                <td>
+                  <div class="mt-4">
+                    <button
+                      class="btn btn-primary hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                      (click)="generatePDF(servicio)"
+                    >
+                      Generar Comprobante
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="flex justify-between mt-4">
+            <button
+              class="btn"
+              (click)="prevPage()"
+              [disabled]="currentPage === 1"
+            >
+              Anterior
+            </button>
+            <span>Página {{ currentPage }} de {{ totalPages }}</span>
+            <button
+              class="btn"
+              (click)="nextPage()"
+              [disabled]="currentPage === totalPages"
+            >
+              Siguiente
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="qrcodeImage"></div>
+</div>

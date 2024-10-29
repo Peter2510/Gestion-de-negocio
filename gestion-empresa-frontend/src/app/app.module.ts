@@ -28,6 +28,7 @@ import { RouterLink, RouterModule } from '@angular/router';
 import { EdicionPerfilComponent } from './usuarios/edicion-perfil/edicion-perfil.component';
 import { ModuloUsuariosModule } from './usuarios/modulo-usuarios/modulo-usuarios.module';
 import { VistaServicioEspecificoComponent } from './admin/modulo-servicios/vistaEspecifica/vista-servicio-especifico/vista-servicio-especifico.component';
+import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
   declarations: [AppComponent, Vista2faLoginComponent],
@@ -47,6 +48,7 @@ import { VistaServicioEspecificoComponent } from './admin/modulo-servicios/vista
     FlatpickrModule.forRoot(),
     RouterLink,
     RouterModule,
+    QRCodeModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

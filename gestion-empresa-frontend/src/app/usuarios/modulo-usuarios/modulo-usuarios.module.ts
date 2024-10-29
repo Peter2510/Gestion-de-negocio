@@ -16,6 +16,7 @@ import { LoadingClienteComponent } from '../loading-cliente/loading-cliente.comp
 import { ModalCreacionCitaComponent } from '../modal-creacion-cita/modal-creacion-cita.component';
 import { HistorialCitasComponent } from '../historial-citas/historial-citas.component';
 import { FacturasComprobantesComponent } from '../facturas-comprobantes/facturas-comprobantes.component';
+import { QRCodeComponent, QRCodeModule } from 'angularx-qrcode';
 @NgModule({
   declarations: [
     HeaderUsuarioComponent,
@@ -39,6 +40,7 @@ import { FacturasComprobantesComponent } from '../facturas-comprobantes/facturas
     BrowserAnimationsModule,
     RouterLink,
     RouterModule,
+    QRCodeModule,
   ],
 })
 export class ModuloUsuariosModule {}
