@@ -1,1 +1,36 @@
 <app-header-admin></app-header-admin>
+
+<div class="p-4 mt-24 bg-base-200 text-base-content">
+  <h2 class="text-lg font-semibold mb-4 text-center">Dashboard Administrador</h2>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="card shadow-lg bg-base-100">
+      <div class="card-body">
+        <h3 class="text-md font-semibold mb-2 text-base-content">Total de Citas por Semana</h3>
+        <canvas id="citasChartSemana" class="mb-4"></canvas>
+        <button (click)="downloadImageSemana()" class="btn btn-primary">Descargar Imagen</button>
+        <button (click)="downloadCSVSemana()" class="btn btn-secondary">Descargar CSV</button>
+      </div>
+    </div>
+
+    <div class="card shadow-lg bg-base-100">
+      <div class="card-body">
+        <h3 class="text-md font-semibold mb-2 text-base-content">Total de Citas por Mes</h3>
+        <canvas id="citasChartMes" class="mb-4"></canvas>
+        <button (click)="downloadImageMes()" class="btn btn-primary">Descargar Imagen</button>
+        <button (click)="downloadCSVMes()" class="btn btn-secondary">Descargar CSV</button>
+      </div>
+    </div>
+
+    <div class="card shadow-lg bg-base-100">
+      <div class="card-body">
+        <h3 class="text-md font-semibold mb-2 text-base-content">Total de Citas por Año</h3>
+        <canvas id="citasChartAnio"></canvas>
+        <button (click)="downloadImageAnio()" class="btn btn-primary">Descargar Imagen</button>
+        <button (click)="downloadCSVAnio()" class="btn btn-secondary">Descargar CSV</button>
+      </div>
+    </div>
+  </div>
+
+  <button (click)="downloadPDF()" class="btn btn-success mt-4">Descargar PDF</button>
+</div>

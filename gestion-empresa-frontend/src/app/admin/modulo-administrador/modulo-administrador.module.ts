@@ -62,6 +62,7 @@ import { PerfilUsuarioComponent } from '../modulo-empleados/perfil-usuario/perfi
       useFactory: adapterFactory,
     }),
     NgbModule,
+    
   ],
 })
 export class ModuloAdministradorModule {}
