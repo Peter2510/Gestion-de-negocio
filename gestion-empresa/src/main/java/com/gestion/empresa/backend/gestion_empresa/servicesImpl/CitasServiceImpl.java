@@ -108,4 +108,12 @@ public class CitasServiceImpl implements CitasService {
         return todasCitas;
     }
 
-}
+    public List<Object[]> getCitasPorServicio() {
+        return citasRepository.findCitasPorServicio();
+    }
+
+    public List<Object[]> getCitasPorEstado() {
+        return citasRepository.findCitasPorEstado();
+    }
+
+ }

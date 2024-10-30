@@ -18,4 +18,8 @@ public interface UsuarioRepository extends JpaRepository<Usuarios, Long> {
     List<Usuarios> findByRolIdNot(Long rolId);
     @Query("SELECT u.rol.nombre, COUNT(u) FROM Usuarios u GROUP BY u.rol.nombre")
     List<Object[]> countUsuariosByRol();
+
+    @Query("SELECT u.rol AS rol, COUNT(u) AS totalEmpleados " +
+            "FROM Usuarios u GROUP BY u.rol")
+    List<Object[]> findEmpleadosPorRol();
 }
