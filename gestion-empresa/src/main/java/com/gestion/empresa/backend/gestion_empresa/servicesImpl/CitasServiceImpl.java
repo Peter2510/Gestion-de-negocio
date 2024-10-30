@@ -50,13 +50,26 @@ public class CitasServiceImpl implements CitasService {
     //funcion para registrar
     @Transactional(rollbackOn = Throwable.class)
     public ResponseBackend registrarCitas(RegistroCitasDTO registroCitasDTO) {
-
-
         try {
-            // ahora ver si se acepta generar esa cita en base al tiempo
+            // Obtén todas las citas registradas
             List<Citas> todasLasCitas = citasRepository.findAll();
 
-            //crear la estado
+            // Verifica si ya hay una cita en el mismo rango de tiempo
+            for (Citas cita : todasLasCitas) {
+                if (cita.getIdDiaLaboral().getId().equals(registroCitasDTO.getIdDiaLaboral()) && isTimeConflict(cita, registroCitasDTO)) {
+                    return new ResponseBackend(false, HttpStatus.CONFLICT, "Ya existe una cita en el mismo rango de tiempo.");
+                }
+            }
+            //ver conflictos
+            boolean conflictosTiempo =
+                        (registroCitasDTO.getHoraFin().isBefore(registroCitasDTO.getHoraInicio()) ||
+                                registroCitasDTO.getHoraInicio().isAfter(registroCitasDTO.getHoraFin()));
+
+                if (conflictosTiempo) {
+                    return new ResponseBackend(false, HttpStatus.CONFLICT, "Conflicto de horarios para la cita");
+                }
+
+            // Crear la nueva cita
             Citas nuevaCitas = new Citas();
             System.out.println(registroCitasDTO);
             Optional<Usuarios> optionalUsuario = usuarioRepository.findById(registroCitasDTO.getIdUsuario());
@@ -64,12 +77,9 @@ public class CitasServiceImpl implements CitasService {
                 return new ResponseBackend(false, HttpStatus.INTERNAL_SERVER_ERROR, "El usuario no se encuentra registrado");
             }
             nuevaCitas.setIdUsuario(optionalUsuario.get());
-
             nuevaCitas.setFechaHoraInicio(registroCitasDTO.getHoraInicio());
             nuevaCitas.setFechaHoraFin(registroCitasDTO.getHoraFin());
-            nuevaCitas.setIdUsuario(usuarioRepository.findById(registroCitasDTO.getIdUsuario())
-                    .orElseThrow(() -> new RuntimeException("El usuario no se encuentra registrado")));
-            nuevaCitas.setIdEstadoCita(estadoCitaRepository.findById(2L)
+            nuevaCitas.setIdEstadoCita(estadoCitaRepository.findById(1L)
                     .orElseThrow(() -> new RuntimeException("El estado no se encuentra registrado")));
             nuevaCitas.setIdDiaLaboral(diasLaboralesRepository.findById(registroCitasDTO.getIdDiaLaboral())
                     .orElseThrow(() -> new RuntimeException("El dia no se encuentra registrado")));
@@ -78,17 +88,14 @@ public class CitasServiceImpl implements CitasService {
 
             Citas ingresoCitas = citasRepository.save(nuevaCitas);
 
-
-            //luego de registrado entonces se hace el ciclo para las otras citas
-
+            // Registrar detalles de la cita
             for (Long elementos : registroCitasDTO.getListadoServiciosEspecificos()) {
                 DetalleCita detalleCita = new DetalleCita();
-                detalleCita.setIdServicioPrestado( servicioPrestadoRepository.findById(elementos)
+                detalleCita.setIdServicioPrestado(servicioPrestadoRepository.findById(elementos)
                         .orElseThrow(() -> new RuntimeException("El servicio no se encuentra registrado")));
                 detalleCita.setIdCita(ingresoCitas);
                 System.out.println(detalleCita);
-                DetalleCita detalleCitaFinal = detalleCitaRepository.save(detalleCita);
-
+                detalleCitaRepository.save(detalleCita);
             }
 
             return new ResponseBackend(true, HttpStatus.CREATED, "CITA registrada correctamente");
@@ -96,8 +103,15 @@ public class CitasServiceImpl implements CitasService {
             e.printStackTrace();
             return new ResponseBackend(false, HttpStatus.INTERNAL_SERVER_ERROR, "Error al registrar la cita: " + e.getMessage());
         }
-
     }
+
+    // Método para verificar si hay un conflicto de tiempo
+    private boolean isTimeConflict(Citas citaExistente, RegistroCitasDTO registroCitasDTO) {
+        // Compara si las horas se superponen
+        return (registroCitasDTO.getHoraInicio().isBefore(citaExistente.getFechaHoraFin()) &&
+                registroCitasDTO.getHoraFin().isAfter(citaExistente.getFechaHoraInicio()));
+    }
+
 
     public List<Citas> obtenerCitasId(Long id){
         Usuarios determinadoUsuarios = this.usuarioRepository.findById(id)
