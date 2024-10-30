@@ -16,6 +16,7 @@ export class ServicioAuthService {
   private readonly directiva = 'auth';
   private readonly url = environment.URL;
   permisos: InfoPermiso[] = [];
+  private correoUrl = "correo";
 
 
   //creacion de signal
@@ -91,6 +92,28 @@ export class ServicioAuthService {
         })
       )
       .subscribe();
+  }
+
+  generarCodigoRecuperacionContrasenia(correo:string): Observable<any>{
+    const recuperarContrasenia = {
+      correo: correo
+    }
+    return this.http.post<any>(`${this.url}/${this.correoUrl}/recuperar-contrasenia`, recuperarContrasenia);
+  }
+
+  validarCodigo(correo:string, codigo:string): Observable<any>{
+    const recuperarContrasenia = {
+      correo: correo,
+      codigo: codigo
+    }
+    return this.http.post<any>(`${this.url}/${this.correoUrl}/validar-codigo-recuperacion-contrasenia`, recuperarContrasenia);
+  }
+
+  cambiarContrasenia(idUsuario:number, contraseniaNueva:string){
+    return this.http.post<any>(`${this.url}/${this.correoUrl}/cambio-contrasenia`,{
+      idUsuario,
+      contraseniaNueva
+    });
   }
 
   // elementos para las cookies

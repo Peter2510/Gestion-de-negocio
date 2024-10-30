@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ServicioAuthService } from '../services/servicio-auth.service';
+import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-recuperacion-contrasenia',
@@ -15,72 +18,106 @@ export class RecuperacionContraseniaComponent {
   mensaje: string = '';
   loading: boolean = false;
   paso: number = 1; //1: ingresar correo, 2: ingresar Código, 3: cambiar Contraseña
+  idUsuario=0;
+  private readonly url = environment.URL;
 
-  constructor(private authService: ServicioAuthService) {}
+  constructor(private authService: ServicioAuthService, private router:Router) {}
 
-  // Método para validar el correo electrónico
+  //validar el correo electrónico
   validarCorreo() {
-    // this.loading = true;
-    // this.authService.validarCorreo(this.email)
-    //   .subscribe({
-    //     next: () => {
-    //       this.mensaje = 'Correo válido. Se ha enviado un código de recuperación.';
-    //       this.paso = 2; // Cambiar a la siguiente pantalla
-    //       this.loading = false;
-    //     },
-    //     error: (err) => {
-    //       this.mensaje = 'Error: ' + err.message;
-    //       this.loading = false;
-    //     }
-    //   });
+
+    if(this.email.length==0){
+      Swal.fire({
+        title: 'Debes llenar el campo de correo electronico',
+        icon: 'info'
+      });
+      return;
+    }
+
+    this.loading = true;
+    this.authService.generarCodigoRecuperacionContrasenia(this.email)
+      .subscribe({
+        next: (data) => {
+          Swal.fire({
+            title: data.mensaje,
+            icon: 'success'
+          })
+          this.paso = 2;
+          this.loading = false;
+        },
+        error: (err) => {
+          Swal.fire({
+            title: err.error.mensaje,
+            icon: 'error'
+          });
+          this.loading = false;
+        }
+      });
   }
 
-  // Método para validar el código de recuperación
+  //método para validar el código de recuperación
   validarCodigo() {
-    // this.loading = true;
-    // this.authService.validarCodigo(this.email, this.codigo)
-    //   .subscribe({
-    //     next: () => {
-    //       this.mensaje = 'Código válido. Puedes cambiar tu contraseña.';
-    //       this.paso = 3; // Cambiar a la siguiente pantalla
-    //       this.loading = false;
-    //     },
-    //     error: (err) => {
-    //       this.mensaje = 'Código inválido: ' + err.message;
-    //       this.loading = false;
-    //     }
-    //   });
+    this.loading = true;
+    this.authService.validarCodigo(this.email, this.codigo)
+      .subscribe({
+        next: (data) => {
+          Swal.fire({
+            title: data.mensaje,
+            icon: 'success'
+          });
+          this.idUsuario = data.idUsuario
+          console.log(this.idUsuario, "idididid")
+          this.paso = 3;
+          this.loading = false;
+        },
+        error: (err) => {
+          Swal.fire({
+            title: err.error.mensaje,
+            icon: 'error'
+          });
+          this.loading = false;
+        }
+      });
   }
 
-  // Método para cambiar la contraseña
+  // cambiar la contraseña
   onSubmit() {
-    // if (this.nuevaContrasena !== this.verificarContrasena) {
-    //   this.mensaje = 'Las contraseñas no coinciden.';
-    //   return;
-    // }
+    if (this.nuevaContrasena !== this.verificarContrasena) {
+      Swal.fire({
+        title: 'Las contraseñas no coinciden',
+        icon: 'info'
+      })
+      return;
+    }
 
-    // this.loading = true;
-    // this.authService.recuperarContrasena(this.email, this.codigo, this.nuevaContrasena)
-    //   .subscribe({
-    //     next: () => {
-    //       this.mensaje = 'Contraseña actualizada con éxito';
-    //       this.loading = false;
-    //       // Resetear campos después de éxito
-    //       this.resetFields();
-    //     },
-    //     error: (err) => {
-    //       this.mensaje = 'Error al actualizar la contraseña: ' + err.message;
-    //       this.loading = false;
-    //     }
-    //   });
+    this.loading = true;
+    this.authService.cambiarContrasenia(this.idUsuario, this.nuevaContrasena)
+      .subscribe({
+        next: (data) => {
+          Swal.fire({
+            title: data.mensaje,
+            icon: 'success'
+          }).then(()=>{
+            this.router.navigate([`${this.url}/auth/login`]);
+          });
+          this.loading = false;
+          this.resetFields();
+        },
+        error: (err) => {
+          Swal.fire({
+            title: err.error.mensaje,
+            icon: 'error'
+          });
+          this.loading = false;
+        }
+      });
   }
 
-  // Método para resetear campos
+  //metodo para resetear campos
   resetFields() {
     this.email = '';
     this.codigo = '';
     this.nuevaContrasena = '';
     this.verificarContrasena = '';
-    this.paso = 1; // Regresar al primer paso
   }
 }
