@@ -10,6 +10,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -142,8 +143,15 @@ public class ServiciosServiceImpl implements ServiciosService {
                         LocalTime horaFinExistente = j.getIdJornadaLaboral().getHoraFin();
                         System.out.println(j.getIdDiaLaboral().getId()+"     "+j.getIdDiaLaboral().getId().equals(diaLaboral.getId())+"            "+jornadaLaboral.getHoraInicio().isBefore(horaFinExistente)+"     "+ jornadaLaboral.getHoraFin().isAfter(horaInicioExistente) );
                         // Comprobar si hay solapamiento
-                        return j.getIdDiaLaboral().getId().equals(diaLaboral.getId()) &&
-                                (jornadaLaboral.getHoraInicio().isBefore(horaFinExistente) && jornadaLaboral.getHoraFin().isAfter(horaInicioExistente));
+                        boolean comprobacion = (j.getIdDiaLaboral().getId().equals(diaLaboral.getId()) &&
+                                (jornadaLaboral.getHoraInicio().isBefore(horaFinExistente) && jornadaLaboral.getHoraFin().isAfter(horaInicioExistente)));
+                        System.out.println(comprobacion+"++++++++++");
+                        if(comprobacion){
+                            System.out.println("-------"+j);
+                            jornadasIncorrectas.add(j);
+                            return true;
+                        }
+                        return  false;
                     });
 
                     if (!existeJornada) {
@@ -159,13 +167,10 @@ public class ServiciosServiceImpl implements ServiciosService {
                         nuevaJornadaServicio.setIdJornadaDia(guardadoJornadaDia);
                         nuevaJornadaServicio.setIdServicio(servicioGuardado);
                         jornadaServicioRepository.save(nuevaJornadaServicio);
-                    } else {
-                        // Manejo de caso donde la jornada ya existe
-                        //guaardar los que estan mal y solo imprimir
-                        throw new RuntimeException("La jornada laboral ya existe para el día laboral " + diasDTO.getNombre());
                     }
                 }
             }
+
 
             // Guardar servicios específicos
             List<ServicioPrestado> serviciosEspecificos = new ArrayList<>();
@@ -196,11 +201,22 @@ public class ServiciosServiceImpl implements ServiciosService {
                 duracionServicioPrestadoRepository.save(nuevaDuracionServicioPrestado);
             }
 
+            if(!jornadasIncorrectas.isEmpty()) {
+                for(Object elementos: jornadasIncorrectas) {
+                    System.out.println("Error en la jornada: "+elementos);
+                }
+                throw new RuntimeException("Conflicto de horarios en jornadas laborales, los errores son: "+jornadasIncorrectas);
+
+
+
+            }
+
             // Retornar éxito
-            return new ResponseBackend(true, HttpStatus.CREATED, "Servicio registrado exitosamente");
+            return new ResponseBackend(true, HttpStatus.CREATED, "Servicio registrado exitosamente" );
         } catch (Exception e) {
             e.printStackTrace();
             // En caso de error, la transacción se revertirá automáticamente
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new ResponseBackend(false, HttpStatus.INTERNAL_SERVER_ERROR, "Error al registrar servicio: " + e.getMessage());
         }
     }
