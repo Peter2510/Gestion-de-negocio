@@ -1,5 +1,6 @@
 package com.gestion.empresa.backend.gestion_empresa.controllers;
 
+import com.gestion.empresa.backend.gestion_empresa.dto.ActualizarContraseniaDTO;
 import com.gestion.empresa.backend.gestion_empresa.dto.RecuperarContraseniaDTO;
 import com.gestion.empresa.backend.gestion_empresa.models.CorreoConfirmacion;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.CacheServiceImpl;
@@ -60,6 +61,19 @@ public class CorreoController {
                 response.getOk()
                 ? Map.of("ok", true, "mensaje", response.getMensaje(), "idUsuario", response.getData())
                 : Map.of("ok", false , "mensaje", response.getMensaje())
+        );
+
+    }
+
+    @PostMapping("/cambio-contrasenia")
+    public ResponseEntity<Map<String, Object>> cambioContrasenia(@RequestBody ActualizarContraseniaDTO cambioContrasenia){
+
+        ResponseBackend response = usuarioServiceImpl.cambioContrasenia(cambioContrasenia);
+
+        return ResponseEntity.status(response.getStatus()).body(
+                response.getOk()
+                        ? Map.of("ok", true, "mensaje", response.getMensaje())
+                        : Map.of("ok", false , "mensaje", response.getMensaje())
         );
 
     }

@@ -23,4 +23,5 @@ public interface UsuarioServicio {
     ResponseBackend actualizarContrasenia(ActualizarContraseniaDTO registro);
     ResponseBackend recuperarContrasenia(String correo);
     ResponseBackend validarCodigoRecuperacion(String correo, String codigoRecuperacion);
+    ResponseBackend cambioContrasenia(ActualizarContraseniaDTO actualizacion);
 }

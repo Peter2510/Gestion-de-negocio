@@ -343,5 +343,24 @@ public class UsuarioServiceImpl implements UsuarioServicio {
         }
     }
 
+    @Override
+    public ResponseBackend cambioContrasenia(ActualizarContraseniaDTO actualizacion) {
+        Optional<Usuarios> usuario = usuarioRepository.findById(actualizacion.getIdUsuario());
+
+        //validar si el usuario existe
+        if (usuario.isEmpty()) {
+            return new ResponseBackend(false, HttpStatus.NOT_FOUND, "El usuario no existe");
+        }
+
+
+        //actualizar la contraseña
+        Usuarios usuarioActualizado = usuario.get();
+        usuarioActualizado.setPassword(passwordEncoder.encode(actualizacion.getContraseniaNueva()));
+        usuarioRepository.save(usuarioActualizado);
+
+        return new ResponseBackend(true, HttpStatus.OK, "Contraseña actualizada exitosamente");
+
+    }
+
 
 }
