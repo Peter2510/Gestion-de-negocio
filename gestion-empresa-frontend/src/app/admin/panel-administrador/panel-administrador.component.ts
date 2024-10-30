@@ -16,17 +16,28 @@ export class PanelAdministradorComponent implements OnInit, AfterViewInit {
   public citasPorMes: any[] = [];
   public citasPorAnio: any[] = [];
   
+  public citasPorServicio: any[] = [];
+  public citasPorEstado: any[] = [];
+  
   public fechas: string[] = [];
   public totalCitasSemana: number[] = [];
   public meses: string[] = [];
   public totalCitasMes: number[] = [];
   public anios: number[] = [];
   public totalCitasAnio: number[] = [];
+  
+  public servicios: string[] = [];
+  public totalCitasServicio: number[] = [];
+  public estados: string[] = [];
+  public totalCitasEstado: number[] = [];
 
   private chartSemana: Chart | undefined;
   private chartMes: Chart | undefined;
   private chartAnio: Chart | undefined;
+  private chartServicio: Chart | undefined;
+  private chartEstado: Chart | undefined;
 
+  
   private monthNames: string[] = [
     'Enero', 'Febrero', 'Marzo', 'Abril', 
     'Mayo', 'Junio', 'Julio', 'Agosto', 
@@ -41,6 +52,8 @@ export class PanelAdministradorComponent implements OnInit, AfterViewInit {
     this.getCitasPorSemana(2024);
     this.getCitasPorMes(2024);
     this.getCitasPorAnio();
+    this.getCitasPorServicio();
+    this.getCitasPorEstado();
   }
 
   ngAfterViewInit(): void {}
@@ -79,6 +92,30 @@ export class PanelAdministradorComponent implements OnInit, AfterViewInit {
     });
   }
 
+  getCitasPorServicio() {
+    this.reportesService.getCitasPorServicio().subscribe(data => {
+      this.citasPorServicio = data;
+  
+      this.servicios = this.citasPorServicio.map(item => item[0].nombre);
+      this.totalCitasServicio = this.citasPorServicio.map(item => item[1]);
+  
+      this.createChartServicio();
+    });
+  }
+  
+
+  getCitasPorEstado() {
+    this.reportesService.getCitasPorEstado().subscribe(data => {
+      this.citasPorEstado = data;
+  
+      this.estados = this.citasPorEstado.map(item => item[0].nombre); 
+      this.totalCitasEstado = this.citasPorEstado.map(item => item[1]);
+  
+      this.createChartEstado();
+    });
+  }
+  
+
   private getStartDateOfWeek(year: number, week: number): Date {
     const firstDayOfYear = new Date(year, 0, 1);
     const daysToAdd = (week - 1) * 7;
@@ -105,7 +142,7 @@ export class PanelAdministradorComponent implements OnInit, AfterViewInit {
         datasets: [{
           label: 'Total Citas por Semana',
           data: this.totalCitasSemana,
-          backgroundColor: 'rgba(75, 192, 192, 0.8)', // Color de fondo
+          backgroundColor: 'rgba(75, 192, 192, 0.8)',
           borderColor: 'rgba(75, 192, 192, 1)',
           borderWidth: 1
         }]
@@ -135,7 +172,7 @@ export class PanelAdministradorComponent implements OnInit, AfterViewInit {
         datasets: [{
           label: 'Total Citas por Mes',
           data: this.totalCitasMes,
-          backgroundColor: 'rgba(153, 102, 255, 0.8)', // Color de fondo
+          backgroundColor: 'rgba(153, 102, 255, 0.8)',
           borderColor: 'rgba(153, 102, 255, 1)',
           borderWidth: 1
         }]
@@ -165,7 +202,7 @@ export class PanelAdministradorComponent implements OnInit, AfterViewInit {
         datasets: [{
           label: 'Total Citas por Año',
           data: this.totalCitasAnio,
-          backgroundColor: 'rgba(255, 159, 64, 0.8)', // Color de fondo
+          backgroundColor: 'rgba(255, 159, 64, 0.8)',
           borderColor: 'rgba(255, 159, 64, 1)',
           borderWidth: 1
         }]
@@ -181,25 +218,86 @@ export class PanelAdministradorComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // Métodos para descargar cada gráfico como imagen
+  createChartServicio() {
+    const ctx = document.getElementById('citasChartServicio') as HTMLCanvasElement;
+  
+    if (this.chartServicio) {
+      this.chartServicio.destroy();
+    }
+  
+    this.chartServicio = new Chart(ctx, {
+      type: 'bar', 
+      data: {
+        labels: this.servicios,
+        datasets: [{
+          label: 'Total Citas por Servicio',
+          data: this.totalCitasServicio,
+          backgroundColor: 'rgba(54, 162, 235, 0.8)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  }
+  
+
+  createChartEstado() {
+    const ctx = document.getElementById('citasChartEstado') as HTMLCanvasElement;
+
+    if (this.chartEstado) {
+      this.chartEstado.destroy();
+    }
+
+    this.chartEstado = new Chart(ctx, {
+      type: 'bar', 
+      data: {
+        labels: this.estados,
+        datasets: [{
+          label: 'Total Citas por Estado',
+          data: this.totalCitasEstado,
+          backgroundColor: 'rgba(255, 99, 132, 0.8)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  }
+
+  //métodos para descargar cada gráfico como imagen
   downloadChartImage(chartId: string, filename: string) {
     const canvas = document.getElementById(chartId) as HTMLCanvasElement;
     const imgData = canvas.toDataURL('image/png');
 
-    // Crear un nuevo canvas con fondo
+    //crear un nuevo canvas con fondo
     const newCanvas = document.createElement('canvas');
     newCanvas.width = canvas.width;
     newCanvas.height = canvas.height;
     const context = newCanvas.getContext('2d');
 
-    // Dibuja el fondo blanco
+    //dibujar el fondo blanco
     if (context) {
       context.fillStyle = 'white';
       context.fillRect(0, 0, newCanvas.width, newCanvas.height);
       context.drawImage(canvas, 0, 0);
     }
 
-    // Convertir a blob y descargar
+    //convertir a blob y descargar
     newCanvas.toBlob((blob) => {
       if (blob) {
         saveAs(blob, filename);
@@ -207,6 +305,7 @@ export class PanelAdministradorComponent implements OnInit, AfterViewInit {
     });
   }
 
+  //métodos de descarga para gráficos existentes
   downloadImageSemana() {
     this.downloadChartImage('citasChartSemana', 'chart_semanas.png');
   }
@@ -219,7 +318,16 @@ export class PanelAdministradorComponent implements OnInit, AfterViewInit {
     this.downloadChartImage('citasChartAnio', 'chart_anios.png');
   }
 
-  // Métodos para descargar CSV
+  //métodos de descarga para nuevos gráficos
+  downloadImageServicio() {
+    this.downloadChartImage('citasChartServicio', 'chart_servicios.png');
+  }
+
+  downloadImageEstado() {
+    this.downloadChartImage('citasChartEstado', 'chart_estados.png');
+  }
+
+  //métodos para descargar CSV
   downloadCSV(data: any[], filename: string) {
     const worksheet = XLSX.utils.json_to_sheet(data);
     const workbook = XLSX.utils.book_new();
@@ -252,34 +360,59 @@ export class PanelAdministradorComponent implements OnInit, AfterViewInit {
     this.downloadCSV(data, 'citas_anio.csv');
   }
 
+  downloadCSVServicio() {
+    const data = this.citasPorServicio.map((item) => ({
+      Servicio: item.servicio,
+      Total: item.total
+    }));
+    this.downloadCSV(data, 'citas_servicio.csv');
+  }
+
+  downloadCSVEstado() {
+    const data = this.citasPorEstado.map((item) => ({
+      Estado: item.estado,
+      Total: item.total
+    }));
+    this.downloadCSV(data, 'citas_estado.csv');
+  }
+  
+
   downloadPDF() {
-    const pdf = new jsPDF('p', 'mm', 'a4'); // Crear un nuevo PDF en formato A4
-    const chartIds = ['citasChartSemana', 'citasChartMes', 'citasChartAnio'];
+    //crear un nuevo PDF en formato A4
+    const pdf = new jsPDF('p', 'mm', 'a4'); 
+    const chartIds = [
+      'citasChartSemana', 
+      'citasChartMes', 
+      'citasChartAnio', 
+      'citasChartServicio', 
+      'citasChartEstado'
+    ];
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
-    let y = 10; // Y inicial
+    let y = 10; //eje y inicial
 
     chartIds.forEach((chartId, index) => {
       const canvas = document.getElementById(chartId) as HTMLCanvasElement;
       const imgData = canvas.toDataURL('image/png');
       
-      // Ajustar el tamaño de la imagen en el PDF
-      const imgWidth = pageWidth - 20; // Margen de 10mm a cada lado
-      const imgHeight = (canvas.height * imgWidth) / canvas.width; // Mantener la relación de aspecto
+      //ajustar el tamaño de la imagen en el PDF
+      //margen de 10mm a cada lado
+      const imgWidth = pageWidth - 20; 
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
       if (y + imgHeight > pageHeight) {
-        pdf.addPage(); // Agregar una nueva página si no hay suficiente espacio
-        y = 10; // Reiniciar la posición Y
+        pdf.addPage(); //agregar una nueva página si no hay suficiente espacio
+        y = 10;
       }
 
-      pdf.addImage(imgData, 'PNG', 10, y, imgWidth, imgHeight); // Añadir imagen al PDF
-      y += imgHeight + 10; // Incrementar la posición Y para el siguiente gráfico
+      pdf.addImage(imgData, 'PNG', 10, y, imgWidth, imgHeight); //añadir imagen al PDF
+      y += imgHeight + 10; //incrementar la posición Y para el siguiente gráfico
 
-      // Añadir título para cada gráfico
-      pdf.text(`Gráfico ${index + 1}`, 10, y - imgHeight - 5); // Título encima del gráfico
+      //añadir título para cada gráfico
+      //título encima del gráfico
+      pdf.text(`Gráfico ${index + 1}`, 10, y - imgHeight - 5); 
     });
     
     pdf.save('dashboard_citas.pdf');
-}
-
+  }
 }

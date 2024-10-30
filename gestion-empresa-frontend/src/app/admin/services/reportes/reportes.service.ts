@@ -36,4 +36,28 @@ export class ReportesService {
     });
   }
 
+   //obtiene las citas por servicio
+   getCitasPorServicio(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/reportes/citas/por-servicio`,
+    {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+    });
+  }
+
+  //obtiene las citas por estado
+  getCitasPorEstado(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/reportes/citas/por-estado`,
+    {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+    });
+  }
+
+  //obtiene los empleados por rol
+  getEmpleadosPorRol(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/reportes/empleados/por-rol`,
+    {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+    });
+  }
+
 }
