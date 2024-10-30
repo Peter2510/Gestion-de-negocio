@@ -26,14 +26,30 @@
           <label class="label"> 
             <span class="label-text">Nueva Contraseña</span>
           </label>
-          <input type="password" [(ngModel)]="nuevaContrasena" name="nuevaContrasena" placeholder="Introduce tu nueva contraseña" class="input input-bordered w-full" required />
+          <input 
+            type="password" 
+            [(ngModel)]="nuevaContrasena" 
+            name="nuevaContrasena" 
+            placeholder="Introduce tu nueva contraseña" 
+            class="input input-bordered w-full" 
+            required 
+            minlength="8"
+          />
         </div>
-
+      
         <div>
           <label class="label"> 
             <span class="label-text">Verificar Contraseña</span>
           </label>
-          <input type="password" [(ngModel)]="verificarContrasena" name="verificarContrasena" placeholder="Verifica tu nueva contraseña" class="input input-bordered w-full" required />
+          <input 
+            type="password" 
+            [(ngModel)]="verificarContrasena" 
+            name="verificarContrasena" 
+            placeholder="Verifica tu nueva contraseña" 
+            class="input input-bordered w-full" 
+            required 
+            minlength="8"
+          />
         </div>
       </div>
       
@@ -46,4 +62,9 @@
       </div>
     </form>
   </div>
+</div>
+
+<div class="fixed inset-0 bg-black bg-opacity-70 flex flex-col justify-center items-center z-50" *ngIf="loading">
+  <span class="loading loading-dots text-base-content text-4xl mb-2"></span>
+  <p class="text-base-content text-lg">Cargando</p>
 </div>

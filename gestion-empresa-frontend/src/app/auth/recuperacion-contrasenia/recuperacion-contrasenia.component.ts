@@ -57,6 +57,15 @@ export class RecuperacionContraseniaComponent {
 
   //método para validar el código de recuperación
   validarCodigo() {
+
+    if(this.codigo.length==0){
+      Swal.fire({
+        title: 'Debes llenar el campo del código',
+        icon: 'info'
+      });
+      return;
+    }
+
     this.loading = true;
     this.authService.validarCodigo(this.email, this.codigo)
       .subscribe({
@@ -82,6 +91,15 @@ export class RecuperacionContraseniaComponent {
 
   // cambiar la contraseña
   onSubmit() {
+    
+    if (this.nuevaContrasena.length < 8 || this.verificarContrasena.length < 8) {
+      Swal.fire({
+        title: 'Las contraseñas deben tener 8 caracteres como mínimo',
+        icon: 'info'
+      });
+      return;
+    }
+
     if (this.nuevaContrasena !== this.verificarContrasena) {
       Swal.fire({
         title: 'Las contraseñas no coinciden',
