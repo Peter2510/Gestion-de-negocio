@@ -20,7 +20,19 @@ export class LoginComponent {
   login() {
     this.servicioAuth.login(this.nombreUsuario, this.password).subscribe({
       next: (response: any) => {
-        if (response.ok) {
+      
+        if(response.idUsuario){
+
+          Swal.fire({
+            title: response.mensaje,
+            icon: 'info',
+          });
+
+          this.router.navigate(['/auth/Autenticacion2FA']);
+          this.servicioAuth.idUsuario2af = response.idUsuario;
+          return;
+
+        }else if (response.ok) {
           this.inicioSesion(response.mensaje);
           Swal.fire({
             icon: 'success',

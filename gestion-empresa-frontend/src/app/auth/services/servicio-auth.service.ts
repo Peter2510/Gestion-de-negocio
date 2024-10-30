@@ -17,6 +17,7 @@ export class ServicioAuthService {
   private readonly url = environment.URL;
   permisos: InfoPermiso[] = [];
   private correoUrl = "correo";
+  public idUsuario2af: number;
 
 
   //creacion de signal
@@ -65,6 +66,11 @@ export class ServicioAuthService {
   login(nombreUsuario: string, password: string) {
     const body = { nombreUsuario, password };
     return this.http.post(`${this.url}/Auth/login`, body);
+  }
+
+  //validar codigo 2fa
+  validarCodigo2fa(idUsuario:number, codigo: string): Observable<any> {
+    return this.http.post(`${this.url}/Auth/validar-codigo-a2f`, { idUsuario, codigo });
   }
 
   // para registrar nuevos usuarios
