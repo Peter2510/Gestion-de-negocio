@@ -186,3 +186,11 @@
   (close)="closeModal()"
   (saveCita)="saveCita($event)"
 ></app-modal-creacion-cita>
+
+<!--vista del modal especifico-->
+<app-modal-cita-especifica
+  [isOpen]="modalOpenVistaEspecifica"
+  (close)="closeModalEspecifico()"
+  (saveCita)="saveCita($event)"
+  [valor]="citaEspecificaValor"
+></app-modal-cita-especifica>

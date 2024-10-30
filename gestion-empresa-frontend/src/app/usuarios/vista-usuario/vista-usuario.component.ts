@@ -65,6 +65,8 @@ export class VistaUsuarioComponent implements OnInit {
 
   // para el modal
   modalOpen = false;
+  modalOpenVistaEspecifica = false;
+  citaEspecificaValor: any;
 
   openModal() {
     this.modalOpen = true;
@@ -72,6 +74,16 @@ export class VistaUsuarioComponent implements OnInit {
 
   closeModal() {
     this.modalOpen = false;
+  }
+
+  /// para los modales especificos
+  openModalEspecifico(event: any) {
+    this.modalOpenVistaEspecifica = true;
+    this.citaEspecificaValor = event;
+  }
+
+  closeModalEspecifico() {
+    this.modalOpenVistaEspecifica = false;
   }
 
   saveCita(citaData: any) {
@@ -92,6 +104,7 @@ export class VistaUsuarioComponent implements OnInit {
             title: element.idServicio.nombre,
             start: new Date(element.fechaHoraInicio),
             end: new Date(element.fechaHoraFin),
+            id: element,
             color: colors['blue'],
             draggable: true,
             resizable: {
@@ -183,6 +196,9 @@ export class VistaUsuarioComponent implements OnInit {
   // Método para manejar el clic en un evento
 
   handleEvent(action: string, event: CalendarEvent): void {
+    console.log(event);
+
+    this.openModalEspecifico(event);
     this.modalData = { event, action };
   }
 

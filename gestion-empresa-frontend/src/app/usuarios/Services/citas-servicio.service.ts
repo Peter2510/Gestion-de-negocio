@@ -78,4 +78,17 @@ export class CitasServicioService {
       }
     );
   }
+
+  //obtener citas, servicio especifico, servicio general y duracion
+  obtenerDetalleCitasEspecificos(id: number) {
+    return this.http.get(
+      `${this.baseUrl}/${this.citas}/obtenerDetalleCitasEspecificos/${id}`,
+      {
+        headers: new HttpHeaders().set(
+          'Authorization',
+          `Bearer ${this.authService.getToken()}`
+        ),
+      }
+    );
+  }
 }

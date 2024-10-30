@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgModule, Pipe } from '@angular/core';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { HeaderUsuarioComponent } from 'src/app/Utils/header-usuario/header-usuario.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
@@ -17,6 +17,7 @@ import { ModalCreacionCitaComponent } from '../modal-creacion-cita/modal-creacio
 import { HistorialCitasComponent } from '../historial-citas/historial-citas.component';
 import { FacturasComprobantesComponent } from '../facturas-comprobantes/facturas-comprobantes.component';
 import { QRCodeComponent, QRCodeModule } from 'angularx-qrcode';
+import { ModalCitaEspecificaComponent } from '../modal-cita-especifica/modal-cita-especifica.component';
 @NgModule({
   declarations: [
     HeaderUsuarioComponent,
@@ -27,6 +28,7 @@ import { QRCodeComponent, QRCodeModule } from 'angularx-qrcode';
     ModalCreacionCitaComponent,
     HistorialCitasComponent,
     FacturasComprobantesComponent,
+    ModalCitaEspecificaComponent,
   ],
   imports: [
     CommonModule,
@@ -41,6 +43,7 @@ import { QRCodeComponent, QRCodeModule } from 'angularx-qrcode';
     RouterLink,
     RouterModule,
     QRCodeModule,
+    CurrencyPipe,
   ],
 })
 export class ModuloUsuariosModule {}

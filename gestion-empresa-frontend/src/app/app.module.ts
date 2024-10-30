@@ -29,6 +29,7 @@ import { EdicionPerfilComponent } from './usuarios/edicion-perfil/edicion-perfil
 import { ModuloUsuariosModule } from './usuarios/modulo-usuarios/modulo-usuarios.module';
 import { VistaServicioEspecificoComponent } from './admin/modulo-servicios/vistaEspecifica/vista-servicio-especifico/vista-servicio-especifico.component';
 import { QRCodeModule } from 'angularx-qrcode';
+import { ModalCitaEspecificaComponent } from './usuarios/modal-cita-especifica/modal-cita-especifica.component';
 
 @NgModule({
   declarations: [AppComponent, Vista2faLoginComponent],

@@ -72,7 +72,10 @@ export class ServiciosService {
       `${this.baseUrl}/${this.servicios}/creacionNuevosServicios`,
       todosDatos,
       {
-        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+        headers: new HttpHeaders().set(
+          'Authorization',
+          `Bearer ${this.authService.getToken()}`
+        ),
       }
     );
   }
@@ -80,9 +83,11 @@ export class ServiciosService {
   //servicio para obtener todos los servicios de un empleado y sus elementos especificos
   obtenerTodosServicios() {
     this.http
-      .get(`${this.baseUrl}/${this.servicios}/obtenerTodosServicios`,
-      {
-        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+      .get(`${this.baseUrl}/${this.servicios}/obtenerTodosServicios`, {
+        headers: new HttpHeaders().set(
+          'Authorization',
+          `Bearer ${this.authService.getToken()}`
+        ),
       })
       .subscribe({
         next: (data: any) => {
@@ -101,7 +106,23 @@ export class ServiciosService {
     return this.http.get(
       `${this.baseUrl}/${this.servicios}/obtenerTodosServiciosEspecificos/${id}`,
       {
-        headers: new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`),
+        headers: new HttpHeaders().set(
+          'Authorization',
+          `Bearer ${this.authService.getToken()}`
+        ),
+      }
+    );
+  }
+
+  // para ver la duracion especifica
+  obtenerDuracionServicio(id: number) {
+    return this.http.get(
+      `${this.baseUrl}/${this.duracionServicioPrestado}/duracionServicioEspecifico/${id}`,
+      {
+        headers: new HttpHeaders().set(
+          'Authorization',
+          `Bearer ${this.authService.getToken()}`
+        ),
       }
     );
   }

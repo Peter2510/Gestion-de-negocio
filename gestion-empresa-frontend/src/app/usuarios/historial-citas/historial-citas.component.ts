@@ -78,6 +78,7 @@ export class HistorialCitasComponent implements OnInit {
       citas.todoServiciosEspecificos.forEach((element: any) => {
         console.log(element);
 
+        //agrega los eventos de valor
         this.events = [
           ...this.events,
           {
@@ -92,6 +93,8 @@ export class HistorialCitasComponent implements OnInit {
             },
           },
         ];
+
+        // ahora determina los precios
       });
       console.log(this.events);
     });
