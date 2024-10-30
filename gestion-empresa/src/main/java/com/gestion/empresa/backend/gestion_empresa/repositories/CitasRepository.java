@@ -36,7 +36,7 @@ public interface CitasRepository extends JpaRepository<Citas, Long> {
             "FROM Citas c " +
             "WHERE FUNCTION('YEAR', c.fechaHoraInicio) = :anio " +
             "GROUP BY FUNCTION('YEAR', c.fechaHoraInicio) " +
-            "ORDER BY FUNCTION('YEAR', c.fechaHoraInicio) DESC")  // Cambiado aquí
+            "ORDER BY FUNCTION('YEAR', c.fechaHoraInicio) DESC")
     List<Tuple> countCitasPorAnio(@Param("anio") int anio);
 
 

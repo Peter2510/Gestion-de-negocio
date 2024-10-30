@@ -1,8 +1,6 @@
 package com.gestion.empresa.backend.gestion_empresa.controllers;
 
-import com.gestion.empresa.backend.gestion_empresa.dto.AuthRespuesta;
-import com.gestion.empresa.backend.gestion_empresa.dto.Login;
-import com.gestion.empresa.backend.gestion_empresa.dto.RegistroUsuariosDTO;
+import com.gestion.empresa.backend.gestion_empresa.dto.*;
 import com.gestion.empresa.backend.gestion_empresa.models.Usuarios;
 import com.gestion.empresa.backend.gestion_empresa.services.PersonaService;
 import com.gestion.empresa.backend.gestion_empresa.services.UsuarioServicio;
@@ -42,19 +40,41 @@ public class AuthController {
     public ResponseEntity<Map<String, Object>> login(@RequestBody Login loginUserDto) {
         Optional<AuthRespuesta> respuesta = autenticacionService.login(loginUserDto);
         System.out.println(respuesta);
+
         if (respuesta.isEmpty()) {
-            System.out.println("no existe");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("ok", false, "mensaje", "El usuario no esta registrado"));
 
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("ok", false, "mensaje", "Usuario no existe"));
         } else if (respuesta.get().getToken().equals("no coincide")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("ok", false, "mensaje", "Credenciales incorrectas"));
+        }
+
+        if(respuesta.get().getStatus() != null){
+            if(respuesta.get().getStatus().equals(HttpStatus.INTERNAL_SERVER_ERROR)){
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("ok", false, "mensaje", respuesta.get().getToken()));
+            }
+
+            if(respuesta.get().getStatus().equals(HttpStatus.OK)){
+                return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "mensaje", "Autenticacion doble factor activa, "+respuesta.get().getToken(),
+                        "idUsuario",respuesta.get().getIdUsuario()));
+            }
+        }
 
 
-        System.out.println("no coincide");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("ok", false, "mensaje", "Credenciales incorrectas"));
 
-    }
-        System.out.println("ok");
         return  ResponseEntity.status(HttpStatus.OK).body(Map.of("ok",true, "mensaje",respuesta.get().getToken())) ;
+    }
+
+    @PostMapping("/validar-codigo-a2f")
+    public ResponseEntity<Map<String, Object>> validarCodigo(@RequestBody A2FDTO validacion){
+
+        ResponseBackend response = autenticacionService.validacionCodigoA2F(validacion.getIdUsuario(), validacion.getCodigo());
+        System.out.println(response);
+        return ResponseEntity.status(response.getStatus()).body(
+                response.getOk()
+                        ? Map.of("ok", true, "mensaje", "Código válido", "token", response.getMensaje())
+                        : Map.of("ok", false , "mensaje", response.getMensaje())
+        );
+
     }
 
 

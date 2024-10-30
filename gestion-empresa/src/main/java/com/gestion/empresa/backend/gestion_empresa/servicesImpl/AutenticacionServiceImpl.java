@@ -17,12 +17,15 @@ import com.gestion.empresa.backend.gestion_empresa.utils.ResponseBackend;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.CacheManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.security.SecureRandom;
 import java.util.Map;
 import java.util.Optional;
 
@@ -44,8 +47,31 @@ public class AutenticacionServiceImpl implements AutenticacionServicie {
 
     @Autowired
     private RolRepository rolRepository;
+
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private CorreoMensajeServiceImpl emailService;
+
+    @Autowired
+    private CacheServiceImpl cacheService;
+
+    @Autowired
+    private CacheManager cacheManager;
+
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private static final int CODE_LENGTH = 6;
+    private static final SecureRandom random = new SecureRandom();
+
+    public String generarCodigo() {
+        StringBuilder codigo = new StringBuilder(CODE_LENGTH);
+        for (int i = 0; i < CODE_LENGTH; i++) {
+            codigo.append(CHARACTERS.charAt(random.nextInt(CHARACTERS.length())));
+        }
+        return codigo.toString();
+    }
+
 
     @Transactional
     public Optional<AuthRespuesta> login(Login valor) {
@@ -54,18 +80,87 @@ public class AutenticacionServiceImpl implements AutenticacionServicie {
         // Buscar al usuario en la base de datos
         Optional<Usuarios> user = userRepository.findByNombreUsuario(valor.getNombreUsuario());
         if (user.isEmpty()) {
-            System.out.println("vacio");
             return Optional.empty();
         }
         // Comparar la contraseña ingresada con la contraseña encriptada en la base de datos
         if (!passwordEncoder.matches(valor.getPassword(), user.get().getPassword())) {
             return Optional.ofNullable(AuthRespuesta.builder().token("no coincide").build());
         }
+
+        //validar a2f
+        if(user.get().isA2fActivo()){
+
+            String correo = user.get().getPersona().getCorreo();
+            Long idUsuario = userRepository.findByNombreUsuario(valor.getNombreUsuario()).get().getId();
+
+            System.out.println("id eel usuarios"+idUsuario);
+
+            String codigoGenerado = generarCodigo();
+
+            //almacenar el código en caché con el correo como clave
+            String codigo = cacheService.almacenarCodigoEnCacheIdUsuario(idUsuario.toString(), codigoGenerado);
+
+            //verificar si se almacenó correctamente
+            Object cachedValue = cacheManager.getCache("myCache").get(idUsuario.toString(), String.class);
+            System.out.println("Valor en caché para " + idUsuario + ": " + cachedValue);
+
+            String cuerpo = "<p>Este es un <strong>correo para validar el ingreso su cuenta</strong>.</p>" +
+                    "<p>Tu código de validacion es: <strong>" + codigo + "</strong></p>" +
+                    "<p>Tiene validez de 10 minutos</p>";
+
+            System.out.println("Código generado: " + codigo);
+            ResponseBackend response = emailService.generarCorreo(correo, "Autenticacion doble factor", cuerpo);
+
+            return Optional.ofNullable(AuthRespuesta.builder().token(response.getMensaje()).idUsuario(user.get().getId()).status(response.getStatus()).build());
+
+        }
+
         // Si la autenticación es correcta, generar el token JWT
         String token = jwtServicio.obtenerToken(user.get());
 
         return Optional.ofNullable(AuthRespuesta.builder().token(token).build());
     }
+
+    @Override
+    public ResponseBackend validacionCodigoA2F(Long idUsuario, String codigo) {
+
+        String  codigoAlmacenado = cacheService.recuperarCodigoDelCacheIdUsuario(idUsuario.toString());
+
+        //valida si el código almacenado coincide con el código ingresado
+        if (codigoAlmacenado != null && codigoAlmacenado.equals(codigo)) {
+            cacheService.limpiarCodigoDelCacheidUsuario(idUsuario.toString());
+            Optional<Usuarios> usuario = usuarioRepository.findById(idUsuario);
+
+            String token = jwtServicio.obtenerToken(usuario.get());
+
+            return new ResponseBackend(true, HttpStatus.OK, token);
+
+        } else {
+            return new ResponseBackend(false, HttpStatus.BAD_REQUEST, "Código invalido");
+        }
+
+    }
+
+/*
+*
+*  @Override
+    public ResponseBackend validarCodigoRecuperacion(String correo, String codigoRecuperacion) {
+        String  codigoAlmacenado = cacheService.recuperarCodigoDelCache(correo);
+
+        //valida si el código almacenado coincide con el código ingresado
+        if (codigoAlmacenado != null && codigoAlmacenado.equals(codigoRecuperacion)) {
+            cacheService.limpiarCodigoDelCache(correo);
+            Optional<Persona> existenciaUsuario = personaServicio.buscarPorCorreo(correo);
+            Optional<Usuarios> idUsuario = usuarioRepository.findByPersonaCui(existenciaUsuario.get().getCui());
+            //retorna el id del usuario para cambiar la contraseña
+            return new ResponseBackend(true, HttpStatus.OK, "Codigo válido", idUsuario.get().getId() );
+        } else {
+            return new ResponseBackend(false, HttpStatus.BAD_REQUEST, "Código invalido");
+        }
+    }
+
+*
+* */
 
     public Optional<AuthRespuesta> validarCredenciales(String password, Optional<Usuarios> usuarios) {
         if ((password == usuarios.get().getPassword())) {
@@ -125,6 +220,7 @@ public class AutenticacionServiceImpl implements AutenticacionServicie {
         } catch (Exception e) {
             System.out.println("Error al registrar usuario: " + e.getMessage());
             // La transacción se marca automáticamente para rollback
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new ResponseBackend(false, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }

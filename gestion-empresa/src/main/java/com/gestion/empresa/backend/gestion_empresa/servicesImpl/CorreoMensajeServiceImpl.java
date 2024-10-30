@@ -49,7 +49,7 @@ public class CorreoMensajeServiceImpl implements CorreoMensajeService {
         }catch (Exception e) {
             System.out.println(e);
             e.printStackTrace();
-            return new ResponseBackend(false, HttpStatus.INTERNAL_SERVER_ERROR, "error al enviar correo");
+            return new ResponseBackend(false, HttpStatus.INTERNAL_SERVER_ERROR, "Error al enviar correo");
         }
     }
 }

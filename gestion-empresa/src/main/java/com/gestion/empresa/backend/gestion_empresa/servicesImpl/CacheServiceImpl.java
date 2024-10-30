@@ -33,4 +33,21 @@ public class CacheServiceImpl {
     public void limpiarCodigoDelCache(String email) {
     }
 
+    //se almacena el código en caché con el idUsuario como clave
+    @CachePut(value = "myCache", key = "#idUsuario")
+    public String almacenarCodigoEnCacheIdUsuario(String idUsuario, String codigo) {
+        return codigo;
+    }
+
+    //esto recupera el codigo desde el caché usando el idUsuario como clave
+    @Cacheable(value = "myCache", key = "#idUsuario")
+    public String recuperarCodigoDelCacheIdUsuario(String idUsuario) {
+        return null;  //spring devolverá el valor en caché si existe si no tira un null
+    }
+
+    //para limpiar el caché después de validar el código
+    @CacheEvict(value = "myCache", key = "#idUsuario")
+    public void limpiarCodigoDelCacheidUsuario(String idUsuario) {
+    }
+
 }
