@@ -1,6 +1,15 @@
+<app-header-admin></app-header-admin>
+
 <div class="p-4 mt-24 bg-base-200 text-base-content">
   <h2 class="text-lg font-semibold mb-4 text-center">Dashboard</h2>
   
+  <div class="mb-4">
+    <label for="yearSelect" class="block text-sm font-medium">Selecciona el Año:</label>
+    <select id="yearSelect" [(ngModel)]="selectedYear" (change)="onYearChange()" class="select select-bordered">
+      <option *ngFor="let year of availableYears" [value]="year">{{ year }}</option>
+    </select>
+  </div>
+
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     <div class="card shadow-lg bg-base-100">
       <div class="card-body">
@@ -46,9 +55,16 @@
         <button (click)="downloadCSVEstado()" class="btn btn-secondary">Descargar CSV</button>
       </div>
     </div>
-  </div>
 
-  
+    <div class="card shadow-lg bg-base-100">
+      <div class="card-body">
+        <h3 class="text-md font-semibold mb-2 text-base-content">Total de Usuarios por Rol</h3>
+        <canvas id="citasChartEmpleados" class="mb-4"></canvas>
+        <button (click)="downloadImageEmpleados()" class="btn btn-primary">Descargar Imagen</button>
+        <button (click)="downloadCSVEmpleados()" class="btn btn-secondary">Descargar CSV</button>
+      </div>
+    </div>
+  </div>
 
   <button (click)="downloadPDF()" class="btn btn-success mt-4">Descargar PDF</button>
 </div>

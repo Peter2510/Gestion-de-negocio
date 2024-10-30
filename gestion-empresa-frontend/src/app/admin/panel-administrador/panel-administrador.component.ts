@@ -1,7 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { ReportesService } from '../services/reportes/reportes.service';
-import * as html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
@@ -31,13 +30,20 @@ export class PanelAdministradorComponent implements OnInit, AfterViewInit {
   public estados: string[] = [];
   public totalCitasEstado: number[] = [];
 
+  public selectedYear: number;
+  public availableYears: number[];
+
   private chartSemana: Chart | undefined;
   private chartMes: Chart | undefined;
   private chartAnio: Chart | undefined;
   private chartServicio: Chart | undefined;
   private chartEstado: Chart | undefined;
+  private chartEmpleados: Chart | undefined;
 
-  
+  public empleadosPorRol: any[] = [];
+  public roles: string[] = [];
+  public totalEmpleados: number[] = [];
+
   private monthNames: string[] = [
     'Enero', 'Febrero', 'Marzo', 'Abril', 
     'Mayo', 'Junio', 'Julio', 'Agosto', 
@@ -46,17 +52,27 @@ export class PanelAdministradorComponent implements OnInit, AfterViewInit {
 
   constructor(private reportesService: ReportesService) {
     Chart.register(...registerables);
+    const currentYear = new Date().getFullYear();
+    this.availableYears = Array.from({ length: currentYear - 2010 + 1 }, (v, k) => k + 2010); //años desde 2010 hasta el año actual
+    this.selectedYear = currentYear; //inicializar con el año actual
   }
 
   ngOnInit(): void {
-    this.getCitasPorSemana(2024);
-    this.getCitasPorMes(2024);
-    this.getCitasPorAnio();
+    this.getCitasPorSemana(this.selectedYear);
+    this.getCitasPorMes(this.selectedYear);
+    this.getCitasPorAnio(this.selectedYear);
     this.getCitasPorServicio();
     this.getCitasPorEstado();
+    this.getEmpleadosPorRol();
   }
 
   ngAfterViewInit(): void {}
+
+  onYearChange() {
+    this.getCitasPorSemana(this.selectedYear);
+    this.getCitasPorMes(this.selectedYear);
+    this.getCitasPorAnio(this.selectedYear); 
+  }
 
   getCitasPorSemana(anio: number) {
     this.reportesService.getCitasPorSemana(anio).subscribe(data => {
@@ -82,8 +98,8 @@ export class PanelAdministradorComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getCitasPorAnio() {
-    this.reportesService.getCitasPorAnio().subscribe(data => {
+  getCitasPorAnio(anio: number) {
+    this.reportesService.getCitasPorAnio(anio).subscribe(data => {
       this.citasPorAnio = data;
       this.anios = this.citasPorAnio.map(item => item.anio);
       this.totalCitasAnio = this.citasPorAnio.map(item => item.total);
@@ -103,19 +119,28 @@ export class PanelAdministradorComponent implements OnInit, AfterViewInit {
     });
   }
   
-
   getCitasPorEstado() {
     this.reportesService.getCitasPorEstado().subscribe(data => {
       this.citasPorEstado = data;
   
-      this.estados = this.citasPorEstado.map(item => item[0].nombre); 
+      this.estados = this.citasPorEstado.map(item => item[0].nombre);
       this.totalCitasEstado = this.citasPorEstado.map(item => item[1]);
   
       this.createChartEstado();
     });
   }
-  
 
+  getEmpleadosPorRol() {
+    this.reportesService.getEmpleadosPorRol().subscribe(data => {
+      this.empleadosPorRol = data;
+  
+      this.roles = this.empleadosPorRol.map(item => item[0].nombre);
+      this.totalEmpleados = this.empleadosPorRol.map(item => item[1]);
+  
+      this.createChartEmpleados();
+    });
+  }
+  
   private getStartDateOfWeek(year: number, week: number): Date {
     const firstDayOfYear = new Date(year, 0, 1);
     const daysToAdd = (week - 1) * 7;
@@ -279,6 +304,36 @@ export class PanelAdministradorComponent implements OnInit, AfterViewInit {
     });
   }
 
+  createChartEmpleados() {
+    const ctx = document.getElementById('citasChartEmpleados') as HTMLCanvasElement;
+
+    if (this.chartEmpleados) {
+      this.chartEmpleados.destroy();
+    }
+
+    this.chartEmpleados = new Chart(ctx, {
+      type: 'bar', 
+      data: {
+        labels: this.roles,
+        datasets: [{
+          label: 'Total Usuarios por Rol',
+          data: this.totalEmpleados,
+          backgroundColor: 'rgba(255, 206, 86, 0.8)',
+          borderColor: 'rgba(255, 206, 86, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  }
+
   //métodos para descargar cada gráfico como imagen
   downloadChartImage(chartId: string, filename: string) {
     const canvas = document.getElementById(chartId) as HTMLCanvasElement;
@@ -325,6 +380,10 @@ export class PanelAdministradorComponent implements OnInit, AfterViewInit {
 
   downloadImageEstado() {
     this.downloadChartImage('citasChartEstado', 'chart_estados.png');
+  }
+
+  downloadImageEmpleados() {
+    this.downloadChartImage('citasChartEmpleados', 'chart_empleados.png');
   }
 
   //métodos para descargar CSV
@@ -375,6 +434,14 @@ export class PanelAdministradorComponent implements OnInit, AfterViewInit {
     }));
     this.downloadCSV(data, 'citas_estado.csv');
   }
+
+  downloadCSVEmpleados() {
+    const data = this.empleadosPorRol.map((item) => ({
+      Rol: item[0].nombre,
+      Total: item[1]
+    }));
+    this.downloadCSV(data, 'empleados_por_rol.csv');
+  }
   
 
   downloadPDF() {
@@ -385,7 +452,9 @@ export class PanelAdministradorComponent implements OnInit, AfterViewInit {
       'citasChartMes', 
       'citasChartAnio', 
       'citasChartServicio', 
-      'citasChartEstado'
+      'citasChartEstado',
+      'citasChartEmpleados'
+      
     ];
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
