@@ -1,7 +1,6 @@
 package com.gestion.empresa.backend.gestion_empresa.repositories;
 
-import com.gestion.empresa.backend.gestion_empresa.models.DuracionServicioPrestado;
-import com.gestion.empresa.backend.gestion_empresa.models.EstadoServicio;
+import com.gestion.empresa.backend.gestion_empresa.models.*;
 import com.gestion.empresa.backend.gestion_empresa.projections.PermisoRolProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,6 +17,9 @@ public interface DuracionServicioPrestadoRepository extends JpaRepository<Duraci
             "join ServiciosAsignado sa on sa.idServicioPrestado.id = sp.id " +
             "WHERE sa.idServicio.id = :idServicio")
     List<Object[]> findByServicio(@Param("idServicio") Long idServicio);
+
+
+    DuracionServicioPrestado findAllByIdServicioPrestado(ServicioPrestado idServicioPrestado); // Busca por el objeto Servicios
 
 
 

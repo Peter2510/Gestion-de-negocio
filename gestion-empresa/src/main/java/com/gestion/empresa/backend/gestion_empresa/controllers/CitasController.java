@@ -9,6 +9,7 @@ import com.gestion.empresa.backend.gestion_empresa.repositories.UsuarioRepositor
 import com.gestion.empresa.backend.gestion_empresa.services.CitasService;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.CategoriaServicioServiceImpl;
 import com.gestion.empresa.backend.gestion_empresa.servicesImpl.CitasServiceImpl;
+import com.gestion.empresa.backend.gestion_empresa.servicesImpl.DetalleCitaServiceImpl;
 import com.gestion.empresa.backend.gestion_empresa.utils.ResponseBackend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,8 @@ public class CitasController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
-
+    @Autowired
+    private DetalleCitaServiceImpl detalleCitaServiceImpl;
 
     // creacion de categorias para usuarios que trabajen ahi
     @PostMapping("/crearCita")
@@ -62,6 +64,15 @@ public class CitasController {
         List<Citas> response = citasServiceImpl.obtenerCitasId(id);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "todoServiciosEspecificos", response));
     }
+
+
+    @GetMapping("/obtenerDetalleCitasEspecificos/{idCita}")
+    public ResponseEntity<Map<String, Object>> obtenerDuracionServiciosEspecificos(@PathVariable Long idCita) {
+        Object response = detalleCitaServiceImpl.obtenerDetalleCitasId(idCita);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("ok", true, "detalle", response));
+    }
+
+
 
 
 

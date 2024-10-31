@@ -2,6 +2,7 @@ package com.gestion.empresa.backend.gestion_empresa.controllers;
 
 import com.gestion.empresa.backend.gestion_empresa.models.CategoriaServicio;
 import com.gestion.empresa.backend.gestion_empresa.models.JornadaLaboral;
+import com.gestion.empresa.backend.gestion_empresa.repositories.JornadaLaboralRepository;
 import com.gestion.empresa.backend.gestion_empresa.services.CategoriaServicioService;
 import com.gestion.empresa.backend.gestion_empresa.services.JornadaLaboralService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,6 +28,8 @@ public class JornadaLaboralController {
 
     @Autowired
     private JornadaLaboralService jornadaLaboralService;
+    @Autowired
+    private JornadaLaboralRepository jornadaLaboralRepository;
 
 
     // creacion de categorias para usuarios que trabajen ahi
@@ -34,6 +38,21 @@ public class JornadaLaboralController {
             @RequestBody JornadaLaboral jornadaLaboral
     ) {
         try {
+
+            System.out.println(jornadaLaboral);
+
+            // Obtener todas las jornadas laborales existentes
+//            List<JornadaLaboral> todasLasJornadas = jornadaLaboralRepository.findAll();
+//
+//            // Verificar si hay conflicto de horarios
+//            for (JornadaLaboral jornada : todasLasJornadas) {
+//                if (jornadaLaboral.getHoraInicio().isBefore(jornada.getHoraFin()) &&
+//                        jornadaLaboral.getHoraFin().isAfter(jornada.getHoraInicio())) {
+//                    return ResponseEntity.status(HttpStatus.CONFLICT)
+//                            .body(Map.of("ok", false, "mensaje", "Ya existe una jornada laboral en el mismo rango de tiempo."));
+//                }
+//            }
+
             System.out.println(jornadaLaboral);
             //crea la categoria
             JornadaLaboral nuevaJornada = new JornadaLaboral();

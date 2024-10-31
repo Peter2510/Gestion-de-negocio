@@ -51,4 +51,5 @@ public interface CitasRepository extends JpaRepository<Citas, Long> {
     @Query("SELECT c.idEstadoCita AS estado, COUNT(c) AS totalCitas " +
             "FROM Citas c GROUP BY c.idEstadoCita")
     List<Object[]> findCitasPorEstado();
+    List<Citas> findAllByIdServicio(Servicios idServicios);
 }
