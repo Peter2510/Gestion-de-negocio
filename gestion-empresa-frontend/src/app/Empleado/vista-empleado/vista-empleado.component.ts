@@ -7,21 +7,21 @@ import {
 } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
-  CalendarEvent,
-  CalendarEventAction,
-  CalendarEventTimesChangedEvent,
   CalendarView,
+  CalendarEvent,
+  CalendarEventTimesChangedEvent,
+  CalendarEventAction,
 } from 'angular-calendar';
 import {
+  isSameMonth,
+  isSameDay,
+  startOfDay,
   addDays,
   endOfDay,
-  isSameDay,
-  isSameMonth,
-  startOfDay,
 } from 'date-fns';
 import { Subject } from 'rxjs';
+import { CitasServicioService } from 'src/app/usuarios/Services/citas-servicio.service';
 import { EventColor } from 'calendar-utils';
-import { CitasServicioService } from '../Services/citas-servicio.service';
 
 const colors: Record<string, EventColor> = {
   red: {
@@ -39,11 +39,11 @@ const colors: Record<string, EventColor> = {
 };
 
 @Component({
-  selector: 'app-vista-usuario',
-  templateUrl: './vista-usuario.component.html',
-  styleUrls: ['./vista-usuario.component.css'],
+  selector: 'app-vista-empleado',
+  templateUrl: './vista-empleado.component.html',
+  styleUrls: ['./vista-empleado.component.css'],
 })
-export class VistaUsuarioComponent implements OnInit {
+export class VistaEmpleadoComponent implements OnInit {
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
   view: CalendarView = CalendarView.Month; // Cambia la vista: Month, Week o Day
   viewDate: Date = new Date(); // Fecha actual

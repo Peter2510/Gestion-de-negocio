@@ -74,13 +74,14 @@ export class LoginComponent {
 
       if (id === 2) {
         this.router.navigate(['/usuarios/']);
+      } else if (id === 12) {
+        this.router.navigate(['/empleados/VistaEmpleadoComponent']);
       } else {
         this.router.navigate(['/administrador/panel-administrador']);
       }
     }
   }
 }
-
 
 // <button class="btn">
 //   Inbox

@@ -129,6 +129,14 @@
           </div>
         </div>
 
+        <div class="form-control mb-4 bg-base-200">
+          <label class="label">
+            <span class="label-text">Activar 2FA</span>
+          </label>
+          <input type="checkbox" class="checkbox" [(ngModel)]="usuario.a2f_activo" name="a2f_activo" />
+        </div>
+
+
         <!-- Botón para enviar -->
         <div class="form-control mt-6 bg-base-100 border-none">
           <button type="submit" [disabled]="registroForm.invalid" class="btn btn-primary w-full">

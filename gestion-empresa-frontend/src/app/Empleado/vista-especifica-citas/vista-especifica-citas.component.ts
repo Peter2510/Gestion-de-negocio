@@ -7,43 +7,27 @@ import {
 } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
-  CalendarEvent,
-  CalendarEventAction,
-  CalendarEventTimesChangedEvent,
   CalendarView,
+  CalendarEventTimesChangedEvent,
+  CalendarEventAction,
 } from 'angular-calendar';
-import {
-  addDays,
-  endOfDay,
-  isSameDay,
-  isSameMonth,
-  startOfDay,
-} from 'date-fns';
+import { CalendarEvent, EventColor } from 'calendar-utils';
+import { isSameMonth, isSameDay, startOfDay, endOfDay } from 'date-fns';
 import { Subject } from 'rxjs';
-import { EventColor } from 'calendar-utils';
-import { CitasServicioService } from '../Services/citas-servicio.service';
+import { CitasServicioService } from 'src/app/usuarios/Services/citas-servicio.service';
 
 const colors: Record<string, EventColor> = {
-  red: {
-    primary: '#ad2121',
-    secondary: '#FAE3E3',
-  },
-  blue: {
-    primary: '#1e90ff',
-    secondary: '#D1E8FF',
-  },
-  yellow: {
-    primary: '#e3bc08',
-    secondary: '#FDF1BA',
+  green: {
+    primary: '#28a745',
+    secondary: '#C9F7C1',
   },
 };
-
 @Component({
-  selector: 'app-vista-usuario',
-  templateUrl: './vista-usuario.component.html',
-  styleUrls: ['./vista-usuario.component.css'],
+  selector: 'app-vista-especifica-citas',
+  templateUrl: './vista-especifica-citas.component.html',
+  styleUrls: ['./vista-especifica-citas.component.css'],
 })
-export class VistaUsuarioComponent implements OnInit {
+export class VistaEspecificaCitasComponent implements OnInit {
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
   view: CalendarView = CalendarView.Month; // Cambia la vista: Month, Week o Day
   viewDate: Date = new Date(); // Fecha actual
@@ -65,8 +49,6 @@ export class VistaUsuarioComponent implements OnInit {
 
   // para el modal
   modalOpen = false;
-  modalOpenVistaEspecifica = false;
-  citaEspecificaValor: any;
 
   openModal() {
     this.modalOpen = true;
@@ -76,16 +58,6 @@ export class VistaUsuarioComponent implements OnInit {
     this.modalOpen = false;
   }
 
-  /// para los modales especificos
-  openModalEspecifico(event: any) {
-    this.modalOpenVistaEspecifica = true;
-    this.citaEspecificaValor = event;
-  }
-
-  closeModalEspecifico() {
-    this.modalOpenVistaEspecifica = false;
-  }
-
   saveCita(citaData: any) {
     console.log('Cita guardada:', citaData);
   }
@@ -93,19 +65,19 @@ export class VistaUsuarioComponent implements OnInit {
   constructor(private modal: NgbModal) {}
 
   ngOnInit(): void {
-    this.citasServicio.obtenerCitas().subscribe((citas: any) => {
-      this.todasCitas = citas.Citas;
-      citas.Citas.forEach((element: any) => {
+    this.citasServicio.obtenerCitasId().subscribe((citas: any) => {
+      this.todasCitas = citas.todoServiciosEspecificos;
+      citas.todoServiciosEspecificos.forEach((element: any) => {
         console.log(element);
 
+        //agrega los eventos de valor
         this.events = [
           ...this.events,
           {
             title: element.idServicio.nombre,
             start: new Date(element.fechaHoraInicio),
             end: new Date(element.fechaHoraFin),
-            id: element,
-            color: colors['blue'],
+            color: colors['green'],
             draggable: true,
             resizable: {
               beforeStart: true,
@@ -113,6 +85,8 @@ export class VistaUsuarioComponent implements OnInit {
             },
           },
         ];
+
+        // ahora determina los precios
       });
       console.log(this.events);
     });
@@ -150,22 +124,7 @@ export class VistaUsuarioComponent implements OnInit {
     this.handleEvent('Dropped or resized', event);
   }
   // Eventos del calendario
-  events: CalendarEvent[] = [
-    {
-      start: startOfDay('2024-10-25T05:55:58.696Z'), // Fecha de inicio
-      end: addDays(new Date(), 1),
-      title: 'Evento del día', // Título del evento
-      color: { ...colors['red'] },
-      draggable: true,
-    },
-    {
-      start: startOfDay(new Date(new Date().setDate(new Date().getDate() + 1))),
-      end: addDays(new Date(), 5),
-      title: 'Evento de mañana', // Otro evento
-      color: { ...colors['yellow'] },
-      draggable: true,
-    },
-  ];
+  events: CalendarEvent[] = [];
 
   actions: CalendarEventAction[] = [
     {
@@ -196,9 +155,6 @@ export class VistaUsuarioComponent implements OnInit {
   // Método para manejar el clic en un evento
 
   handleEvent(action: string, event: CalendarEvent): void {
-    console.log(event);
-
-    this.openModalEspecifico(event);
     this.modalData = { event, action };
   }
 
@@ -216,7 +172,7 @@ export class VistaUsuarioComponent implements OnInit {
         title: 'New event',
         start: startOfDay(new Date()),
         end: endOfDay(new Date()),
-        color: colors['red'],
+        color: colors['green'],
         draggable: true,
         resizable: {
           beforeStart: true,
@@ -245,5 +201,30 @@ export class VistaUsuarioComponent implements OnInit {
 
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
+  }
+
+  //******** */ Paginación
+  currentPage = 1;
+  itemsPerPage = 5;
+
+  get totalPages(): number {
+    return Math.ceil(this.todasCitas.length / this.itemsPerPage);
+  }
+
+  get paginatedItems() {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    return this.todasCitas.slice(start, start + this.itemsPerPage);
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
   }
 }

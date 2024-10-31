@@ -7,6 +7,8 @@ import { EmpresaService } from 'src/app/admin/services/empresa/empresa.service';
 import { Empresa } from 'src/app/models/Empresa';
 import { QRCodeComponent } from 'angularx-qrcode';
 import * as QRCode from 'qrcode';
+import { ServiciosService } from 'src/app/admin/services/servicios.service';
+import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-facturas-comprobantes',
   templateUrl: './facturas-comprobantes.component.html',
@@ -15,23 +17,58 @@ import * as QRCode from 'qrcode';
 export class FacturasComprobantesComponent implements OnInit {
   //servicios
   citasServicio = inject(CitasServicioService);
+  ServicioDuracion = inject(ServiciosService);
   empresaServicio = inject(EmpresaService);
   todasCitas: any;
   valorEmpresa!: Empresa;
+  detallesCitas: any;
 
   ngOnInit(): void {
     this.empresaServicio.obtenerInfoEmpresa().subscribe((empresas: any) => {
       console.log(empresas);
-
       this.valorEmpresa = empresas.empresa;
     });
+
     this.citasServicio.obtenerCitasId().subscribe((citas: any) => {
       this.todasCitas = citas.todoServiciosEspecificos;
+      this.detallesCitas = []; // Array para almacenar los detalles de cada cita
+      console.log(this.todasCitas);
+
       citas.todoServiciosEspecificos.forEach((element: any) => {
-        console.log(element);
+        console.log('aaaaaaa');
+
+        this.citasServicio
+          .obtenerDetalleCitasEspecificos(element.id)
+          .subscribe((detalleCita: any) => {
+            console.log(detalleCita.detalle[1]), '-----------';
+            this.detallesCitas.push(detalleCita.detalle[1]); // Guarda cada detalle en el array
+          });
       });
     });
   }
+
+  // calculo para el precio
+  // Método para calcular segmentos de duración en el componente
+  calcularSegmentos(
+    fechaHoraInicio: string,
+    fechaHoraFin: string,
+    duracion: number,
+    precio: number
+  ): number {
+    const inicio = new Date(fechaHoraInicio);
+    const fin = new Date(fechaHoraFin);
+
+    if (isNaN(inicio.getTime()) || isNaN(fin.getTime()) || duracion <= 0) {
+      return 0;
+    }
+
+    const diferenciaMs = fin.getTime() - inicio.getTime();
+    console.log(diferenciaMs / (1000 * 60), duracion);
+
+    const diferenciaMinutos = diferenciaMs / (1000 * 60);
+    return (diferenciaMinutos / duracion) * precio; // Retorna el número de segmentos
+  }
+
   //******** */ Paginación
   currentPage = 1;
   itemsPerPage = 5;
@@ -85,7 +122,7 @@ export class FacturasComprobantesComponent implements OnInit {
       img.src = url;
     });
   }
-  async generatePDF(citaEspecifica: any) {
+  async generatePDF(citaEspecifica: any, indice: number) {
     const doc = new jsPDF();
     const today = new Date();
     const formattedDate = this.formatDate(today);
@@ -109,6 +146,12 @@ export class FacturasComprobantesComponent implements OnInit {
         EstadoCita: citaEspecifica.idEstadoCita.nombre,
         Hora_incio: this.formatDate(new Date(citaEspecifica.fechaHoraInicio)),
         Hora_fin: this.formatDate(new Date(citaEspecifica.fechaHoraFin)),
+        precio: this.calcularSegmentos(
+          citaEspecifica.fechaHoraInicio,
+          citaEspecifica.fechaHoraFin,
+          this.detallesCitas[indice].duracion,
+          this.detallesCitas[indice].idServicioPrestado.precio
+        ),
         Día: citaEspecifica.idDiaLaboral.nombre,
       };
       const jsonData = JSON.stringify(datosJson);
@@ -126,6 +169,7 @@ export class FacturasComprobantesComponent implements OnInit {
           'Estado de Cita',
           'Fecha Hora Inicio',
           'Fecha Hora Fin',
+          'Precio',
           'Día Laboral',
         ],
       ];
@@ -139,6 +183,12 @@ export class FacturasComprobantesComponent implements OnInit {
           citaEspecifica.idEstadoCita.nombre,
           this.formatDate(new Date(citaEspecifica.fechaHoraInicio)),
           this.formatDate(new Date(citaEspecifica.fechaHoraFin)),
+          this.calcularSegmentos(
+            citaEspecifica.fechaHoraInicio,
+            citaEspecifica.fechaHoraFin,
+            this.detallesCitas[indice].duracion,
+            this.detallesCitas[indice].idServicioPrestado.precio
+          ),
           citaEspecifica.idDiaLaboral.nombre,
         ],
       ];
@@ -153,5 +203,34 @@ export class FacturasComprobantesComponent implements OnInit {
     } catch (error) {
       console.error('Error loading image:', error, this.valorEmpresa?.logo);
     }
+  }
+
+  exportacionExcel(citaEspecifica: any, indice: number) {
+    const data = [
+      [
+        citaEspecifica.id,
+        citaEspecifica.idUsuario.nombreUsuario,
+        citaEspecifica.idUsuario.persona.correo,
+        citaEspecifica.idUsuario.persona.telefono,
+        citaEspecifica.idServicio.nombre,
+        citaEspecifica.idEstadoCita.nombre,
+        this.formatDate(new Date(citaEspecifica.fechaHoraInicio)),
+        this.formatDate(new Date(citaEspecifica.fechaHoraFin)),
+        this.calcularSegmentos(
+          citaEspecifica.fechaHoraInicio,
+          citaEspecifica.fechaHoraFin,
+          this.detallesCitas[indice].duracion,
+          this.detallesCitas[indice].idServicioPrestado.precio
+        ),
+        citaEspecifica.idDiaLaboral.nombre,
+      ],
+    ];
+    const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /*save to file*/
+    XLSX.writeFile(wb, 'FacturaNo. ' + indice + '.xlsx');
   }
 }

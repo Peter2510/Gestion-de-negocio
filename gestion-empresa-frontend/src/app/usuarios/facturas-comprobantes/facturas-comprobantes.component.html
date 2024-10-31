@@ -14,7 +14,7 @@
         <div class="mt-8 w-full max-w-4xl p-4">
           <h1 class="text-2xl font-bold mb-4">Historial de Citas personales</h1>
 
-          <table class="table w-full">
+          <table class="table w-full" id="informacion">
             <thead>
               <tr>
                 <th>ID</th>
@@ -25,13 +25,14 @@
                 <th>Estado de Cita</th>
                 <th>Fecha Hora Inicio</th>
                 <th>Fecha Hora Fin</th>
+                <th>Precio</th>
                 <th>Día Laboral</th>
                 <th>facturas</th>
                 <th>Comprobantes</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let servicio of this.paginatedItems">
+              <tr *ngFor="let servicio of this.paginatedItems; let i = index">
                 <td>{{ servicio.id }}</td>
                 <td>{{ servicio.idUsuario.nombreUsuario }}</td>
                 <td>{{ servicio.idUsuario.persona.correo }}</td>
@@ -44,12 +45,22 @@
                 <td>
                   {{ servicio.fechaHoraFin | date : "dd/MM/yyyy HH:mm:ss" }}
                 </td>
+                <td>
+                  {{
+                    calcularSegmentos(
+                      servicio.fechaHoraInicio,
+                      servicio.fechaHoraFin,
+                      detallesCitas[i].duracion,
+                      detallesCitas[i].idServicioPrestado.precio
+                    ) | currency : "Q" : "symbol"
+                  }}
+                </td>
                 <td>{{ servicio.idDiaLaboral.nombre }}</td>
                 <td>
                   <div class="mt-4">
                     <button
                       class="btn btn-primary hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                      (click)="generatePDF(servicio)"
+                      (click)="generatePDF(servicio, i)"
                     >
                       Generar Factura
                     </button>
@@ -57,7 +68,7 @@
                   <div class="mt-4">
                     <button
                       class="btn btn-secondary hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                      (click)="generatePDF(servicio)"
+                      (click)="exportacionExcel(servicio, i)"
                     >
                       Generar Factura Excel
                     </button>
@@ -67,7 +78,7 @@
                   <div class="mt-4">
                     <button
                       class="btn btn-primary hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                      (click)="generatePDF(servicio)"
+                      (click)="generatePDF(servicio, i)"
                     >
                       Generar Comprobante
                     </button>
