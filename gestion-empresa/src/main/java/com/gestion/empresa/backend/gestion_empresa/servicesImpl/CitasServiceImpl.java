@@ -39,7 +39,8 @@ public class CitasServiceImpl implements CitasService {
     private DetalleCitaRepository detalleCitaRepository;
     @Autowired
     private ServicioPrestadoRepository servicioPrestadoRepository;
-
+    @Autowired
+    private  ServicioPorUsuariosRepository servicioPorUsuariosRepository;
 
 
     @Override
@@ -118,7 +119,26 @@ public class CitasServiceImpl implements CitasService {
                 .orElseThrow(() -> new RuntimeException("El estado no se encuentra registrado"));
 
         List<Citas> todasCitas = this.citasRepository.findAllByIdUsuario(determinadoUsuarios);
+
         return todasCitas;
+    }
+
+
+    public List<Citas> obtenerCitasPorEmpleado(Long id) {
+        Usuarios determinarUsuario = this.usuarioRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Usuario no encontrado")
+        );
+        // ya que tiene el usuario solo jalar la cita en base al servicio dado
+        // asi que servicios por usuarios
+        List<ServicioPorUsuarios > determinarServicio = this.servicioPorUsuariosRepository.findAllByIdUsuario(determinarUsuario);
+
+        for (ServicioPorUsuarios todosServicios : determinarServicio){
+            //ya caon cada lista de servicios entonces que me obtenga cada cita que se tenga en el actual
+            List<Citas> todasCitas = this.citasRepository.findAllByIdServicio(todosServicios.getIdServicio());
+
+            System.out.println(todasCitas);
+        }
+        return  null;
     }
 
 

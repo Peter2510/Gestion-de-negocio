@@ -11,4 +11,5 @@ import java.util.List;
 public interface CitasRepository extends JpaRepository<Citas, Long> {
 
     List<Citas> findAllByIdUsuario(Usuarios idUsuarios);
+    List<Citas> findAllByIdServicio(Servicios idServicios);
 }
