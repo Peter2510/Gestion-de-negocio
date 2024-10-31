@@ -1,0 +1,70 @@
+<div class="flex items-center justify-center h-screen bg-base-content">
+  <div class="w-full max-w-md p-8 space-y-6 bg-base-content rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold text-center text-base-200">Recuperar contraseña</h2>
+    
+    <form (ngSubmit)="paso === 1 ? validarCorreo() : paso === 2 ? validarCodigo() : onSubmit()">
+      
+      <!-- Paso 1: Ingresar Correo -->
+      <div *ngIf="paso === 1">
+        <label class="label"> 
+          <span class="label-text text-base-200">Correo electrónico</span>
+        </label>
+        <input type="email" [(ngModel)]="email" name="email" placeholder="Introduce tu correo" class="input input-bordered w-full" required />
+      </div>
+
+      <!-- Paso 2: Ingresar Código -->
+      <div *ngIf="paso === 2">
+        <label class="label"> 
+          <span class="label-text">Código de Recuperación</span>
+        </label>
+        <input type="text" [(ngModel)]="codigo" name="codigo" placeholder="Introduce el código" class="input input-bordered w-full" required />
+      </div>
+
+      <!-- Paso 3: Cambiar Contraseña -->
+      <div *ngIf="paso === 3">
+        <div>
+          <label class="label"> 
+            <span class="label-text">Nueva Contraseña</span>
+          </label>
+          <input 
+            type="password" 
+            [(ngModel)]="nuevaContrasena" 
+            name="nuevaContrasena" 
+            placeholder="Introduce tu nueva contraseña" 
+            class="input input-bordered w-full" 
+            required 
+            minlength="8"
+          />
+        </div>
+      
+        <div>
+          <label class="label"> 
+            <span class="label-text">Verificar Contraseña</span>
+          </label>
+          <input 
+            type="password" 
+            [(ngModel)]="verificarContrasena" 
+            name="verificarContrasena" 
+            placeholder="Verifica tu nueva contraseña" 
+            class="input input-bordered w-full" 
+            required 
+            minlength="8"
+          />
+        </div>
+      </div>
+      
+      <button type="submit" class="btn btn-primary w-full" [disabled]="loading">
+        {{ loading ? 'Cargando...' : (paso === 3 ? 'Actualizar Contraseña' : 'Enviar Código') }}
+      </button>
+      
+      <div *ngIf="mensaje" class="mt-4 text-center text-red-500">
+        {{ mensaje }}
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="fixed inset-0 bg-black bg-opacity-70 flex flex-col justify-center items-center z-50" *ngIf="loading">
+  <span class="loading loading-dots text-base-content text-4xl mb-2"></span>
+  <p class="text-base-content text-lg">Cargando</p>
+</div>

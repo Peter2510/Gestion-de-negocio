@@ -1,0 +1,54 @@
+<app-header-admin></app-header-admin>
+
+<app-loading *ngIf="loading"></app-loading>
+
+<div class="bg-base-200 min-h-screen flex justify-center items-center mt-24">
+  <div class="bg-base-100 p-6 rounded-lg shadow-lg w-full max-w-2xl">
+    <h2 class="text-2xl font-semibold mb-4 text-center text-base-content">Creación de rol</h2>
+
+    <form (ngSubmit)="guardarPermisos()" #permisosForm="ngForm">
+
+      <div class="mb-4">
+        <input
+          type="text"
+          name="nombre"
+          placeholder="Ingresar nombre"
+          class="input input-bordered w-full p-2 text-base focus:outline-none focus:ring-2 focus:ring-slate-50"
+          required
+          [(ngModel)]="nuevoRol.nombre"
+        />
+      </div>
+
+      <div class="mb-6">
+        <input
+          type="text"
+          name="descripcion"
+          placeholder="Ingresar descripción"
+          class="input input-bordered w-full p-2 text-base focus:outline-none focus:ring-2 focus:ring-slate-50"
+          required
+          [(ngModel)]="nuevoRol.descripcion"
+        />
+      </div>
+
+      <!-- Selección de Permisos -->
+      <div>
+        <h2 class="text-xl font-semibold mb-4 text-base-content">Seleccione los Permisos</h2>
+        <div *ngFor="let permiso of permisos" class="flex items-center mb-3">
+          <label class="flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              class="checkbox checkbox-primary"
+              [(ngModel)]="permiso.selected"
+              [ngModelOptions]="{standalone: true}"
+            />
+            <span class="ml-2 text-base text-slate-50">{{ permiso.nombre }}</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="mt-6">
+        <button type="submit" class="btn btn-success w-full" [disabled]="!permisosForm.valid">Crear rol</button>
+      </div>
+    </form>
+  </div>
+</div>

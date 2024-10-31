@@ -1,0 +1,96 @@
+<app-header-admin />
+
+<section class="text-gray-600 body-font mt-6">
+  <div class="container px-5 py-24 mx-auto flex flex-wrap">
+    <div class="lg:w-1/2 w-full mb-10 lg:mb-0 rounded-lg overflow-hidden">
+      <img
+        alt="feature"
+        class="object-cover object-center h-full w-full"
+        src="https://dummyimage.com/460x500"
+      />
+    </div>
+    <div
+      class="flex flex-col flex-wrap lg:py-6 -mb-10 lg:w-1/2 lg:pl-12 lg:text-left text-center"
+    >
+      <!-- Ciclo *ngFor para iterar sobre los servicios -->
+      <section class="py-10 bg-gray-100">
+        <div class="container mx-auto">
+          <h1 class="text-2xl font-bold text-center mb-6">
+            Servicios Disponibles
+          </h1>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div
+              *ngFor="
+                let servicio of this.serviciosServicio.serviciosEspecificos()
+              "
+              class="card w-full bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition duration-300 ease-in-out"
+            >
+              <div class="flex items-center mb-4">
+                <div
+                  class="w-12 h-12 flex items-center justify-center rounded-full bg-pink-100 text-pink-500"
+                >
+                  <svg
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    class="w-8 h-8"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16 17v2a1 1 0 01-1 1H9a1 1 0 01-1-1v-2M10 11V4m4 0v7M4 17h16M4 12V5a2 2 0 012-2h12a2 2 0 012 2v7"
+                    ></path>
+                  </svg>
+                </div>
+                <h2 class="text-gray-900 text-lg title-font font-medium ml-3">
+                  {{ servicio[2] }}
+                  <!-- Nombre del servicio -->
+                </h2>
+              </div>
+              <p class="leading-relaxed text-base mb-4">
+                Duración: {{ servicio[0] }} minutos <br />
+                Tipo: {{ servicio[1] }} <br />
+                Precio: Q{{ servicio[3] }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="py-10 bg-gray-100">
+        <div class="container mx-auto">
+          <h1 class="text-2xl font-bold text-center mb-6">
+            Horarios de jornadas
+          </h1>
+          <div class="overflow-x-auto">
+            <table class="table table-zebra w-full">
+              <thead>
+                <tr class="text-gray-900">
+                  <th>No.</th>
+                  <th>Nombre del Corte</th>
+                  <th>Hora de Inicio</th>
+                  <th>Hora de Fin</th>
+                  <th>Día</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let jornadas of this.jornadasServicio.jornadasEspecificas();
+                    let indice = index
+                  "
+                >
+                  <td>{{ indice + 1 }}</td>
+                  <td>{{ jornadas[0] }}</td>
+                  <td>{{ jornadas[1] }}</td>
+                  <td>{{ jornadas[2] }}</td>
+                  <td>{{ jornadas[3] }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,439 @@
+<app-header-admin></app-header-admin>
+<div class="flex justify-center items-center min-h-screen mt-24">
+  <div class="card w-full max-w-lg bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h2 class="card-title text-center text-primary">Creación de Servicios</h2>
+
+      <!-- Stepper -->
+      <ul class="steps mb-8">
+        <li
+          class="step text-primary"
+          [class.step-primary]="currentStep >= 1"
+          [class.step-complete]="currentStep > 1"
+          data-content="1"
+        >
+          Información de Servicio
+        </li>
+        <li
+          class="step text-primary"
+          [class.step-primary]="currentStep >= 2"
+          [class.step-complete]="currentStep > 2"
+          data-content="2"
+        >
+          Generacion de horarios
+        </li>
+        <li
+          class="step text-primary"
+          [class.step-primary]="currentStep >= 3"
+          [class.step-complete]="currentStep > 3"
+          data-content="3"
+        >
+          Generacion de servicios especificos
+        </li>
+      </ul>
+      <!-- Step 1: Nombre del Servicio -->
+      <div *ngIf="currentStep === 1" class="form-control">
+        <label class="label">
+          <span class="label-text text-primary">Nombre del Servicio</span>
+        </label>
+        <input
+          type="text"
+          class="input input-bordered w-full text-primary"
+          placeholder="Ingrese el nombre del servicio"
+          [(ngModel)]="this.nombreServicio"
+        />
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text text-primary"
+              >Descripción del Servicio</span
+            >
+          </label>
+          <textarea
+            class="textarea textarea-bordered w-full text-primary"
+            placeholder="Ingrese la descripción del servicio"
+            [(ngModel)]="this.descripcionServicio"
+          ></textarea>
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text text-primary">Estado del Servicio</span>
+          </label>
+          <select
+            class="select select-bordered w-full text-primary"
+            [(ngModel)]="this.estadoSerivicioServicio"
+          >
+            <option
+              *ngFor="
+                let estado of categoriaEstadoServicio.estadoServicioElementos()
+              "
+              [value]="estado.id"
+            >
+              {{ estado.estado }}
+            </option>
+          </select>
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text text-primary">Categoría del Servicio</span>
+          </label>
+          <select
+            class="select select-bordered w-full text-primary"
+            [(ngModel)]="this.categoriaServicio"
+          >
+            <option
+              *ngFor="let categoria of this.todasCategorias"
+              [value]="categoria.id"
+            >
+              {{ categoria.tipo }}
+            </option>
+          </select>
+        </div>
+        <div *ngIf="this.empresa.tipoServicio.id==2" class="form-control">
+          <label class="label">
+            <span class="label-text text-primary"
+              >Seleccione al usuario asociado a este servicio</span
+            >
+          </label>
+          <select
+            class="select select-bordered w-full text-primary"
+            [(ngModel)]="this.usuarioSeleccionado"
+          >
+            <option
+              *ngFor="let usuario of this.todosUsuarios"
+              [value]="usuario.id"
+            >
+              {{ usuario.persona.nombre }}
+            </option>
+          </select>
+        </div>
+        <div class="form-control mt-6">
+          <button class="btn btn-primary w-full" (click)="goToStep(2)">
+            Siguiente
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2: -->
+      <div *ngIf="currentStep === 2">
+        <button
+          class="btn btn-outline btn-primary flex items-center text-base-content bg-blue-600 hover:bg-blue-700"
+          (click)="this.agregarHorario()"
+        >
+          <!-- SVG del ícono de agregar -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 mr-2"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
+          Agregar Horario
+        </button>
+
+        <div class="overflow-x-auto">
+          <h2 class="text-lg font-semibold mb-4 text-gray-200">
+            Vista de horario
+          </h2>
+          <table
+            class="table table-zebra w-full min-w-[768px] bg-gray-800 text-gray-100"
+          >
+            <!-- head -->
+            <thead class="bg-gray-700 text-gray-300">
+              <tr>
+                <th>#</th>
+                <td>Nombre</td>
+                <td>Hora inicio</td>
+                <td>Hora fin</td>
+                <td>Dia laboral</td>
+                <td>Acciones</td>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- row 1 -->
+              <tr
+                *ngFor="
+                  let horarioNuevos of this.arregloHorarios;
+                  let indice = index
+                "
+                class="hover:bg-gray-700"
+              >
+                <th>{{ indice + 1 }}</th>
+                <td>
+                  <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    [(ngModel)]="horarioNuevos.nombre"
+                    class="input input-bordered w-full bg-gray-700 text-gray-200"
+                    placeholder="Nombre"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="time"
+                    id="horaInicio"
+                    name="horaInicio"
+                    [(ngModel)]="horarioNuevos.hora_inicio"
+                    class="input input-bordered w-full bg-gray-700 text-gray-200"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="time"
+                    id="horaFin"
+                    name="horaFin"
+                    [(ngModel)]="horarioNuevos.hora_fin"
+                    class="input input-bordered w-full bg-gray-700 text-gray-200"
+                  />
+                </td>
+                <td>
+                  <select
+                    class="select select-bordered w-full text-primary"
+                    [(ngModel)]="id_dia_laboral[indice]"
+                    name="dia_laboral{{ indice }}"
+                  >
+                    <option
+                      *ngFor="
+                        let dias of jornadasServicio.diasLaboralesTotales()
+                      "
+                      [value]="dias.id"
+                    >
+                      {{ dias.nombre }}
+                    </option>
+                  </select>
+                </td>
+                <td>
+                  <button
+                    class="btn btn-outline btn-primary flex items-center text-base-content bg-red-600 hover:bg-red-700"
+                    (click)="
+                      eliminarHorario(horarioNuevos.id, horarioNuevos.nombre)
+                    "
+                  >
+                    <!-- SVG del ícono de eliminar -->
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-6 mr-2"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                    Eliminar
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div
+          class="form-control mt-6 flex justify-between items-center gap-x-4"
+        >
+          <button
+            class="btn btn-secondary flex-1 text-base-content bg-gray-600 hover:bg-gray-700"
+            (click)="goToStep(1)"
+          >
+            Atrás
+          </button>
+          <button
+            class="btn btn-primary flex-1 text-base-content bg-blue-600 hover:bg-blue-700"
+            (click)="goToStep(3)"
+          >
+            Siguiente
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 3: Confirmación -->
+      <div *ngIf="currentStep === 3">
+        <button
+          class="btn btn-outline btn-primary flex items-center text-base-content bg-blue-600 hover:bg-blue-700"
+          (click)="this.agregarServicio()"
+        >
+          <!-- SVG del ícono de agregar -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 mr-2"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
+          Agregar Servicio
+        </button>
+
+        <div class="overflow-x-auto p-4">
+          <h2 class="text-lg font-semibold mb-6 text-gray-200">
+            Vista de servicios
+          </h2>
+          <table
+            class="table table-zebra w-full min-w-[1400px] bg-gray-800 text-gray-100"
+          >
+            <!-- head -->
+            <thead class="bg-gray-700 text-gray-300">
+              <tr>
+                <th class="p-4">#</th>
+                <td class="p-4">Nombre</td>
+                <td class="p-4">Estado</td>
+                <td class="p-4">Precio</td>
+                <td class="p-4">Nombre del servicio de duración</td>
+                <td class="p-4">Duración (en minutos)</td>
+                <td class="p-4">Acciones</td>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- row 1 -->
+              <tr
+                *ngFor="
+                  let servicio of this.arregloServiciosEspecificos;
+                  let indice = index
+                "
+                class="hover:bg-gray-700"
+              >
+                <th class="p-4">{{ indice + 1 }}</th>
+                <td class="p-4">
+                  <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    [(ngModel)]="servicio.nombre"
+                    class="input input-bordered w-full bg-gray-700 text-gray-200 mb-4"
+                    placeholder="Nombre del servicio"
+                  />
+                </td>
+                <td class="p-4">
+                  <select
+                    class="select select-bordered w-full text-primary mb-4"
+                    name="estado_servicio_especifico{{ indice }}"
+                    [(ngModel)]="servicio.estadoServicio"
+                  >
+                    <option
+                      *ngFor="
+                        let estado of categoriaEstadoServicio.estadoServicioElementos()
+                      "
+                      [value]="estado.id"
+                    >
+                      {{ estado.estado }}
+                    </option>
+                  </select>
+                </td>
+                <td class="p-4">
+                  <input
+                    type="number"
+                    id="precio"
+                    name="precio"
+                    [(ngModel)]="servicio.precio"
+                    class="input input-bordered w-full bg-gray-700 text-gray-200 mb-4"
+                  />
+                </td>
+                <td class="p-4">
+                  <input
+                    type="text"
+                    id="Nombre_duracion"
+                    name="Nombre_duracion{{ indice }}"
+                    class="input input-bordered w-full bg-gray-700 text-gray-200 mb-4"
+                    placeholder="Nombre de la duración"
+                    [(ngModel)]="
+                      arregloDuracionServiciosEspecificos[indice].nombre
+                    "
+                  />
+                </td>
+                <td class="p-4">
+                  <input
+                    type="number"
+                    id="duracion"
+                    name="duracion{{ indice }}"
+                    class="input input-bordered w-full bg-gray-700 text-gray-200 mb-4"
+                    placeholder="Duración (min)"
+                    [(ngModel)]="
+                      this.arregloDuracionServiciosEspecificos[indice].duracion
+                    "
+                  />
+                </td>
+                <td>
+                  <button
+                    class="btn btn-outline btn-primary flex items-center text-base-content bg-red-600 hover:bg-red-700"
+                    (click)="eliminarServicio(servicio.id, servicio.nombre)"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                    Eliminar
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Formulario para cargar imágenes -->
+          <!-- <div class="mt-8">
+            <h2 class="text-lg font-semibold mb-4 text-gray-200">
+              Cargar Imagen
+            </h2>
+            <input
+              type="file"
+              (change)="onImageSelected($event)"
+              class="input input-bordered w-full bg-gray-700 text-gray-200 mb-4"
+              accept="image/*"
+            />
+            <div *ngIf="selectedImage" class="card bg-gray-800 p-4 mt-4">
+              <h3 class="text-gray-200">Vista previa de la imagen</h3>
+              <img
+                [src]="selectedImage"
+                alt="Vista previa"
+                class="mt-2 w-full h-auto rounded"
+              />
+            </div>
+          </div> -->
+        </div>
+
+        <div class="form-control mt-6 flex justify-between">
+          <button
+            class="btn btn-secondary text-base-content bg-gray-600 hover:bg-gray-700"
+            (click)="goToStep(2)"
+          >
+            Atrás
+          </button>
+          <div class="flex space-x-4">
+            <button
+              class="btn btn-primary w-full text-base-content bg-blue-600 hover:bg-blue-700"
+              (click)="this.creacionServicio()"
+            >
+              Registrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

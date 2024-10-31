@@ -1,0 +1,56 @@
+<div class="min-h-screen bg-base-200 flex flex-col justify-center sm:py-12">
+  <div class="relative py-3 sm:max-w-xl sm:mx-auto">
+    <div
+      class="absolute inset-0 bg-gradient-to-r from-purple-400 to-blue-500 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-lg"
+    ></div>
+    <div class="relative px-4 py-10 shadow-lg sm:rounded-lg sm:p-20">
+      <div class="max-w-md mx-auto">
+        <h1 class="text-2xl font-semibold text-base-300">Iniciar sesión</h1>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text text-base-300">Nombre de usuario</span>
+          </label>
+          <input
+            type="text"
+            placeholder="Ingrese su nombre de usuario"
+            class="input input-bordered w-full bg-base-content"
+            required
+            [(ngModel)]="this.nombreUsuario"
+          />
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text text-base-300">Contraseña</span>
+          </label>
+          <input
+            type="password"
+            placeholder="Ingrese su contraseña"
+            class="input input-bordered w-full bg-base-content"
+            required
+            [(ngModel)]="this.password"
+          />
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <a
+              href="auth/cambio-contrasenia"
+              class="label-text-alt link link-hover text-base-300"
+              >¿Olvidaste tu contraseña?</a
+            >
+          </label>
+        </div>
+        <div class="form-control mt-6">
+          <button (click)="this.login()" class="btn btn-primary w-full">
+            Iniciar sesión
+          </button>
+        </div>
+        <p class="mt-4 text-sm text-center text-gray-900">
+          ¿Aún no tiene una cuenta?
+          <a href="auth/registro" class="text-blue-950 hover:underline"
+            >Registrese aqui</a
+          >
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
