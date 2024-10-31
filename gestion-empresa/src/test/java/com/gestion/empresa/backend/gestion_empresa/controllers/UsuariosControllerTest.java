@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -107,4 +108,55 @@ public class UsuariosControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("Error al actualizar contraseña", response.getBody().get("mensaje"));
     }
+
+    @Test
+    public void testObtenerUsuariosPorId_Success() {
+        ResponseBackend responseBackend = new ResponseBackend(true, HttpStatus.OK, List.of("Usuario1", "Usuario2"));
+        when(usuarioServiceImpl.listarUsuariosPorRol(1L)).thenReturn(responseBackend);
+
+        ResponseEntity<Map<String, Object>> response = usuariosController.obtenerUsuariosPorId(1L);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue((Boolean) response.getBody().get("ok"));
+        assertTrue(response.getBody().containsKey("usuarios"));
+    }
+
+    @Test
+    public void testObtenerUsuariosPorId_NotFound() {
+        ResponseBackend responseBackend = new ResponseBackend(false, HttpStatus.NOT_FOUND, "Rol no encontrado");
+        when(usuarioServiceImpl.listarUsuariosPorRol(1L)).thenReturn(responseBackend);
+
+        ResponseEntity<Map<String, Object>> response = usuariosController.obtenerUsuariosPorId(1L);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertFalse((Boolean) response.getBody().get("ok"));
+        assertEquals("Rol no encontrado", response.getBody().get("mensaje"));
+    }
+
+    @Test
+    public void testObtenerEmpleadosRegistrados_Success() {
+        ResponseBackend responseBackend = new ResponseBackend(true, HttpStatus.OK, List.of("Empleado1", "Empleado2"));
+        when(usuarioServiceImpl.listarEmpleados(2L)).thenReturn(responseBackend);
+
+        ResponseEntity<Map<String, Object>> response = usuariosController.obtenerEmpleadosRegistrados();
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue((Boolean) response.getBody().get("ok"));
+        assertTrue(response.getBody().containsKey("empleados"));
+    }
+
+    @Test
+    public void testObtenerEmpleadosRegistrados_Failure() {
+        ResponseBackend responseBackend = new ResponseBackend(false, HttpStatus.NOT_FOUND, "Empleados no encontrados");
+        when(usuarioServiceImpl.listarEmpleados(2L)).thenReturn(responseBackend);
+
+        ResponseEntity<Map<String, Object>> response = usuariosController.obtenerEmpleadosRegistrados();
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertFalse((Boolean) response.getBody().get("ok"));
+        assertEquals("Empleados no encontrados", response.getBody().get("mensaje"));
+    }
+
+
+
 }

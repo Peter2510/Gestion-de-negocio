@@ -2,6 +2,7 @@ package com.gestion.empresa.backend.gestion_empresa.servicesImpl;
 
 import com.gestion.empresa.backend.gestion_empresa.models.Empresa;
 import com.gestion.empresa.backend.gestion_empresa.repositories.EmpresaRepository;
+import com.gestion.empresa.backend.gestion_empresa.utils.ResponseBackend;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,6 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,6 +25,9 @@ class EmpresaServiceImplTest {
 
     @InjectMocks
     private EmpresaServiceImpl empresaService;
+
+    @Mock
+    private S3ServiceImpl s3Service;
 
     private Empresa empresa;
 
@@ -82,4 +88,28 @@ class EmpresaServiceImplTest {
         assertEquals("Optica 2", empresa.getNombre());
         verify(empresaRepository,times(1)).findById(empresa.getId());
     }
+
+
+    @Test
+    public void testObtenerLogoBase64_EmpresaNoExistente() {
+        when(empresaRepository.findById(1L)).thenReturn(Optional.empty());
+
+        ResponseBackend response = empresaService.obtenerLogoBase64(1L);
+
+        assertFalse(response.getOk());
+        assertEquals("La empresa no existe", response.getMensaje());
+    }
+
+    @Test
+    public void testObtenerLogoBase64_SinLogo() {
+        empresa.setLogo(null);
+        when(empresaRepository.findById(1L)).thenReturn(Optional.of(empresa));
+
+        ResponseBackend response = empresaService.obtenerLogoBase64(1L);
+
+        assertFalse(response.getOk());
+        assertEquals("La empresa no existe", response.getMensaje());
+    }
+
+
 }
