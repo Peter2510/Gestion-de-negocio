@@ -30,6 +30,11 @@ import { ModuloUsuariosModule } from './usuarios/modulo-usuarios/modulo-usuarios
 import { VistaServicioEspecificoComponent } from './admin/modulo-servicios/vistaEspecifica/vista-servicio-especifico/vista-servicio-especifico.component';
 import { QRCodeModule } from 'angularx-qrcode';
 import { ModalCitaEspecificaComponent } from './usuarios/modal-cita-especifica/modal-cita-especifica.component';
+import { HeaderEmpleadoComponent } from './Utils/header-empleado/header-empleado.component';
+import { VistaEmpleadoComponent } from './Empleado/vista-empleado/vista-empleado.component';
+import { PerfilEmpleadoComponent } from './Empleado/perfil-empleado/perfil-empleado.component';
+import { EmpleadoModuleModule } from './Empleado/empleado-module/empleado-module.module';
+import { VistaEspecificaCitasComponent } from './Empleado/vista-especifica-citas/vista-especifica-citas.component';
 
 @NgModule({
   declarations: [AppComponent, Vista2faLoginComponent],
@@ -50,6 +55,7 @@ import { ModalCitaEspecificaComponent } from './usuarios/modal-cita-especifica/m
     RouterLink,
     RouterModule,
     QRCodeModule,
+    EmpleadoModuleModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

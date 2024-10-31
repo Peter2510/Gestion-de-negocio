@@ -1,4 +1,4 @@
-<app-header-usuario></app-header-usuario>
+<app-header-empleado />
 <div class="flex min-h-screen">
   <!-- Barra Lateral -->
   <aside class="w-1/4 bg-gray-200 p-4">
@@ -110,18 +110,3 @@
     </div>
   </div>
 </div>
-
-<!--vista del modal-->
-<app-modal-creacion-cita
-  [isOpen]="modalOpen"
-  (close)="closeModal()"
-  (saveCita)="saveCita($event)"
-></app-modal-creacion-cita>
-
-<!--vista del modal especifico-->
-<app-modal-cita-especifica
-  [isOpen]="modalOpenVistaEspecifica"
-  (close)="closeModalEspecifico()"
-  (saveCita)="saveCita($event)"
-  [valor]="citaEspecificaValor"
-></app-modal-cita-especifica>

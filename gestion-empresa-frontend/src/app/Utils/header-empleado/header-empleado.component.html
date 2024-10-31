@@ -13,9 +13,11 @@
 >
   <div class="flex-1 flex items-center">
     <img class="w-20 h-10 rounded md:w-40 md:h-20" [src]="empresa?.logo" />
-    <a href="/usuarios/vista-usuario" class="text-xl text-base-content ml-2">{{
-      empresa?.nombre
-    }}</a>
+    <a
+      href="/empleados/panel-empleado"
+      class="text-xl text-base-content ml-2"
+      >{{ empresa?.nombre }}</a
+    >
   </div>
 
   <div class="flex-none gap-2 items-center">
@@ -91,11 +93,8 @@
               (change)="onSelectChange($event)"
             >
               <option disabled selected>Gestión de reservaciones</option>
-              <option value="/usuarios/historial-citas">
+              <option value="/empleados/vistaEspecifica">
                 Ver reservaciones
-              </option>
-              <option value="/administrador/crear-servicio">
-                Crear reservacion
               </option>
             </select>
           </li>
@@ -105,7 +104,7 @@
               (change)="onSelectChange($event)"
             >
               <option disabled selected>Comprobantes y facturas</option>
-              <option value="/administrador/facturas">
+              <option value="/empleados/facturas">
                 Ver Facturas y comprobantes
               </option>
             </select>
@@ -122,10 +121,7 @@
           (change)="onSelectChange($event)"
         >
           <option disabled selected>Gestión de reservaciones</option>
-          <option value="/usuarios/historial-citas">Ver reservaciones</option>
-          <option value="/administrador/crear-servicio">
-            Crear reservacion
-          </option>
+          <option value="/empleados/vistaEspecifica">Ver reservaciones</option>
         </select>
       </li>
       <li>
@@ -134,7 +130,7 @@
           (change)="onSelectChange($event)"
         >
           <option disabled selected>Comprobantes y facturas</option>
-          <option value="/usuarios/facturas">
+          <option value="/empleados/facturas">
             Ver facturas y comprobantes
           </option>
         </select>

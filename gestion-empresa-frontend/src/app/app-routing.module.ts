@@ -16,6 +16,13 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'empleados',
+    loadChildren: () =>
+      import(
+        './Empleado/routing-empelado-module/routing-empelado-module.module'
+      ).then((m) => m.RoutingEmpeladoModuleModule),
+  },
+  {
     path: 'administrador',
     loadChildren: () =>
       import('./admin/administrador-routing/administrador-routing.module').then(
