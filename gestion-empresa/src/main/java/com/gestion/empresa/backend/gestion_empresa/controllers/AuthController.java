@@ -40,7 +40,7 @@ public class AuthController {
     public ResponseEntity<Map<String, Object>> login(@RequestBody Login loginUserDto) {
         Optional<AuthRespuesta> respuesta = autenticacionService.login(loginUserDto);
         System.out.println(respuesta);
-
+        System.out.println("hola");
         if (respuesta.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("ok", false, "mensaje", "El usuario no esta registrado"));
 
